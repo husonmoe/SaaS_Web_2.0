@@ -1,0 +1,66 @@
+/**
+ * 光谱云诊官网 · 设计 Token
+ * Figma: 官网重构-2.0 · node 299:12221
+ */
+:root {
+  /* 品牌色 */
+  --color-primary: #0089ff;
+  --color-primary-end: #466dfc;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary-end) 24%, white);
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary-end) 0%,
+    var(--color-primary) 100%
+  );
+  --gradient-section-product: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+
+  /* 文字 */
+  --text-base: #171c21;
+  --text-secondary: #727679;
+  --text-tertiary: #9fa2a6;
+  --text-muted: #6d777e;
+
+  /* 背景与边框 */
+  --bg-white: #ffffff;
+  --bg-shell: #f6f9fc;
+  --border-light: #e7eaed;
+
+  /* 描边白底按钮 */
+  --btn-outline-hover: #f9fafc;
+  --btn-outline-active: #f1f3f6;
+
+  /* 卡片投影 · Figma Drop shadow #0F2F4C 8% */
+  --shadow-card: 0 8px 24px 0 rgba(15, 47, 76, 0.08);
+  --shadow-card-rgb: 15, 47, 76;
+  /* 版本方案卡片 · 1px 白色内描边 + Drop shadow */
+  --shadow-version-card: inset 0 0 0 1px #ffffff, 0 8px 24px 0 rgba(15, 47, 76, 0.08);
+
+  /* 字号 / 行高 */
+  --font-size-header: 18px;
+  --line-height-header: 26px;
+  --font-size-title: 16px;
+  --line-height-title: 24px;
+  --font-size-subtitle: 14px;
+  --line-height-subtitle: 22px;
+  --font-size-display-1: 20px;
+  --line-height-display-1: 28px;
+  --font-size-display-2: 24px;
+  --line-height-display-2: 32px;
+  --font-size-hero: 52px;
+  --line-height-hero: 68px;
+  --font-size-section: 44px;
+  --line-height-section: 56px;
+  --font-size-stat: 40px;
+
+  /* 统计数字区固定宽度（按最宽「5000万+」对齐） */
+  --stat-value-width: 120px;
+
+  --font-sans: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-brand: "DingTalk JinBuTi", var(--font-sans);
+}
+
+@media (min-width: 834px) {
+  :root {
+    --stat-value-width: 160px;
+  }
+}

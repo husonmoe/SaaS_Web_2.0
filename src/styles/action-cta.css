@@ -1,0 +1,25 @@
+/**
+ * 行动号召 · bg_action.png (5760×792)
+ * 填充规则与 hero / 客户案例背景一致：
+ * - 等比例缩放，居中显示，超出由容器 overflow 裁剪
+ * - 视口宽度 < 1920px（未超出素材展示宽度）：background-size 1920px auto，水平居中，不随页面变窄缩小
+ * - 视口宽度 ≥ 1920px：background-size 100% auto，等比铺满视口宽度并裁切溢出
+ */
+.action-cta-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: url("/assets/image_action/bg_action.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 1920px auto;
+}
+
+@media (min-width: 1920px) {
+  .action-cta-bg-layer {
+    background-size: 100% auto;
+  }
+}

@@ -1,0 +1,89 @@
+/**
+ * 客户案例板块纹理 bg_map.png (5760×2520)
+ * - 视口 < 1200px：background-size 1920px，水平居中
+ * - 视口 ≥ 1200px：background-size 100% auto，等比铺满宽度
+ */
+.customer-cases-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  pointer-events: none;
+  background-image: url("/assets/bg_map.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 1920px auto;
+}
+
+@media (min-width: 1200px) {
+  .customer-cases-bg-layer {
+    background-size: 100% auto;
+  }
+}
+
+/* 客户案例 · 滚动视口：严格 520px 高，左右留白保留投影 */
+.customer-cases-scroll-viewport {
+  box-sizing: border-box;
+  height: 100%;
+  max-height: 520px;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+/* 客户案例 · 卡片匀速上滚 */
+
+@keyframes customer-cases-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.customer-cases-scroll-track {
+  animation: customer-cases-scroll 48s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-cases-scroll-track {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* 地图面板：上移 20px + 淡入；数字在半程启动；光柱在面板结束后 1s 播放 */
+.customer-cases-map-panel {
+  --map-panel-enter-duration: 1.2s;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
+
+.customer-cases-map-panel--entering {
+  animation: customer-cases-map-panel-enter var(--map-panel-enter-duration)
+    ease-out forwards;
+}
+
+@keyframes customer-cases-map-panel-enter {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-cases-map-panel {
+    opacity: 1;
+    transform: none;
+  }
+
+  .customer-cases-map-panel--entering {
+    animation: none;
+  }
+}

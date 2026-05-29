@@ -1,0 +1,103 @@
+/* 业务分布地图 · 光柱 / 光点动效 */
+
+.business-map-root {
+  --map-enter-duration: 1.2s;
+  --map-item-opacity: 1;
+  --map-ripple-opacity: 0.65;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  width: fit-content;
+}
+
+/* 以高度 520px 为基准等比缩放（设计稿 624×520） */
+.business-map-root svg {
+  display: block;
+  flex-shrink: 0;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 624 / 520;
+}
+
+/* land / water 使用 SVG 自带 fill，不压透明度（与 mapgroup.svg 原稿一致） */
+.business-map-root #land,
+.business-map-root #water {
+  opacity: 1;
+}
+
+.business-map-root #water path[fill="url(#paint2_linear_423_274017)"] {
+  opacity: 1;
+}
+
+.business-map-root #map {
+  visibility: hidden;
+}
+
+/* 地图出现前：光点 / 光柱保持透明 */
+.business-map-root .map-dot-anim,
+.business-map-root #light-columns > .map-column-item,
+.business-map-root #light-columns > g:not(.map-column-item),
+.business-map-root [id*="light-columns" i] > .map-column-item,
+.business-map-root [id*="light-columns" i] > g:not(.map-column-item) {
+  opacity: 0;
+}
+
+.business-map-root #light-columns > .map-column-item,
+.business-map-root #light-columns > g:not(.map-column-item),
+.business-map-root [id*="light-columns" i] > .map-column-item,
+.business-map-root [id*="light-columns" i] > g:not(.map-column-item) {
+  transform: translateY(20px);
+}
+
+/* 光点：地图出现后淡入 */
+.business-map-root--dots-active .map-dot-anim {
+  will-change: opacity;
+  animation: map-dot-fade-in var(--map-enter-duration) ease-out forwards;
+}
+
+.business-map-root--dots-active .map-dot-ripple-wrap {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: map-dot-ripple 2.4s ease-out infinite;
+}
+
+/* 光柱：光点阶段 2s 后上移 20px + 淡入 */
+.business-map-root--columns-active #light-columns > .map-column-item,
+.business-map-root--columns-active #light-columns > g:not(.map-column-item),
+.business-map-root--columns-active [id*="light-columns" i] > .map-column-item,
+.business-map-root--columns-active [id*="light-columns" i] > g:not(.map-column-item) {
+  will-change: transform, opacity;
+  animation: map-item-enter var(--map-enter-duration) ease-out forwards;
+}
+
+@keyframes map-item-enter {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: var(--map-item-opacity, 1);
+  }
+}
+
+@keyframes map-dot-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--map-item-opacity, 1);
+  }
+}
+
+@keyframes map-dot-ripple {
+  0% {
+    transform: scale(1);
+    opacity: var(--map-ripple-opacity, 0.65);
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}

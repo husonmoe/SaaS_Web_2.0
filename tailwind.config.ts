@@ -8,9 +8,26 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        md: "834px",
+        lg: "1200px",
+      },
+      keyframes: {
+        "feature-icon-spin": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+      },
+      animation: {
+        "feature-icon-spin": "feature-icon-spin 0.4s ease-in-out",
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "var(--color-primary)",
+        "text-base": "var(--text-base)",
+        "text-secondary": "var(--text-secondary)",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
       },
     },
   },

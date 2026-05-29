@@ -1,0 +1,29 @@
+/**
+ * Hero 顶部渐变背景 bg_header.png (5760×1956)
+ * - 视口 < 1200px：background-size 1920px，水平居中，不随页面变窄缩小
+ * - 视口 ≥ 1200px：background-size 100% auto，等比铺满宽度
+ */
+.hero-header-bg-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  min-height: 653px;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: url("/assets/bg_header.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 1920px auto;
+}
+
+@media (min-width: 1200px) {
+  .hero-header-bg-layer {
+    aspect-ratio: 5760 / 1956;
+    min-height: 0;
+    height: auto;
+    background-size: 100% auto;
+  }
+}
