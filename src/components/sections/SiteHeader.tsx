@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { PATHS } from "@/lib/paths";
 
 const NAV_ITEMS = [
   { label: "诊所系统", href: "#" },
-  { label: "版本对比", href: "#" },
+  { label: "版本对比", href: PATHS.versionComparison },
   { label: "运营指南", href: "#" },
   { label: "用户手册", href: "#" },
   { label: "药师帮", href: "#" },

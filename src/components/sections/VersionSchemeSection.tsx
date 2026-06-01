@@ -1,8 +1,10 @@
 import { PageContainer } from "@/components/layout/PageContainer";
 import { VersionPlanCard } from "@/components/sections/VersionPlanCard";
 import { VERSION_PLANS } from "@/components/sections/versionSchemeContent";
-import { Button } from "@/components/ui/Button";
+import { PATHS } from "@/lib/paths";
+import { cn } from "@/lib/cn";
 import Image from "next/image";
+import Link from "next/link";
 
 export function VersionSchemeSection() {
   return (
@@ -18,11 +20,13 @@ export function VersionSchemeSection() {
           ))}
         </div>
 
-        <Button
-          variant="outline"
-          className="h-[60px] min-h-[60px] gap-1 rounded-full pl-10 pr-8 text-[var(--text-secondary)] md:h-[60px] md:min-h-[60px]"
+        <Link
+          href={PATHS.versionComparison}
+          className={cn(
+            "inline-flex h-[60px] min-h-[60px] items-center justify-center gap-1 rounded-full border border-[var(--border-light)] bg-white pl-10 pr-8 text-[var(--text-secondary)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)] md:h-[60px] md:min-h-[60px]",
+          )}
         >
-          <span className="text-[var(--text-secondary)]">查看版本对比</span>
+          <span>查看版本对比</span>
           <Image
             src="/assets/icon_chervon_right_s.svg"
             alt=""
@@ -31,7 +35,7 @@ export function VersionSchemeSection() {
             className="size-6 shrink-0"
             aria-hidden
           />
-        </Button>
+        </Link>
       </PageContainer>
     </section>
   );
