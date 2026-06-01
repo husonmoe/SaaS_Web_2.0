@@ -11,7 +11,8 @@ const MAP_SVG_SRC = "/assets/mapgroup.structured.svg";
  * - legacy：原始 fill 叠层，位于地图下方；回退时改此常量并执行 scripts/restore-water-asset.sh
  */
 type WaterRenderMode = "borders" | "legacy";
-const WATER_RENDER_MODE: WaterRenderMode = "borders";
+/** 回退 legacy 时改为 `"legacy" as WaterRenderMode` */
+const WATER_RENDER_MODE = "borders" as WaterRenderMode;
 const WATER_SVG_SRC =
   WATER_RENDER_MODE === "legacy"
     ? "/assets/water.svg.original"
