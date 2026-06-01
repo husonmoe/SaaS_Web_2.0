@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { LoginModalButton } from "@/components/modals/LoginModalButton";
+import { TrialModalButton } from "@/components/modals/TrialModalButton";
 import { cn } from "@/lib/cn";
 import { EXTERNAL_PATHS, PATHS } from "@/lib/paths";
 
@@ -91,6 +92,7 @@ export function SiteHeader() {
     : hovered
       ? 1
       : scrollFill;
+  const headerInverted = fillOpacity >= 1;
 
   return (
     <header
@@ -150,10 +152,17 @@ export function SiteHeader() {
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
-          <Button variant="outline" className="hidden sm:inline-flex">
+          <LoginModalButton
+            variant="outline"
+            className={cn(
+              "hidden sm:inline-flex",
+              headerInverted &&
+                "border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] active:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)]",
+            )}
+          >
             登录诊所
-          </Button>
-          <Button className="hidden sm:inline-flex">免费试用</Button>
+          </LoginModalButton>
+          <TrialModalButton className="hidden sm:inline-flex">免费试用</TrialModalButton>
           <button
             type="button"
             className="inline-flex size-10 flex-col items-center justify-center gap-1 rounded-lg border border-[var(--border-light)] bg-white/80 md:hidden"

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PageContainer, PageGrid } from "@/components/layout/PageContainer";
 import { PageHeroBgLayer } from "@/components/layout/PageHeroBgLayer";
-import { Button } from "@/components/ui/Button";
+import { TrialModalButton } from "@/components/modals/TrialModalButton";
 
 const LAUREL_LEFT = "/assets/figma-cache/laurel-left.svg";
 const LAUREL_RIGHT = "/assets/figma-cache/laurel-right.svg";
@@ -65,9 +65,9 @@ export function HeroSection() {
               </ul>
             </div>
 
-            <Button className="h-14 w-[152px] rounded-xl px-10 text-lg">
+            <TrialModalButton className="h-14 min-h-14 md:h-14 w-[152px] rounded-xl px-10 text-lg">
               免费试用
-            </Button>
+            </TrialModalButton>
           </div>
 
           <div className="col-span-full lg:col-span-7">

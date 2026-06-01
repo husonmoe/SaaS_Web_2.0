@@ -14,6 +14,11 @@
   padding-bottom: var(--user-manual-category-block-height);
 }
 
+.user-manual-hero-with-category-gap > .hero-header-bg-layer {
+  bottom: auto;
+  height: 652px;
+}
+
 /** 分类条 + 正文共用容器：sticky 的活动边界须覆盖整段正文，不能限于分类条自身高度 */
 .user-manual-sticky-body {
   margin-top: 0;

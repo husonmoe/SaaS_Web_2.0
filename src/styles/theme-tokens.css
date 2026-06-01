@@ -18,12 +18,15 @@
   --text-base: #171c21;
   --text-secondary: #727679;
   --text-tertiary: #9fa2a6;
+  --text-quaternary: #c3c6c9;
   --text-muted: #6d777e;
+  --text-error: #e11529;
 
   /* 背景与边框 */
   --bg-white: #ffffff;
   --bg-shell: #f6f9fc;
   --border-light: #e7eaed;
+  --border-heavy: #d6d8db;
 
   /* 描边白底按钮 */
   --btn-outline-hover: #f9fafc;

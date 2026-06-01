@@ -98,7 +98,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
           <FooterColumn title="产品入口" links={PRODUCT_LINKS} />
           <FooterColumn title="友情链接" links={FRIEND_LINKS} />
-          <FooterColumn title="联系我们" links={CONTACT} />
+          <FooterColumn title="联系我们" links={CONTACT} interactive={false} />
         </div>
 
         <hr className="border-[var(--border-light)]" />
@@ -142,9 +142,11 @@ SiteFooter.displayName = "SiteFooter";
 function FooterColumn({
   title,
   links,
+  interactive = true,
 }: {
   title: string;
   links: string[];
+  interactive?: boolean;
 }) {
   return (
     <div className="w-full pl-[52px]">
@@ -152,12 +154,18 @@ function FooterColumn({
       <ul className="flex flex-col gap-4">
         {links.map((link) => (
           <li key={link}>
-            <Link
-              href="#"
-              className="text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)]"
-            >
-              {link}
-            </Link>
+            {interactive ? (
+              <Link
+                href="#"
+                className="text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)]"
+              >
+                {link}
+              </Link>
+            ) : (
+              <span className="text-base text-[var(--text-secondary)]">
+                {link}
+              </span>
+            )}
           </li>
         ))}
       </ul>

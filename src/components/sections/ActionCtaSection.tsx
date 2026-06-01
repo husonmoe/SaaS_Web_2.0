@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { PageContainer, PageGrid } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import { ACTION_CTA_SECTION_ID } from "@/lib/floating-toolbar-anchor";
 import Image from "next/image";
 
@@ -7,6 +11,13 @@ const ACTION_MOCKUP_SRC = "/assets/image_action/image_action.png";
 const PHONE_ICON_SRC = "/assets/image_action/icon_telephone.svg";
 
 export function ActionCtaSection() {
+  const { open } = useTrialModal();
+  const [phone, setPhone] = useState("");
+
+  const handleTrialClick = () => {
+    open({ phone: phone.trim() });
+  };
+
   return (
     <section
       id={ACTION_CTA_SECTION_ID}
@@ -41,12 +52,24 @@ export function ActionCtaSection() {
                 <input
                   type="tel"
                   name="phone"
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      handleTrialClick();
+                    }
+                  }}
                   placeholder="请输入手机号"
-                  className="h-12 w-full rounded-xl border border-[var(--border-light)] bg-white pl-11 pr-4 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)]"
                   autoComplete="tel"
+                  className="h-12 w-full rounded-xl border border-[var(--border-light)] bg-white pl-11 pr-4 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)]"
                 />
               </label>
-              <Button className="h-12 shrink-0 rounded-xl px-8 sm:w-[152px]">
+              <Button
+                type="button"
+                className="h-12 shrink-0 rounded-xl px-8 sm:w-[152px]"
+                onClick={handleTrialClick}
+              >
                 免费试用
               </Button>
             </div>

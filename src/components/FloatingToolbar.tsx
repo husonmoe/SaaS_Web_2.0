@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import { type CSSProperties, type ReactNode } from "react";
 import {
   FLOATING_TOOLBAR_BUTTON_SIZE,
@@ -30,6 +31,7 @@ const TOOLTIP_WRAP_CLASS =
 
 export function FloatingToolbar() {
   const { showBackToTop, mode, coords } = useFloatingToolbarPosition();
+  const { open: openTrialModal } = useTrialModal();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -64,7 +66,7 @@ export function FloatingToolbar() {
         <ToolbarSlot style={SLOT_STYLE}>
           <ToolbarButton
             variant="primary"
-            href="#"
+            onClick={openTrialModal}
             ariaLabel="免费试用"
             iconSrc={ICONS.gift}
             tooltip={<SimpleTooltip label="免费试用" />}

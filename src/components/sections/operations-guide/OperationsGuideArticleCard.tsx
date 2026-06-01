@@ -15,8 +15,10 @@ export function OperationsGuideArticleCard({
   return (
     <Link
       href={operationsGuideDetailPath(slug)}
+      target="_blank"
+      rel="noopener noreferrer"
       className="operations-guide-article-card group flex flex-col overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-white)] transition-[box-shadow] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
-      aria-label={`阅读：${title}`}
+      aria-label={`阅读：${title}（新标签页打开）`}
     >
       <div className="p-4">
         <div className="relative aspect-[282/120] w-full overflow-hidden rounded-md">
