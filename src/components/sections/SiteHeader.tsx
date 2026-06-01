@@ -61,7 +61,7 @@ export function SiteHeader() {
       <div className="relative z-10 flex h-[72px] w-full items-center gap-4 px-[var(--page-margin-x)] lg:px-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center"
+          className="flex w-[222px] shrink-0 items-center"
           aria-label="光谱云诊"
         >
           <Image

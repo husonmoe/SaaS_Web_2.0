@@ -8,10 +8,12 @@ const LAUREL_RIGHT = "/assets/figma-cache/laurel-right.svg";
 const FEATURES = ["0 打字", "AI辅助问诊", "医保对接", "一键入库"];
 
 const HERO_MOCKUP_SRC = "/assets/image_header.png";
+const HERO_MOCKUP_WIDTH = 2034;
+const HERO_MOCKUP_HEIGHT = 1320;
 
 export function HeroSection() {
   return (
-    <section className="relative -mt-[72px] overflow-hidden pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-24">
+    <section className="relative overflow-visible pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-24">
       {/* 背景图 bg_header.png：延伸至透明顶栏下方 */}
       <div className="hero-header-bg-layer" aria-hidden />
 
@@ -73,8 +75,8 @@ export function HeroSection() {
               <Image
                 src={HERO_MOCKUP_SRC}
                 alt="光谱云诊产品界面预览"
-                width={2416}
-                height={1686}
+                width={HERO_MOCKUP_WIDTH}
+                height={HERO_MOCKUP_HEIGHT}
                 className="h-auto w-full object-contain"
                 priority
                 sizes="(max-width: 1024px) 100vw, 58vw"
