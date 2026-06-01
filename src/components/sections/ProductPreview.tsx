@@ -1,12 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
-import type { ProductFeature, ProductTabContent, HeadlinePart } from "@/components/sections/productModuleContent";
-import {
-  DEFAULT_APP_IMAGE,
+import type {
+  ProductFeature,
+  ProductFeatureMedia,
+  ProductTabContent,
+  HeadlinePart,
 } from "@/components/sections/productModuleContent";
+import { DEFAULT_APP_IMAGE } from "@/components/sections/productModuleContent";
+
+const AUTO_PLAY_INTERVAL_MS = 5000;
+/** 180° 翻转：装饰性动效建议 500–700ms，便于感知方向变化 */
+const FEATURE_ICON_TRANSITION_MS = 500;
+
+const PREVIEW_MEDIA_CLASS =
+  "h-auto w-full rounded-3xl object-contain object-left lg:h-[500px]";
 
 function headlineColorClass(color: "primary" | "base") {
   return color === "primary"
@@ -29,26 +39,18 @@ function HeadlineLine({ part }: { part: HeadlinePart }) {
   );
 }
 
-function AiFeatureIcon({
-  isActive,
-  animateColor,
-}: {
-  isActive: boolean;
-  animateColor?: boolean;
-}) {
+function AiFeatureIcon({ isActive }: { isActive: boolean }) {
   return (
     <svg
       className={cn(
         "size-4 shrink-0",
-        animateColor
-          ? "animate-feature-icon-color"
-          : cn(
-              "transition-colors duration-300",
-              isActive
-                ? "text-[var(--color-primary-end)]"
-                : "text-[var(--color-primary-soft)]",
-            ),
+        isActive
+          ? "text-[var(--color-primary-end)]"
+          : "text-[var(--color-primary-soft)]",
       )}
+      style={{
+        transition: `color ${FEATURE_ICON_TRANSITION_MS}ms ease-in-out`,
+      }}
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -62,11 +64,63 @@ function AiFeatureIcon({
   );
 }
 
-function resolveFeatureImage(
+function resolveFeatureMedia(
   content: ProductTabContent,
   feature: ProductFeature,
-): string {
-  return feature.image ?? content.appImage ?? DEFAULT_APP_IMAGE;
+): ProductFeatureMedia {
+  if (feature.media) return feature.media;
+
+  const src = feature.image ?? content.appImage ?? DEFAULT_APP_IMAGE;
+  return { type: "image", src };
+}
+
+function FeaturePreviewMedia({
+  media,
+  alt,
+}: {
+  media: ProductFeatureMedia;
+  alt: string;
+}) {
+  if (media.type === "video") {
+    return (
+      <video
+        key={media.src}
+        src={media.src}
+        poster={media.poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className={PREVIEW_MEDIA_CLASS}
+        aria-label={alt}
+      />
+    );
+  }
+
+  if (media.type === "gif") {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        key={media.src}
+        src={media.src}
+        alt={alt}
+        className={PREVIEW_MEDIA_CLASS}
+      />
+    );
+  }
+
+  return (
+    <Image
+      key={media.src}
+      src={media.src}
+      alt={alt}
+      width={2388}
+      height={1500}
+      quality={95}
+      className={PREVIEW_MEDIA_CLASS}
+      sizes="(max-width: 1024px) 100vw, 796px"
+    />
+  );
 }
 
 function FeatureItem({
@@ -78,37 +132,23 @@ function FeatureItem({
   isActive: boolean;
   onSelect: () => void;
 }) {
-  const [spinTick, setSpinTick] = useState(0);
-  const [animateColor, setAnimateColor] = useState(false);
-
-  const triggerSpin = (activating = false) => {
-    setAnimateColor(activating);
-    setSpinTick((tick) => tick + 1);
-  };
-
-  const handleSpinEnd = () => {
-    setAnimateColor(false);
-  };
-
   return (
     <button
       type="button"
-      onClick={() => {
-        triggerSpin(!isActive);
-        onSelect();
-      }}
+      onClick={onSelect}
       className="group flex w-full gap-3 text-left"
     >
       <div className="flex h-7 items-center">
         <span
-          key={spinTick}
-          onAnimationEnd={handleSpinEnd}
           className={cn(
-            "inline-flex origin-center",
-            spinTick > 0 && "animate-feature-icon-spin",
+            "inline-flex origin-center motion-reduce:transition-none",
+            isActive ? "rotate-0" : "rotate-180",
           )}
+          style={{
+            transition: `transform ${FEATURE_ICON_TRANSITION_MS}ms cubic-bezier(0.45, 0.05, 0.55, 0.95)`,
+          }}
         >
-          <AiFeatureIcon isActive={isActive} animateColor={animateColor} />
+          <AiFeatureIcon isActive={isActive} />
         </span>
       </div>
       <div className="min-w-0 flex-1">
@@ -130,14 +170,31 @@ type ProductPreviewProps = {
 export function ProductPreview({ content }: ProductPreviewProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeFeature = content.features[activeIndex] ?? content.features[0];
-  const previewImage = activeFeature
-    ? resolveFeatureImage(content, activeFeature)
-    : (content.appImage ?? DEFAULT_APP_IMAGE);
+  const previewMedia = activeFeature
+    ? resolveFeatureMedia(content, activeFeature)
+    : {
+        type: "image" as const,
+        src: content.appImage ?? DEFAULT_APP_IMAGE,
+      };
+  const previewAlt = `光谱云诊${content.label} · ${activeFeature?.title ?? ""}`;
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [content.id]);
+
+  useEffect(() => {
+    if (content.features.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % content.features.length);
+    }, AUTO_PLAY_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [content.features.length, content.id, activeIndex]);
 
   return (
     <div className="relative min-h-[500px] overflow-visible">
       <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
-        {/* 左：文案（Figma 130:13005 · w340） */}
         <div className="flex w-full shrink-0 flex-col lg:w-[340px]">
           <div className="pt-[26px] text-[32px] font-semibold leading-[44px] text-[var(--text-base)]">
             <p className="mb-0">
@@ -160,18 +217,13 @@ export function ProductPreview({ content }: ProductPreviewProps) {
           </div>
         </div>
 
-        {/* 右：功能预览图（Figma 97:41742 · 796×500） */}
         <div className="relative min-h-[280px] flex-1 lg:min-h-[500px] lg:max-w-[796px]">
-          <Image
-            key={previewImage}
-            src={previewImage}
-            alt={`光谱云诊${content.label} · ${activeFeature?.title ?? ""}`}
-            width={2388}
-            height={1500}
-            quality={95}
-            className="h-auto w-full rounded-3xl object-contain object-left lg:h-[500px]"
-            sizes="(max-width: 1024px) 100vw, 796px"
-          />
+          <div
+            key={`${content.id}-${activeIndex}`}
+            className="animate-product-preview-in motion-reduce:animate-none"
+          >
+            <FeaturePreviewMedia media={previewMedia} alt={previewAlt} />
+          </div>
         </div>
       </div>
     </div>

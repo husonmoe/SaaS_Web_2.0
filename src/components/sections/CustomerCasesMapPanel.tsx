@@ -2,13 +2,14 @@
 
 import { BusinessMap } from "@/components/sections/BusinessMap";
 import { MapStatsList } from "@/components/sections/MapStatsList";
+import {
+  MAP_COLUMNS_OFFSET_MS,
+  MAP_EFFECTS_START_MS,
+  MAP_STATS_DURATION_MS,
+} from "@/components/sections/mapPanelTiming";
 import { useInViewOnce } from "@/hooks/useInViewOnce";
 import { cn } from "@/lib/cn";
 import { useEffect, useState } from "react";
-
-const PANEL_ENTER_MS = 1200;
-const MAP_EFFECT_STAGGER_MS = 1000;
-const STATS_START_MS = PANEL_ENTER_MS / 2;
 
 export function CustomerCasesMapPanel() {
   const { ref, isInView } = useInViewOnce(0.08);
@@ -32,15 +33,15 @@ export function CustomerCasesMapPanel() {
 
     const statsTimer = window.setTimeout(
       () => setStatsEnabled(true),
-      STATS_START_MS,
+      MAP_EFFECTS_START_MS,
     );
     const dotsTimer = window.setTimeout(
       () => setDotsActive(true),
-      PANEL_ENTER_MS,
+      MAP_EFFECTS_START_MS,
     );
     const columnsTimer = window.setTimeout(
       () => setColumnsActive(true),
-      PANEL_ENTER_MS + MAP_EFFECT_STAGGER_MS,
+      MAP_EFFECTS_START_MS + MAP_COLUMNS_OFFSET_MS,
     );
 
     return () => {
@@ -62,12 +63,14 @@ export function CustomerCasesMapPanel() {
         <BusinessMap
           dotsActive={dotsActive}
           columnsActive={columnsActive}
+          mapEntered={isInView}
           className="absolute inset-y-0 left-1/2 h-full -translate-x-1/2"
         />
       </div>
 
       <MapStatsList
         enabled={statsEnabled}
+        durationMs={MAP_STATS_DURATION_MS}
         className="relative z-10 shrink-0 lg:absolute lg:bottom-0 lg:left-0 lg:w-full"
       />
     </div>

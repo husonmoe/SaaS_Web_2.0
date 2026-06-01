@@ -10,11 +10,11 @@ export type CustomerCaseItem = {
 
 export const VERSION_TAG_STYLES: Record<
   CaseVersionTag,
-  { color: string; bg: string }
+  { color: string; border: string }
 > = {
-  basic: { color: "#0089ff", bg: "rgba(0, 137, 255, 0.08)" },
-  insurance: { color: "#35968b", bg: "rgba(53, 150, 139, 0.08)" },
-  pro: { color: "#f65601", bg: "rgba(246, 86, 1, 0.08)" },
+  basic: { color: "#0089ff", border: "rgba(0, 137, 255, 0.16)" },
+  insurance: { color: "#35968b", border: "rgba(53, 150, 139, 0.16)" },
+  pro: { color: "#f65601", border: "rgba(246, 86, 1, 0.16)" },
 };
 
 export const CUSTOMER_CASES: CustomerCaseItem[] = [

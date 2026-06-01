@@ -1,19 +1,20 @@
 "use client";
 
 import { MAP_STATS } from "@/components/sections/customerCasesContent";
+import { MAP_STATS_DURATION_MS } from "@/components/sections/mapPanelTiming";
 import { useCountUp } from "@/hooks/useCountUp";
 import { cn } from "@/lib/cn";
-
-const DURATION_MS = 2000;
 
 function AnimatedMapStatNumber({
   target,
   enabled,
+  durationMs,
 }: {
   target: number;
   enabled: boolean;
+  durationMs: number;
 }) {
-  const value = useCountUp(target, DURATION_MS, enabled);
+  const value = useCountUp(target, durationMs, enabled);
 
   return <span className="tabular-nums text-[var(--text-base)]">{value}</span>;
 }
@@ -21,9 +22,11 @@ function AnimatedMapStatNumber({
 export function MapStatsList({
   className,
   enabled = false,
+  durationMs = MAP_STATS_DURATION_MS,
 }: {
   className?: string;
   enabled?: boolean;
+  durationMs?: number;
 }) {
   return (
     <div className={cn("flex flex-col gap-[2px]", className)}>
@@ -36,7 +39,11 @@ export function MapStatsList({
             />
             <span className="text-base leading-6 text-[var(--text-secondary)]">
               {item.before}
-              <AnimatedMapStatNumber target={item.target} enabled={enabled} />
+              <AnimatedMapStatNumber
+                target={item.target}
+                enabled={enabled}
+                durationMs={durationMs}
+              />
               {item.after}
             </span>
           </li>

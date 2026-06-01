@@ -18,8 +18,11 @@ export function VersionSchemeSection() {
           ))}
         </div>
 
-        <Button variant="outline" className="gap-1 rounded-full px-8">
-          查看版本对比
+        <Button
+          variant="outline"
+          className="h-[60px] min-h-[60px] gap-1 rounded-full pl-10 pr-8 text-[var(--text-secondary)] md:h-[60px] md:min-h-[60px]"
+        >
+          <span className="text-[var(--text-secondary)]">查看版本对比</span>
           <Image
             src="/assets/icon_chervon_right_s.svg"
             alt=""

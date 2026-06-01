@@ -83,6 +83,21 @@
     animation: feature-icon-color 0.45s ease-in-out forwards;
   }
 
+  @keyframes product-preview-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-product-preview-in {
+    animation: product-preview-in 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) both;
+  }
+
   .version-plan-card {
     box-shadow: var(--shadow-version-card);
   }

@@ -1,8 +1,17 @@
+export type ProductFeatureMedia = {
+  type: "image" | "video" | "gif";
+  src: string;
+  /** 视频首帧或加载前占位图 */
+  poster?: string;
+};
+
 export type ProductFeature = {
   title: string;
   description: string;
   /** 功能预览图；缺省时按 `{label}_{title}` 规则拼接路径 */
   image?: string;
+  /** 功能预览媒体；缺省时由 image / appImage 推导为图片 */
+  media?: ProductFeatureMedia;
 };
 
 /** 产品模块功能预览图路径（public/assets/image_product_module） */

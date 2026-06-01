@@ -88,9 +88,9 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <a
-              href="tel:4006665061"
+            <span
               className="ml-auto flex shrink-0 items-center gap-2 text-lg text-[var(--text-muted)]"
+              aria-label="客服电话 400-666-5061"
             >
               <Image
                 src={PHONE_ICON_SRC}
@@ -101,7 +101,7 @@ export function SiteHeader() {
                 unoptimized
               />
               400-666-5061
-            </a>
+            </span>
           </nav>
         </div>
 
@@ -140,9 +140,9 @@ export function SiteHeader() {
             {item.label}
           </Link>
         ))}
-        <a
-          href="tel:4006665061"
+        <span
           className="flex items-center gap-2 px-5 py-3 text-lg text-[var(--text-muted)]"
+          aria-label="客服电话 400-666-5061"
         >
           <Image
             src={PHONE_ICON_SRC}
@@ -153,7 +153,7 @@ export function SiteHeader() {
             unoptimized
           />
           400-666-5061
-        </a>
+        </span>
       </nav>
     </header>
   );

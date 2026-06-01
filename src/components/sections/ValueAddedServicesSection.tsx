@@ -42,7 +42,7 @@ export function ValueAddedServicesSection() {
 
         <Button
           variant="outline"
-          className="h-[60px] min-h-[60px] gap-1 rounded-full pl-10 pr-8 text-[var(--text-secondary)]"
+          className="h-[60px] min-h-[60px] gap-1 rounded-full pl-10 pr-8 text-[var(--text-secondary)] md:h-[60px] md:min-h-[60px]"
         >
           <span className="text-[var(--text-secondary)]">了解功能详情</span>
           <Image

@@ -59,29 +59,28 @@ def find_exported_group(body: str, keys: Tuple[str, ...]) -> Optional[str]:
     return None
 
 
-def is_water_path(path: str) -> bool:
-    """水域：paint0–paint5 灰蓝/蓝色渐变"""
+def is_land_base_path(path: str) -> bool:
+    """地图底色（原 paint0–paint5 渐变）"""
     return any(f"paint{i}_linear" in path for i in range(6))
 
 
 def is_column_path(path: str) -> bool:
-    return "url(#paint" in path and "linear" in path and not is_water_path(path)
+    return "url(#paint" in path and "linear" in path and not is_land_base_path(path)
 
 
 def classify_paths(paths: List[str]) -> Dict[str, List[str]]:
     land_paths: List[str] = []
-    water_paths: List[str] = []
     col_paths: List[str] = []
 
     for p in paths:
-        if is_water_path(p):
-            water_paths.append(p)
+        if is_land_base_path(p):
+            land_paths.append(p)
         elif is_column_path(p):
             col_paths.append(p)
         else:
             land_paths.append(p)
 
-    return {"land": land_paths, "water": water_paths, "columns": col_paths}
+    return {"land": land_paths, "columns": col_paths}
 
 
 def classify_circles(circles: List[str]) -> List[str]:
@@ -132,11 +131,6 @@ def main() -> None:
         if land_content:
             layers["land"] = f'<g id="land">\n{land_content}\n</g>'
 
-    if "water" not in layers:
-        water_content = "\n".join(classified["water"])
-        if water_content:
-            layers["water"] = f'<g id="water">\n{water_content}\n</g>'
-
     if "light-columns" not in layers:
         col_content = "\n".join(classified["columns"] + filter_gs)
         if col_content:
@@ -154,7 +148,7 @@ def main() -> None:
                 f'<g id="light-dots">\n' + "\n".join(dot_nodes) + "\n</g>"
             )
 
-    order = ["water", "land", "light-columns", "light-dots"]
+    order = ["land", "light-columns", "light-dots"]
     out = header + "\n"
     for key in order:
         if key in layers:

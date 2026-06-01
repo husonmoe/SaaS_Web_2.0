@@ -1,13 +1,30 @@
-/* 业务分布地图 · 光柱 / 光点动效 */
+/* 业务分布地图 · 光柱 / 光点 / 水域动效 */
 
 .business-map-root {
   --map-enter-duration: 1.2s;
+  --map-effect-enter-duration: 0.8s;
   --map-item-opacity: 1;
   --map-ripple-opacity: 0.65;
+  --map-water-opacity: 0.17;
+  --map-water-stroke-width: 0.65;
+  position: relative;
   display: flex;
   justify-content: center;
   overflow: hidden;
   width: fit-content;
+}
+
+.business-map-stack,
+.business-map-layer,
+.business-map-water {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.business-map-layer {
+  position: static;
+  z-index: 1;
 }
 
 /* 以高度 520px 为基准等比缩放（设计稿 624×520） */
@@ -19,14 +36,37 @@
   aspect-ratio: 624 / 520;
 }
 
-/* land / water 使用 SVG 自带 fill，不压透明度（与 mapgroup.svg 原稿一致） */
-.business-map-root #land,
-.business-map-root #water {
-  opacity: 1;
+.business-map-water svg {
+  aspect-ratio: 623 / 520;
 }
 
-.business-map-root #water path[fill="url(#paint2_linear_423_274017)"] {
-  opacity: 1;
+/* 水域层：透明度由 CSS 变量控制，入场与地图面板同步 */
+.business-map-water {
+  color: white;
+  opacity: 0;
+}
+
+.business-map-root--water-borders {
+  --map-water-opacity: 0.147;
+}
+
+.business-map-root--water-borders .business-map-water path {
+  stroke-width: var(--map-water-stroke-width, 0.65);
+  vector-effect: non-scaling-stroke;
+}
+
+.business-map-root--water-legacy {
+  --map-water-opacity: 0.084;
+}
+
+.business-map-root--entered .business-map-water {
+  will-change: opacity;
+  animation: map-water-fade-in var(--map-enter-duration) ease-out forwards;
+}
+
+.business-map-root #land,
+.business-map-root #land path {
+  opacity: 1 !important;
 }
 
 .business-map-root #map {
@@ -42,42 +82,84 @@
   opacity: 0;
 }
 
-.business-map-root #light-columns > .map-column-item,
-.business-map-root #light-columns > g:not(.map-column-item),
-.business-map-root [id*="light-columns" i] > .map-column-item,
-.business-map-root [id*="light-columns" i] > g:not(.map-column-item) {
-  transform: translateY(20px);
-}
-
-/* 光点：地图出现后淡入 */
+/* 光点：地图出现后淡入（错峰 +  per-dot 变量） */
 .business-map-root--dots-active .map-dot-anim {
   will-change: opacity;
-  animation: map-dot-fade-in var(--map-enter-duration) ease-out forwards;
+  animation: map-dot-fade-in var(--map-effect-enter-duration, 0.8s) ease-out forwards;
+  animation-delay: var(--map-dot-fade-delay, 0ms);
 }
 
-.business-map-root--dots-active .map-dot-ripple-wrap {
+.business-map-root--dots-active
+  .map-dot-node
+  circle:not(.map-dot-ripple) {
+  will-change: opacity;
+  animation: map-dot-pulse var(--map-dot-pulse-duration, 3s) ease-in-out
+    infinite;
+  animation-delay: var(--map-dot-pulse-delay, 0ms);
+}
+
+.business-map-root--dots-active .map-dot-ripple {
   transform-box: fill-box;
   transform-origin: center;
+  stroke-width: 0.5;
   will-change: transform, opacity;
-  animation: map-dot-ripple 2.4s ease-out infinite;
+  animation: map-dot-ripple var(--map-ripple-duration, 2.4s) ease-out infinite;
+  animation-delay: var(--map-ripple-delay, 0ms);
 }
 
-/* 光柱：光点阶段 2s 后上移 20px + 淡入 */
+/* 光柱：错峰淡入 + 持续亮度/拉伸呼吸 */
 .business-map-root--columns-active #light-columns > .map-column-item,
 .business-map-root--columns-active #light-columns > g:not(.map-column-item),
 .business-map-root--columns-active [id*="light-columns" i] > .map-column-item,
 .business-map-root--columns-active [id*="light-columns" i] > g:not(.map-column-item) {
-  will-change: transform, opacity;
-  animation: map-item-enter var(--map-enter-duration) ease-out forwards;
+  will-change: opacity;
+  animation: map-column-fade-in var(--map-effect-enter-duration, 0.8s) ease-out forwards;
+  animation-delay: var(--map-column-fade-delay, 0ms);
 }
 
-@keyframes map-item-enter {
+.business-map-root--columns-active .map-column-item path,
+.business-map-root--columns-active
+  #light-columns
+  > g:not(.map-column-item)
+  path,
+.business-map-root--columns-active
+  [id*="light-columns" i]
+  > .map-column-item
+  path,
+.business-map-root--columns-active
+  [id*="light-columns" i]
+  > g:not(.map-column-item)
+  path {
+  will-change: filter;
+  animation: map-column-glow var(--map-column-pulse-duration, 2.8s) ease-in-out
+    infinite;
+  animation-delay: var(--map-column-pulse-delay, 0ms);
+}
+
+@keyframes map-water-fade-in {
   from {
-    transform: translateY(20px);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    opacity: var(--map-water-opacity, 0.24);
+  }
+}
+
+@keyframes map-column-glow {
+  0%,
+  100% {
+    filter: brightness(1.5) saturate(1.28);
+  }
+  50% {
+    filter: brightness(var(--map-column-glow-peak, 2.25)) saturate(1.58);
+  }
+}
+
+@keyframes map-column-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: var(--map-item-opacity, 1);
   }
 }
@@ -91,13 +173,52 @@
   }
 }
 
+@keyframes map-dot-pulse {
+  0%,
+  100% {
+    opacity: var(--map-dot-base-opacity, 1);
+  }
+  50% {
+    opacity: calc(var(--map-dot-base-opacity, 1) * 0.58);
+  }
+}
+
 @keyframes map-dot-ripple {
   0% {
     transform: scale(1);
     opacity: var(--map-ripple-opacity, 0.65);
   }
   100% {
-    transform: scale(2.5);
+    transform: scale(var(--map-ripple-scale, 1.75));
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .business-map-root--entered .business-map-water {
+    animation: none;
+    opacity: var(--map-water-opacity, 0.24);
+  }
+
+  .business-map-root--dots-active .map-dot-node circle:not(.map-dot-ripple),
+  .business-map-root--dots-active .map-dot-ripple {
+    animation: none;
+  }
+
+  .business-map-root--columns-active .map-column-item path,
+  .business-map-root--columns-active
+    #light-columns
+    > g:not(.map-column-item)
+    path,
+  .business-map-root--columns-active
+    [id*="light-columns" i]
+    > .map-column-item
+    path,
+  .business-map-root--columns-active
+    [id*="light-columns" i]
+    > g:not(.map-column-item)
+    path {
+    animation: none;
+    filter: brightness(1.45) saturate(1.2);
   }
 }

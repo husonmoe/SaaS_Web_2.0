@@ -18,8 +18,11 @@ export function CustomerCaseCard({
           {location}
         </h3>
         <span
-          className="inline-flex h-7 items-center rounded-full px-3 text-sm leading-[22px]"
-          style={{ color: tag.color, backgroundColor: tag.bg }}
+          className="inline-flex h-7 items-center rounded-md border px-1.5 text-sm leading-[22px]"
+          style={{
+            color: tag.color,
+            borderColor: tag.border,
+          }}
         >
           {versionLabel}
         </span>

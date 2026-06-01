@@ -4,21 +4,170 @@ import { cn } from "@/lib/cn";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const MAP_SVG_SRC = "/assets/mapgroup.structured.svg";
-const STAGGER_MAX_MS = 800;
+
+/**
+ * 水域渲染模式
+ * - borders：描边叠在地图之上，避免大面积 fill 把陆地洗灰（推荐）
+ * - legacy：原始 fill 叠层，位于地图下方；回退时改此常量并执行 scripts/restore-water-asset.sh
+ */
+type WaterRenderMode = "borders" | "legacy";
+const WATER_RENDER_MODE: WaterRenderMode = "borders";
+const WATER_SVG_SRC =
+  WATER_RENDER_MODE === "legacy"
+    ? "/assets/water.svg.original"
+    : "/assets/water.svg";
+/** 每组内元素数量 */
+const COLUMN_GROUP_SIZE = 3;
+const DOT_GROUP_SIZE = 4;
+/** 组与组之间的间隔（与 mapPanelTiming.MAP_EFFECT_MAX_STAGGER_MS 配合） */
+const GROUP_STAGGER_MS = 60;
+/** 同组内相邻元素的微错开 */
+const IN_GROUP_STEP_MS = 22;
 
 function configureMapSvg(root: HTMLElement) {
-  const svg = root.querySelector("svg");
-  if (!svg) return;
-
-  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  root.querySelectorAll("svg").forEach((svg) => {
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  });
 }
 
-function randomDelayMs() {
-  return Math.floor(Math.random() * STAGGER_MAX_MS);
+/** 相对素材默认水域 fill-opacity 的缩放（0.5 为历史减半，×0.7 为再降 30%） */
+const WATER_FILL_OPACITY_SCALE = 0.35;
+
+function prepareWaterSvg(root: HTMLElement, mode: WaterRenderMode) {
+  root.querySelectorAll<SVGElement>("g[opacity]").forEach((group) => {
+    group.removeAttribute("opacity");
+  });
+
+  if (mode !== "borders") return;
+
+  root.querySelectorAll<SVGPathElement>("path").forEach((path) => {
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", "0.65");
+    path.setAttribute("stroke-linejoin", "round");
+    path.setAttribute("stroke-linecap", "round");
+    path.removeAttribute("fill-rule");
+    path.removeAttribute("clip-rule");
+  });
 }
 
-function randomOpacity(min: number, max: number) {
-  return (min + Math.random() * (max - min)).toFixed(2);
+/** 陆地渐变 stop-opacity / fill-opacity 修正；仅陆地底色应用竖向双色渐变 */
+function solidifyLandGradients(root: HTMLElement) {
+  const landGradientTop = "#9AC3E9";
+  const landGradientBottom = "#C6DDF4";
+
+  root
+    .querySelectorAll<SVGLinearGradientElement>(
+      'linearGradient[id^="paint"][id*="_linear"]',
+    )
+    .forEach((gradient) => {
+      const id = gradient.getAttribute("id") ?? "";
+      if (!/^paint[024]_linear/.test(id)) return;
+
+      gradient.setAttribute("x1", "312");
+      gradient.setAttribute("y1", "0");
+      gradient.setAttribute("x2", "312");
+      gradient.setAttribute("y2", "520");
+      gradient.setAttribute("gradientUnits", "userSpaceOnUse");
+
+      const stops = gradient.querySelectorAll("stop");
+      if (stops.length === 0) return;
+
+      stops[0].setAttribute("stop-color", landGradientTop);
+      stops[stops.length - 1].setAttribute("stop-color", landGradientBottom);
+    });
+
+  root.querySelectorAll<SVGStopElement>(
+    'linearGradient[id^="paint"] stop[stop-opacity]',
+  ).forEach((stop) => {
+    const gradient = stop.closest("linearGradient");
+    const id = gradient?.getAttribute("id") ?? "";
+    if (/^paint[0-5]_linear/.test(id)) {
+      stop.setAttribute("stop-opacity", "1");
+    }
+  });
+
+  root.querySelectorAll<SVGElement>("#land, #land path").forEach((el) => {
+    el.style.opacity = "1";
+  });
+
+  root.querySelectorAll<SVGPathElement>("#land path[fill-opacity]").forEach(
+    (path) => {
+      const raw = parseFloat(path.getAttribute("fill-opacity") ?? "1");
+      if (!Number.isNaN(raw)) {
+        path.setAttribute("fill-opacity", String(raw * WATER_FILL_OPACITY_SCALE));
+      }
+    },
+  );
+}
+
+/** 按索引生成稳定伪随机数（0–1），避免每次 apply 时参数跳动 */
+function seededUnit(seed: number) {
+  let t = (seed ^ 0x6d2b79f5) >>> 0;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+function lerp(min: number, max: number, t: number) {
+  return min + (max - min) * t;
+}
+
+/** 光点错峰：保留分组波浪感，叠加 per-dot 抖动与相位差 */
+function dotAnimationTiming(index: number, total: number) {
+  const wave = seededUnit(index * 7919 + 13);
+  const jitter = seededUnit(index * 4177 + 29);
+  const rhythm = seededUnit(index * 2341 + 7);
+
+  const groupIndex = Math.floor(index / DOT_GROUP_SIZE);
+  const indexInGroup = index % DOT_GROUP_SIZE;
+  const baseDelay =
+    groupIndex * GROUP_STAGGER_MS +
+    indexInGroup * IN_GROUP_STEP_MS +
+    (index / Math.max(total, 1)) * 120;
+
+  const fadeDelay = Math.round(baseDelay + jitter * 180 + wave * 60);
+  const rippleDuration = Math.round(lerp(1900, 3400, rhythm));
+  const rippleScale = lerp(1.55, 2.05, seededUnit(index * 4567 + 41)).toFixed(2);
+  const rippleDelayOffset = Math.round(lerp(80, 560, seededUnit(index * 891 + 17)));
+  const ripplePhase = Math.round(
+    seededUnit(index * 3333 + 59) * rippleDuration,
+  );
+  const pulseDuration = Math.round(lerp(2400, 4200, seededUnit(index * 6121 + 23)));
+  const pulseDelay = Math.round(
+    fadeDelay + lerp(200, 900, seededUnit(index * 9871 + 31)),
+  );
+
+  return {
+    fadeDelay,
+    rippleDuration,
+    rippleScale,
+    rippleDelay: fadeDelay + rippleDelayOffset - ripplePhase,
+    pulseDuration,
+    pulseDelay,
+  };
+}
+
+/** 光柱错峰：分组波浪 + 抖动，入场后持续亮度呼吸 */
+function columnAnimationTiming(index: number, total: number) {
+  const jitter = seededUnit(index * 5531 + 11);
+  const rhythm = seededUnit(index * 8821 + 37);
+
+  const groupIndex = Math.floor(index / COLUMN_GROUP_SIZE);
+  const indexInGroup = index % COLUMN_GROUP_SIZE;
+  const baseDelay =
+    groupIndex * GROUP_STAGGER_MS +
+    indexInGroup * IN_GROUP_STEP_MS +
+    (index / Math.max(total, 1)) * 100;
+
+  const fadeDelay = Math.round(baseDelay + jitter * 120);
+  const pulseDuration = Math.round(lerp(2200, 3800, rhythm));
+  const pulseDelay = Math.round(
+    fadeDelay + lerp(160, 680, seededUnit(index * 7123 + 19)),
+  );
+  const glowPeak = lerp(1.92, 2.48, seededUnit(index * 9347 + 43)).toFixed(2);
+
+  return { fadeDelay, pulseDuration, pulseDelay, glowPeak };
 }
 
 function idMatchesKey(id: string, key: string) {
@@ -69,15 +218,9 @@ function prepareMapSvg(root: HTMLElement) {
     anim.appendChild(dotNode);
   });
 
-  dotsGroup.querySelectorAll(".map-dot-ripple").forEach((ripple) => {
-    const circle = ripple as SVGCircleElement;
-    if (circle.parentElement?.classList.contains("map-dot-ripple-wrap")) return;
-
-    const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    wrap.setAttribute("class", "map-dot-ripple-wrap");
-    circle.parentNode?.insertBefore(wrap, circle);
-    wrap.appendChild(circle);
-  });
+  const hasStructuredDots =
+    dotsGroup.querySelector(":scope > .map-dot-node") !== null;
+  if (hasStructuredDots) return;
 
   dotsGroup.querySelectorAll(":scope > circle").forEach((circle) => {
     const cx = parseFloat(circle.getAttribute("cx") || "0");
@@ -100,7 +243,7 @@ function prepareMapSvg(root: HTMLElement) {
     ripple.setAttribute("r", r);
     ripple.setAttribute("fill", "none");
     ripple.setAttribute("stroke", "white");
-    ripple.setAttribute("stroke-width", "1");
+    ripple.setAttribute("stroke-width", "0.5");
     ripple.setAttribute("opacity", "0");
 
     circle.parentNode?.insertBefore(anim, circle);
@@ -116,10 +259,25 @@ function applyColumnVisuals(root: HTMLElement, animate: boolean) {
     "#light-columns > .map-column-item, #light-columns > g:not(.map-column-item), [id*='light-columns' i] > .map-column-item, [id*='light-columns' i] > g:not(.map-column-item)",
   );
 
-  columns.forEach((el) => {
-    el.style.setProperty("--map-item-opacity", randomOpacity(0.42, 1));
+  columns.forEach((el, index) => {
+    const seed = index * 1597334677 + 974107;
+    const itemOpacity = lerp(0.78, 1, seededUnit(seed)).toFixed(2);
+    const timing = columnAnimationTiming(index, columns.length);
+
+    el.style.setProperty("--map-item-opacity", itemOpacity);
+    el.style.setProperty("--map-column-glow-peak", timing.glowPeak);
+
     if (!animate) return;
-    el.style.animationDelay = `${randomDelayMs()}ms`;
+
+    el.style.setProperty("--map-column-fade-delay", `${timing.fadeDelay}ms`);
+    el.style.setProperty(
+      "--map-column-pulse-duration",
+      `${timing.pulseDuration}ms`,
+    );
+    el.style.setProperty(
+      "--map-column-pulse-delay",
+      `${timing.pulseDelay}ms`,
+    );
   });
 }
 
@@ -128,34 +286,52 @@ function applyDotVisuals(root: HTMLElement, animate: boolean) {
     "#light-dots > .map-dot-anim, [id*='light-dots' i] > .map-dot-anim",
   );
 
-  dotAnims.forEach((el) => {
-    el.style.setProperty("--map-item-opacity", randomOpacity(0.55, 1));
+  dotAnims.forEach((el, index) => {
+    const seed = index * 2654435761 + 1013904223;
+    const itemOpacity = lerp(0.72, 1, seededUnit(seed)).toFixed(2);
+    const dotOpacity = lerp(0.82, 1, seededUnit(seed + 17)).toFixed(2);
+    const timing = dotAnimationTiming(index, dotAnims.length);
+
+    el.style.setProperty("--map-item-opacity", itemOpacity);
+    el.style.setProperty("--map-dot-base-opacity", dotOpacity);
 
     el.querySelectorAll<SVGCircleElement>(
       ".map-dot-node circle:not(.map-dot-ripple)",
     ).forEach((circle) => {
-      circle.style.opacity = randomOpacity(0.75, 1);
+      circle.style.opacity = dotOpacity;
     });
 
     if (!animate) return;
 
-    const delay = randomDelayMs();
-    el.style.animationDelay = `${delay}ms`;
+    el.style.setProperty("--map-dot-fade-delay", `${timing.fadeDelay}ms`);
+    el.style.setProperty("--map-dot-pulse-duration", `${timing.pulseDuration}ms`);
+    el.style.setProperty("--map-dot-pulse-delay", `${timing.pulseDelay}ms`);
 
-    const rippleWrap = el.querySelector<SVGGElement>(".map-dot-ripple-wrap");
-    if (rippleWrap) {
-      rippleWrap.style.setProperty(
+    const ripple = el.querySelector<SVGCircleElement>(".map-dot-ripple");
+    if (ripple) {
+      ripple.style.setProperty(
         "--map-ripple-opacity",
-        randomOpacity(0.45, 0.85),
+        lerp(0.36, 0.62, seededUnit(seed + 53)).toFixed(2),
       );
-      rippleWrap.style.animationDelay = `${delay + 200 + (randomDelayMs() % 400)}ms`;
+      ripple.style.setProperty(
+        "--map-ripple-duration",
+        `${timing.rippleDuration}ms`,
+      );
+      ripple.style.setProperty(
+        "--map-ripple-scale",
+        timing.rippleScale,
+      );
+      ripple.style.setProperty(
+        "--map-ripple-delay",
+        `${timing.rippleDelay}ms`,
+      );
     }
   });
 }
 
 function restartDotAnimations(root: HTMLElement) {
   root
-    .querySelectorAll<SVGElement>(".map-dot-anim, .map-dot-ripple-wrap")
+    .querySelectorAll<SVGElement>(".map-dot-anim, .map-dot-ripple")
     .forEach((el) => {
       el.style.animation = "none";
       void el.getBoundingClientRect();
@@ -180,74 +356,111 @@ function restartColumnAnimations(root: HTMLElement) {
     });
 }
 
+function restartWaterAnimation(root: HTMLElement) {
+  const layer = root.querySelector<HTMLElement>(".business-map-water");
+  if (!layer) return;
+  layer.style.animation = "none";
+  void layer.getBoundingClientRect();
+  layer.style.removeProperty("animation");
+}
+
 type BusinessMapProps = {
   className?: string;
   dotsActive?: boolean;
   columnsActive?: boolean;
+  mapEntered?: boolean;
 };
 
 export function BusinessMap({
   className,
   dotsActive = false,
   columnsActive = false,
+  mapEntered = false,
 }: BusinessMapProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const waterRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapMarkup, setMapMarkup] = useState<string | null>(null);
+  const [waterMarkup, setWaterMarkup] = useState<string | null>(null);
   const preparedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(MAP_SVG_SRC)
-      .then((res) => {
+
+    Promise.all([
+      fetch(MAP_SVG_SRC).then((res) => {
         if (!res.ok) throw new Error(`map svg ${res.status}`);
         return res.text();
-      })
-      .then((text) => {
-        if (!cancelled) setSvgMarkup(text);
+      }),
+      fetch(WATER_SVG_SRC).then((res) => {
+        if (!res.ok) throw new Error(`water svg ${res.status}`);
+        return res.text();
+      }),
+    ])
+      .then(([mapText, waterText]) => {
+        if (cancelled) return;
+        setMapMarkup(mapText);
+        setWaterMarkup(waterText);
       })
       .catch(() => {
-        if (!cancelled) setSvgMarkup(null);
+        if (cancelled) return;
+        setMapMarkup(null);
+        setWaterMarkup(null);
       });
+
     return () => {
       cancelled = true;
     };
   }, []);
 
   useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root || !svgMarkup) return;
+    const mapRoot = mapRef.current;
+    const waterRoot = waterRef.current;
+    if (!mapRoot || !mapMarkup) return;
 
-    root.innerHTML = svgMarkup;
+    mapRoot.innerHTML = mapMarkup;
+    if (waterRoot && waterMarkup) {
+      waterRoot.innerHTML = waterMarkup;
+      prepareWaterSvg(waterRoot, WATER_RENDER_MODE);
+    }
+
     preparedRef.current = false;
 
     try {
-      configureMapSvg(root);
-      prepareMapSvg(root);
-      applyColumnVisuals(root, false);
-      applyDotVisuals(root, false);
+      configureMapSvg(stackRef.current ?? mapRoot);
+      prepareMapSvg(mapRoot);
+      solidifyLandGradients(mapRoot);
+      applyColumnVisuals(mapRoot, false);
+      applyDotVisuals(mapRoot, false);
       preparedRef.current = true;
     } catch {
       preparedRef.current = false;
     }
-  }, [svgMarkup]);
+  }, [mapMarkup, waterMarkup]);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root || !preparedRef.current || !dotsActive) return;
-
-    applyDotVisuals(root, true);
-    restartDotAnimations(root);
-  }, [dotsActive, svgMarkup]);
+    const stack = stackRef.current;
+    if (!stack || !preparedRef.current || !mapEntered) return;
+    restartWaterAnimation(stack);
+  }, [mapEntered, mapMarkup, waterMarkup]);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root || !preparedRef.current || !columnsActive) return;
+    const mapRoot = mapRef.current;
+    if (!mapRoot || !preparedRef.current || !dotsActive) return;
 
-    applyColumnVisuals(root, true);
-    restartColumnAnimations(root);
-  }, [columnsActive, svgMarkup]);
+    applyDotVisuals(mapRoot, true);
+    restartDotAnimations(mapRoot);
+  }, [dotsActive, mapMarkup]);
 
-  if (!svgMarkup) {
+  useEffect(() => {
+    const mapRoot = mapRef.current;
+    if (!mapRoot || !preparedRef.current || !columnsActive) return;
+
+    applyColumnVisuals(mapRoot, true);
+    restartColumnAnimations(mapRoot);
+  }, [columnsActive, mapMarkup]);
+
+  if (!mapMarkup || !waterMarkup) {
     return (
       <div
         className={cn(
@@ -261,14 +474,27 @@ export function BusinessMap({
 
   return (
     <div
-      ref={rootRef}
+      ref={stackRef}
       className={cn(
         "business-map-root h-full",
+        WATER_RENDER_MODE === "borders"
+          ? "business-map-root--water-borders"
+          : "business-map-root--water-legacy",
+        mapEntered && "business-map-root--entered",
         dotsActive && "business-map-root--dots-active",
         columnsActive && "business-map-root--columns-active",
         className,
       )}
       aria-hidden
-    />
+    >
+      <div
+        ref={waterRef}
+        className={cn(
+          "business-map-water pointer-events-none absolute inset-0 flex items-center justify-center",
+          WATER_RENDER_MODE === "borders" ? "z-[2]" : "z-0",
+        )}
+      />
+      <div ref={mapRef} className="business-map-layer h-full" />
+    </div>
   );
 }
