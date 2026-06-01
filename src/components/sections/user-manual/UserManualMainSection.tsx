@@ -30,7 +30,7 @@ export function UserManualMainSection({
   const showSystemLayout = activeCategoryId === "system" && topics.length > 0;
 
   return (
-    <section className="bg-[var(--bg-white)] pb-12 md:pb-[100px]">
+    <section className="pb-12 md:pb-[100px]">
       <PageContainer className="flex flex-col items-center gap-[100px]">
         {showSystemLayout ? (
           <div className="mt-16 flex w-full max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-6">

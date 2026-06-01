@@ -21,6 +21,9 @@
 
   html {
     scroll-behavior: smooth;
+    /* 弹窗锁滚动时保留滚动条占位，避免内容宽度跳动 */
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
   }
 
   body {

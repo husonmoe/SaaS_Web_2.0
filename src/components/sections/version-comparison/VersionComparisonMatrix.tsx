@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import { cn } from "@/lib/cn";
 import {
   VERSION_PLANS,
@@ -95,6 +96,8 @@ function MatrixHeader({
   onHideIdenticalChange: (checked: boolean) => void;
   stuck?: boolean;
 }) {
+  const { open: openTrialModal } = useTrialModal();
+
   return (
     <div
       className={cn(
@@ -184,6 +187,7 @@ function MatrixHeader({
             <button
               type="button"
               className="inline-flex h-10 min-h-10 items-center justify-center rounded-lg border border-[var(--border-light)] bg-white px-4 text-sm leading-[22px] text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)]"
+              onClick={() => openTrialModal()}
             >
               立即试用
             </button>

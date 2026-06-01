@@ -1,8 +1,11 @@
+"use client";
+
 import {
   VERSION_COMPARE_TAG,
   VERSION_THEMES,
   type VersionPlan,
 } from "@/components/sections/versionSchemeContent";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import Image from "next/image";
 
 const CHECK_ICON_SRC = "/assets/icon_check.svg";
@@ -22,6 +25,7 @@ function FeatureCheck({ color }: { color: string }) {
 }
 
 export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
+  const { open: openTrialModal } = useTrialModal();
   const theme = VERSION_THEMES[plan.theme];
 
   return (
@@ -115,6 +119,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           <button
             type="button"
             className="inline-flex h-12 min-h-12 flex-1 items-center justify-center rounded-[10px] border border-[var(--border-light)] bg-white text-base leading-6 text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)]"
+            onClick={() => openTrialModal()}
           >
             立即试用
           </button>
@@ -122,6 +127,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
             type="button"
             className="inline-flex h-12 min-h-12 flex-1 items-center justify-center rounded-[10px] text-base leading-6 text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: theme.ctaBg }}
+            onClick={() => openTrialModal()}
           >
             咨询购买
           </button>

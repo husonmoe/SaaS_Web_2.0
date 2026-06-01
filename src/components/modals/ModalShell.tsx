@@ -22,7 +22,7 @@ export function ModalShell({
   children,
 }: ModalShellProps) {
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overscroll-none p-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden overscroll-none p-4">
       <button
         type="button"
         className="absolute inset-0 bg-[#000000]/40"

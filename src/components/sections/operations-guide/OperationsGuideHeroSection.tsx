@@ -4,7 +4,7 @@ import { OPERATIONS_GUIDE_HERO } from "@/components/sections/operations-guide/op
 
 export function OperationsGuideHeroSection() {
   return (
-    <section className="page-hero-section relative isolate overflow-visible pt-[100px] pb-16 md:pb-[100px]">
+    <section className="page-hero-section operations-guide-hero-section relative isolate overflow-visible pt-[100px] pb-16 md:pb-[100px]">
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10 flex flex-col items-center">

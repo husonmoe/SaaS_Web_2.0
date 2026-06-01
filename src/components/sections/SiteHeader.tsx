@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LoginModalButton } from "@/components/modals/LoginModalButton";
 import { TrialModalButton } from "@/components/modals/TrialModalButton";
+import { useLoginModal } from "@/contexts/LoginModalContext";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import { cn } from "@/lib/cn";
 import { EXTERNAL_PATHS, PATHS } from "@/lib/paths";
 
@@ -23,6 +25,16 @@ const NAV_ITEMS: NavItem[] = [
 /** 顶栏高度；滚动 0→72px 时背景由透明过渡到不透明白底 */
 const HEADER_HEIGHT = 72;
 
+/** 弹窗锁滚动时 body 为 fixed，window.scrollY 会变为 0，需从 body.top 读取真实偏移 */
+function getEffectiveScrollY(): number {
+  const { body } = document;
+  if (body.style.position === "fixed" && body.style.top) {
+    const parsed = Number.parseInt(body.style.top, 10);
+    if (!Number.isNaN(parsed)) return Math.max(0, -parsed);
+  }
+  return window.scrollY;
+}
+
 const LOGO_SRC = "/assets/LOGO.png";
 const PHONE_ICON_SRC = "/assets/figma-cache/phone-icon.svg";
 
@@ -39,9 +51,11 @@ function openExternalUrl(url: string) {
 function NavLink({
   item,
   onNavigate,
+  onPointerEnter,
 }: {
   item: NavItem;
   onNavigate?: () => void;
+  onPointerEnter?: (event: React.MouseEvent) => void;
 }) {
   if (item.external) {
     return (
@@ -49,6 +63,7 @@ function NavLink({
         href={item.href}
         rel="noopener noreferrer"
         className={NAV_LINK_CLASS}
+        onMouseEnter={onPointerEnter}
         onClick={(event) => {
           event.preventDefault();
           onNavigate?.();
@@ -64,6 +79,7 @@ function NavLink({
     <Link
       href={item.href}
       className={NAV_LINK_CLASS}
+      onMouseEnter={onPointerEnter}
       onClick={() => onNavigate?.()}
     >
       {item.label}
@@ -72,33 +88,103 @@ function NavLink({
 }
 
 export function SiteHeader() {
+  const { isOpen: loginOpen } = useLoginModal();
+  const { isOpen: trialOpen } = useTrialModal();
+  const modalOpen = loginOpen || trialOpen;
+
+  const headerRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [pointerInHeader, setPointerInHeader] = useState(false);
   const [scrollFill, setScrollFill] = useState(0);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setScrollFill(Math.min(window.scrollY / HEADER_HEIGHT, 1));
-    };
+  const syncScrollFill = () => {
+    setScrollFill(Math.min(getEffectiveScrollY() / HEADER_HEIGHT, 1));
+  };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+  const updatePointerInHeader = useCallback(
+    (clientX: number, clientY: number) => {
+      const header = headerRef.current;
+      if (!header) return;
+
+      const hit = document.elementFromPoint(clientX, clientY);
+      if (hit instanceof Element && header.contains(hit)) {
+        setPointerInHeader(true);
+        return;
+      }
+
+      // 弹窗遮罩挡住 hit 检测时，仍按顶栏区域坐标判断（如鼠标停在「登录」按钮上）
+      if (modalOpen) {
+        const { left, right, top, bottom } = header.getBoundingClientRect();
+        setPointerInHeader(
+          clientX >= left &&
+            clientX <= right &&
+            clientY >= top &&
+            clientY <= bottom,
+        );
+        return;
+      }
+
+      setPointerInHeader(false);
+    },
+    [modalOpen],
+  );
+
+  useEffect(() => {
+    syncScrollFill();
+    window.addEventListener("scroll", syncScrollFill, { passive: true });
+    return () => window.removeEventListener("scroll", syncScrollFill);
   }, []);
 
-  const useHoverTransition = hovered || menuOpen;
-  const fillOpacity = menuOpen
-    ? 1
-    : hovered
-      ? 1
-      : scrollFill;
+  /** 锁滚动后 window.scrollY 归零，需在 body.fixed 生效后按真实偏移重算背景 */
+  useEffect(() => {
+    const id = requestAnimationFrame(syncScrollFill);
+    return () => cancelAnimationFrame(id);
+  }, [modalOpen]);
+
+  /** 弹窗遮罩会触发 header 的 mouseleave，用坐标判断指针是否仍在顶栏区域 */
+  useEffect(() => {
+    const onMove = (event: MouseEvent) => {
+      updatePointerInHeader(event.clientX, event.clientY);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [updatePointerInHeader]);
+
+  const headerActive = hovered || pointerInHeader;
+  const useHoverTransition = headerActive || menuOpen;
+  const fillOpacity = menuOpen ? 1 : headerActive ? 1 : scrollFill;
   const headerInverted = fillOpacity >= 1;
+
+  const activateHeader = (clientX: number, clientY: number) => {
+    setHovered(true);
+    updatePointerInHeader(clientX, clientY);
+  };
+
+  const deactivateHeader = (event: React.MouseEvent<HTMLElement>) => {
+    const next = event.relatedTarget;
+    if (next instanceof Node && event.currentTarget.contains(next)) return;
+    setHovered(false);
+    setPointerInHeader(false);
+  };
 
   return (
     <header
+      ref={headerRef}
       className="sticky top-0 z-50 w-full max-w-none"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseOver={(event) => {
+        if (event.currentTarget.contains(event.target as Node)) {
+          activateHeader(event.clientX, event.clientY);
+        }
+      }}
+      onMouseOut={deactivateHeader}
+      onFocusCapture={() => setHovered(true)}
+      onBlurCapture={(event) => {
+        if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          return;
+        }
+        setHovered(false);
+      }}
     >
       {/* 背景层：默认透明；滚动 0–72px 渐显；hover 时 300ms 过渡到白底 */}
       <div
@@ -115,6 +201,7 @@ export function SiteHeader() {
           href="/"
           className="flex w-[222px] shrink-0 items-center"
           aria-label="光谱云诊"
+          onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
         >
           <Image
             src={LOGO_SRC}
@@ -132,7 +219,13 @@ export function SiteHeader() {
             aria-label="主导航"
           >
             {NAV_ITEMS.map((item) => (
-              <NavLink key={item.label} item={item} />
+              <NavLink
+                key={item.label}
+                item={item}
+                onPointerEnter={(event) =>
+                  activateHeader(event.clientX, event.clientY)
+                }
+              />
             ))}
             <span
               className="ml-auto flex shrink-0 items-center gap-2 text-lg text-[var(--text-muted)]"
@@ -159,15 +252,22 @@ export function SiteHeader() {
               headerInverted &&
                 "border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] active:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)]",
             )}
+            onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
           >
             登录诊所
           </LoginModalButton>
-          <TrialModalButton className="hidden sm:inline-flex">免费试用</TrialModalButton>
+          <TrialModalButton
+            className="hidden sm:inline-flex"
+            onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
+          >
+            免费试用
+          </TrialModalButton>
           <button
             type="button"
             className="inline-flex size-10 flex-col items-center justify-center gap-1 rounded-lg border border-[var(--border-light)] bg-white/80 md:hidden"
             aria-label="打开菜单"
             aria-expanded={menuOpen}
+            onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
             onClick={() => setMenuOpen((v) => !v)}
           >
             <span className="block h-0.5 w-5 bg-[var(--text-base)]" />
@@ -187,6 +287,9 @@ export function SiteHeader() {
               key={item.label}
               item={item}
               onNavigate={() => setMenuOpen(false)}
+              onPointerEnter={(event) =>
+                activateHeader(event.clientX, event.clientY)
+              }
             />
           ))}
           <span

@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
 import { forwardRef } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { useLoginModal } from "@/contexts/LoginModalContext";
+import { useTrialModal } from "@/contexts/TrialModalContext";
 import { SITE_FOOTER_ID } from "@/lib/floating-toolbar-anchor";
+import { EXTERNAL_PATHS } from "@/lib/paths";
 
 const ICONS = {
   logo: "/assets/LOGO.png",
@@ -38,7 +42,23 @@ const SERVICES = [
   },
 ];
 
-const PRODUCT_LINKS = ["诊所登录", "免费试用", "药师帮商城"];
+const FOOTER_LINK_CLASS =
+  "text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)]";
+
+type ProductFooterLink =
+  | { label: string; action: "login" }
+  | { label: string; action: "trial" }
+  | { label: string; action: "external"; href: string };
+
+const PRODUCT_LINKS: ProductFooterLink[] = [
+  { label: "诊所登录", action: "login" },
+  { label: "免费试用", action: "trial" },
+  {
+    label: "药师帮商城",
+    action: "external",
+    href: EXTERNAL_PATHS.yaoshibangLogin,
+  },
+];
 const FRIEND_LINKS = ["药师帮官网", "光谱健康官网", "掌店易Pro"];
 const CONTACT = [
   "客服 400-666-5061",
@@ -96,7 +116,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
             </div>
           </div>
 
-          <FooterColumn title="产品入口" links={PRODUCT_LINKS} />
+          <FooterProductColumn />
           <FooterColumn title="友情链接" links={FRIEND_LINKS} />
           <FooterColumn title="联系我们" links={CONTACT} interactive={false} />
         </div>
@@ -139,6 +159,43 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
 SiteFooter.displayName = "SiteFooter";
 
+function FooterProductColumn() {
+  const { open: openLogin } = useLoginModal();
+  const { open: openTrial } = useTrialModal();
+
+  return (
+    <div className="w-full pl-[52px]">
+      <p className="mb-8 font-medium text-[var(--text-base)]">产品入口</p>
+      <ul className="flex flex-col gap-4">
+        {PRODUCT_LINKS.map((link) => (
+          <li key={link.label}>
+            {link.action === "external" ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={FOOTER_LINK_CLASS}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <button
+                type="button"
+                className={FOOTER_LINK_CLASS}
+                onClick={
+                  link.action === "login" ? openLogin : () => openTrial()
+                }
+              >
+                {link.label}
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function FooterColumn({
   title,
   links,
@@ -155,12 +212,9 @@ function FooterColumn({
         {links.map((link) => (
           <li key={link}>
             {interactive ? (
-              <Link
-                href="#"
-                className="text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)]"
-              >
+              <a href="#" className={FOOTER_LINK_CLASS}>
                 {link}
-              </Link>
+              </a>
             ) : (
               <span className="text-base text-[var(--text-secondary)]">
                 {link}

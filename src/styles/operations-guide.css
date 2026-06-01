@@ -11,6 +11,11 @@
   box-shadow: var(--shadow-card);
 }
 
+.operations-guide-hero-section > .hero-header-bg-layer {
+  bottom: auto;
+  height: 652px;
+}
+
 .operations-guide-detail-section > .hero-header-bg-layer {
   bottom: 0;
   min-height: 0;
