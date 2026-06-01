@@ -103,7 +103,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           {plan.features.map((feature) => (
             <li
               key={feature}
-              className="flex items-center gap-3 text-base leading-6 text-[var(--text-base)]"
+              className="flex items-center gap-3 text-base leading-6 text-[var(--text-secondary)]"
             >
               <FeatureCheck color={theme.color} />
               <span>{feature}</span>

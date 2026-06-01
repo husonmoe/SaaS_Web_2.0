@@ -1,0 +1,43 @@
+/**
+ * 用户手册 · 吸顶滚动容器（分类条 + 正文）
+ * 分类条高度由 UserManualCategoryBar ResizeObserver 写入
+ */
+.user-manual-sticky-scope {
+  --user-manual-category-sticky-height: 72px;
+  --user-manual-category-block-height: calc(var(--user-manual-category-sticky-height) + 64px);
+  --user-manual-sidebar-sticky-gap: 64px;
+  --user-manual-chip-hover: #eff2f6;
+}
+
+/** Hero 底部预留分类条占位，使渐变背景覆盖未吸顶时的分类条区域 */
+.user-manual-hero-with-category-gap {
+  padding-bottom: var(--user-manual-category-block-height);
+}
+
+/** 分类条 + 正文共用容器：sticky 的活动边界须覆盖整段正文，不能限于分类条自身高度 */
+.user-manual-sticky-body {
+  margin-top: 0;
+}
+
+/** 侧栏目录：主导航 + 分类条吸顶区 + 64px 间距 */
+.user-manual-sidebar {
+  top: calc(
+    var(--hero-header-offset, 72px) + var(--user-manual-category-sticky-height, 72px) +
+      var(--user-manual-sidebar-sticky-gap, 64px)
+  );
+}
+
+/**
+ * 用户手册 · 侧栏激活指示条
+ * Figma node 407:170558
+ */
+.user-manual-topic-active::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 2px;
+  height: 22px;
+  border-radius: 1px;
+  background: var(--gradient-primary);
+}

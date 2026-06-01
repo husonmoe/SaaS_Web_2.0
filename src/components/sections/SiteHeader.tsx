@@ -5,14 +5,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-import { PATHS } from "@/lib/paths";
+import { EXTERNAL_PATHS, PATHS } from "@/lib/paths";
 
-const NAV_ITEMS = [
-  { label: "诊所系统", href: "#" },
+type NavItem =
+  | { label: string; href: string; external?: false }
+  | { label: string; href: string; external: true };
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "诊所系统", href: PATHS.home },
   { label: "版本对比", href: PATHS.versionComparison },
-  { label: "运营指南", href: "#" },
-  { label: "用户手册", href: "#" },
-  { label: "药师帮", href: "#" },
+  { label: "运营指南", href: PATHS.operationsGuide },
+  { label: "用户手册", href: PATHS.userManual },
+  { label: "药师帮", href: EXTERNAL_PATHS.yaoshibangLogin, external: true },
 ];
 
 /** 顶栏高度；滚动 0→72px 时背景由透明过渡到不透明白底 */
@@ -20,6 +24,51 @@ const HEADER_HEIGHT = 72;
 
 const LOGO_SRC = "/assets/LOGO.png";
 const PHONE_ICON_SRC = "/assets/figma-cache/phone-icon.svg";
+
+const NAV_LINK_CLASS =
+  "shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
+
+function openExternalUrl(url: string) {
+  const opened = window.open(url, "_blank", "noopener,noreferrer");
+  if (!opened) {
+    window.location.assign(url);
+  }
+}
+
+function NavLink({
+  item,
+  onNavigate,
+}: {
+  item: NavItem;
+  onNavigate?: () => void;
+}) {
+  if (item.external) {
+    return (
+      <a
+        href={item.href}
+        rel="noopener noreferrer"
+        className={NAV_LINK_CLASS}
+        onClick={(event) => {
+          event.preventDefault();
+          onNavigate?.();
+          openExternalUrl(item.href);
+        }}
+      >
+        {item.label}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href}
+      className={NAV_LINK_CLASS}
+      onClick={() => onNavigate?.()}
+    >
+      {item.label}
+    </Link>
+  );
+}
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -81,13 +130,7 @@ export function SiteHeader() {
             aria-label="主导航"
           >
             {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]"
-              >
-                {item.label}
-              </Link>
+              <NavLink key={item.label} item={item} />
             ))}
             <span
               className="ml-auto flex shrink-0 items-center gap-2 text-lg text-[var(--text-muted)]"
@@ -125,37 +168,34 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <nav
-        className={cn(
-          "relative z-10 flex flex-col gap-1 border-t border-[var(--border-light)] bg-white px-[var(--page-margin-x)] py-4 md:hidden",
-          menuOpen ? "flex" : "hidden",
-        )}
-        aria-label="主导航"
-      >
-        {NAV_ITEMS.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]"
-          >
-            {item.label}
-          </Link>
-        ))}
-        <span
-          className="flex items-center gap-2 px-5 py-3 text-lg text-[var(--text-muted)]"
-          aria-label="客服电话 400-666-5061"
+      {menuOpen ? (
+        <nav
+          className="relative z-10 flex flex-col gap-1 border-t border-[var(--border-light)] bg-white px-[var(--page-margin-x)] py-4 md:hidden"
+          aria-label="主导航"
         >
-          <Image
-            src={PHONE_ICON_SRC}
-            alt=""
-            width={24}
-            height={24}
-            className="size-6"
-            unoptimized
-          />
-          400-666-5061
-        </span>
-      </nav>
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.label}
+              item={item}
+              onNavigate={() => setMenuOpen(false)}
+            />
+          ))}
+          <span
+            className="flex items-center gap-2 px-5 py-3 text-lg text-[var(--text-muted)]"
+            aria-label="客服电话 400-666-5061"
+          >
+            <Image
+              src={PHONE_ICON_SRC}
+              alt=""
+              width={24}
+              height={24}
+              className="size-6"
+              unoptimized
+            />
+            400-666-5061
+          </span>
+        </nav>
+      ) : null}
     </header>
   );
 }

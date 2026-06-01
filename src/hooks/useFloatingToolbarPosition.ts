@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ACTION_CTA_SECTION_ID } from "@/lib/floating-toolbar-anchor";
+import {
+  ACTION_CTA_SECTION_ID,
+  SITE_FOOTER_ID,
+} from "@/lib/floating-toolbar-anchor";
 
-/** 设计稿：右 / 下边距 */
-export const FLOATING_TOOLBAR_MARGIN = 60;
+/** 设计稿：右边距 / 下边距 */
+export const FLOATING_TOOLBAR_MARGIN_RIGHT = 24;
+export const FLOATING_TOOLBAR_MARGIN_BOTTOM = 60;
 /** 滚动超过该距离后显示置顶按钮 */
 export const FLOATING_TOOLBAR_SCROLL_THRESHOLD = 300;
 /** 单坑位高度（按钮 48px + 坑位间距 16px）；最后一坑无下间距，总高 176px */
@@ -23,15 +27,18 @@ export type FloatingToolbarCoords = {
 };
 
 function getBoundaryElement(): HTMLElement | null {
-  return document.getElementById(ACTION_CTA_SECTION_ID);
+  return (
+    document.getElementById(ACTION_CTA_SECTION_ID) ??
+    document.getElementById(SITE_FOOTER_ID)
+  );
 }
 
 export function useFloatingToolbarPosition() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mode, setMode] = useState<FloatingToolbarPositionMode>("fixed");
   const [coords, setCoords] = useState<FloatingToolbarCoords>({
-    right: FLOATING_TOOLBAR_MARGIN,
-    bottom: FLOATING_TOOLBAR_MARGIN,
+    right: FLOATING_TOOLBAR_MARGIN_RIGHT,
+    bottom: FLOATING_TOOLBAR_MARGIN_BOTTOM,
   });
 
   useEffect(() => {
@@ -65,32 +72,32 @@ export function useFloatingToolbarPosition() {
       if (!boundary) {
         setMode("fixed");
         setCoords({
-          right: FLOATING_TOOLBAR_MARGIN,
-          bottom: FLOATING_TOOLBAR_MARGIN,
+          right: FLOATING_TOOLBAR_MARGIN_RIGHT,
+          bottom: FLOATING_TOOLBAR_MARGIN_BOTTOM,
         });
         return;
       }
 
       const boundaryRect = boundary.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-      const margin = FLOATING_TOOLBAR_MARGIN;
+      const bottomMargin = FLOATING_TOOLBAR_MARGIN_BOTTOM;
       const toolbarHeight = FLOATING_TOOLBAR_TOTAL_HEIGHT;
 
-      const fixedBottomEdge = viewportHeight - margin;
-      const pinnedBottomEdge = boundaryRect.top - margin;
+      const fixedBottomEdge = viewportHeight - bottomMargin;
+      const pinnedBottomEdge = boundaryRect.top - bottomMargin;
 
       if (pinnedBottomEdge >= fixedBottomEdge) {
         setMode("fixed");
         setCoords({
-          right: margin,
-          bottom: margin,
+          right: FLOATING_TOOLBAR_MARGIN_RIGHT,
+          bottom: bottomMargin,
         });
         return;
       }
 
       setMode("absolute");
       setCoords({
-        right: margin,
+        right: FLOATING_TOOLBAR_MARGIN_RIGHT,
         top: scrollY + pinnedBottomEdge - toolbarHeight,
       });
     };

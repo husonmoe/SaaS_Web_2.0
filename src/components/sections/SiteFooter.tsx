@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { forwardRef } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { SITE_FOOTER_ID } from "@/lib/floating-toolbar-anchor";
 
 const ICONS = {
   logo: "/assets/LOGO.png",
@@ -47,7 +48,7 @@ const CONTACT = [
 
 export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
   return (
-    <footer ref={ref} className="bg-[var(--bg-shell)]">
+    <footer id={SITE_FOOTER_ID} ref={ref} className="bg-[var(--bg-shell)]">
       <PageContainer>
         <div className="grid gap-6 py-12 md:grid-cols-2 lg:grid-cols-4">
           {SERVICES.map((item) => (

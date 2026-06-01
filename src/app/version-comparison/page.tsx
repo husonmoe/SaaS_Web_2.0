@@ -3,6 +3,8 @@ import { MarketingPageShell } from "@/components/MarketingPageShell";
 import { SiteHeader } from "@/components/sections/SiteHeader";
 import { VersionComparisonHeroSection } from "@/components/sections/version-comparison/VersionComparisonHeroSection";
 import { VersionComparisonTableSection } from "@/components/sections/version-comparison/VersionComparisonTableSection";
+import { VersionComparisonStepsSection } from "@/components/sections/version-comparison/VersionComparisonStepsSection";
+import { VersionComparisonFaqSection } from "@/components/sections/version-comparison/VersionComparisonFaqSection";
 
 export const metadata: Metadata = {
   title: "版本对比—光谱云诊",
@@ -17,6 +19,8 @@ export default function VersionComparisonPage() {
       <main>
         <VersionComparisonHeroSection />
         <VersionComparisonTableSection />
+        <VersionComparisonStepsSection />
+        <VersionComparisonFaqSection />
       </main>
     </MarketingPageShell>
   );

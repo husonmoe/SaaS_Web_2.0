@@ -1,4 +1,4 @@
-import { HomePageShell } from "@/components/HomePageShell";
+import { MarketingPageShell } from "@/components/MarketingPageShell";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ProductSection } from "@/components/sections/ProductSection";
 import { CustomerCasesSection } from "@/components/sections/CustomerCasesSection";
@@ -12,7 +12,7 @@ import { WhyChooseSection } from "@/components/sections/WhyChooseSection";
 
 export default function HomePage() {
   return (
-    <HomePageShell>
+    <MarketingPageShell>
       <SiteHeader />
       <main>
         <HeroSection />
@@ -25,6 +25,6 @@ export default function HomePage() {
         <FaqSection />
         <ActionCtaSection />
       </main>
-    </HomePageShell>
+    </MarketingPageShell>
   );
 }

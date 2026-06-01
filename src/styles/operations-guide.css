@@ -1,0 +1,24 @@
+/**
+ * 运营指南文章卡片 · Figma Drop shadow
+ * x:0 y:8 blur:24 spread:0 · #0F2F4C 8%
+ */
+.operations-guide-article-card {
+  box-shadow: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.operations-guide-article-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.operations-guide-detail-section > .hero-header-bg-layer {
+  bottom: 0;
+  min-height: 0;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .operations-guide-article-card {
+    transition: none;
+  }
+}

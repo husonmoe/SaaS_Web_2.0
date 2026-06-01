@@ -34,3 +34,20 @@
     background-size: 100% auto;
   }
 }
+
+/**
+ * 内页 Hero（版本对比等）：背景随区块高度拉满，素材与首页一致
+ */
+.page-hero-section > .hero-header-bg-layer {
+  bottom: 0;
+  min-height: 0;
+  height: auto;
+}
+
+@media (min-width: 1200px) {
+  .page-hero-section > .hero-header-bg-layer {
+    aspect-ratio: unset;
+    min-height: 0;
+    height: auto;
+  }
+}

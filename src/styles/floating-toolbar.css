@@ -1,5 +1,5 @@
 /**
- * 右下角悬浮工具栏 · Figma 间距 right/bottom 60px
+ * 右下角悬浮工具栏 · Figma 间距 right 24px / bottom 60px
  */
 .floating-toolbar-tooltip {
   box-shadow: var(--shadow-card);
