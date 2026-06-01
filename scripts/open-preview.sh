@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# 在 Cursor Simple Browser 或系统浏览器中打开本地预览
-URL="${1:-http://localhost:3000}"
+# 在 Cursor Simple Browser 或系统浏览器中打开本地预览（带缓存破坏参数）
+BASE="${1:-http://localhost:3000}"
+BASE="${BASE%%\?*}"
+URL="${BASE}?dev=$(date +%s)"
 CURSOR_BIN="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
 
 if [[ -x "$CURSOR_BIN" ]]; then

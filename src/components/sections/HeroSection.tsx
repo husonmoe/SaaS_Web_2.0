@@ -13,7 +13,7 @@ const HERO_MOCKUP_HEIGHT = 1320;
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-visible pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-24">
+    <section className="relative isolate min-h-[calc(653px+var(--hero-header-offset))] overflow-visible pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-24">
       {/* 背景图 bg_header.png：延伸至透明顶栏下方 */}
       <div className="hero-header-bg-layer" aria-hidden />
 

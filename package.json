@@ -5,6 +5,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "dev:fresh": "bash scripts/dev-fresh.sh 3000",
+    "preview:verify": "bash scripts/verify-local-preview.sh 3000",
     "preview:open": "bash scripts/open-preview.sh http://localhost:3000",
     "preview:share": "bash scripts/share-preview.sh 3000",
     "preview:share:prod": "bash scripts/share-preview-prod.sh 3000",

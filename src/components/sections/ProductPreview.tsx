@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
 import type {
@@ -16,7 +15,7 @@ const AUTO_PLAY_INTERVAL_MS = 5000;
 const FEATURE_ICON_TRANSITION_MS = 500;
 
 const PREVIEW_MEDIA_CLASS =
-  "h-auto w-full rounded-3xl object-contain object-left lg:h-[500px]";
+  "block h-auto max-h-[500px] w-full rounded-3xl object-contain object-left";
 
 function headlineColorClass(color: "primary" | "base") {
   return color === "primary"
@@ -110,15 +109,17 @@ function FeaturePreviewMedia({
   }
 
   return (
-    <Image
+    // 静态 PNG 直连 public，避免 Cloudflare 上 /_next/image 失败；用原生 img 避免宽高属性撑破布局
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       key={media.src}
       src={media.src}
       alt={alt}
       width={2388}
       height={1500}
-      quality={95}
+      loading="lazy"
+      decoding="async"
       className={PREVIEW_MEDIA_CLASS}
-      sizes="(max-width: 1024px) 100vw, 796px"
     />
   );
 }
