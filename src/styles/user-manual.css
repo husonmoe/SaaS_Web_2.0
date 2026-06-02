@@ -21,6 +21,8 @@
 
 /** 分类条 + 正文共用容器：sticky 的活动边界须覆盖整段正文，不能限于分类条自身高度 */
 .user-manual-sticky-body {
+  position: relative;
+  z-index: 10;
   margin-top: 0;
 }
 

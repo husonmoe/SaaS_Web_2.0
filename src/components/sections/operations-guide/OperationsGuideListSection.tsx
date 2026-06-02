@@ -14,7 +14,7 @@ export function OperationsGuideListSection() {
   const hasMore = visibleCount < OPERATIONS_GUIDE_ARTICLES.length;
 
   return (
-    <section className="pb-12 md:pb-16">
+    <section className="operations-guide-list-section pb-12 md:pb-16">
       <PageContainer className="flex flex-col items-center gap-12 md:gap-16">
         <div className="grid w-full max-w-[1200px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {visibleArticles.map((article) => (
