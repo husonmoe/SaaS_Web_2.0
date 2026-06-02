@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import type { ReactNode, RefObject } from "react";
+import type { ReactNode, Ref } from "react";
 
 const ICON_CLOSE_SRC = "/assets/modal/icon_close.svg";
 
 type ModalShellProps = {
   titleId: string;
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: Ref<HTMLDivElement>;
   panelBgSrc: string;
   onClose: () => void;
   children: ReactNode;

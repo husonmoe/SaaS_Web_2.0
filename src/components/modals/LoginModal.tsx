@@ -23,6 +23,12 @@ const ICON_CLEAR_SRC = "/assets/trial-modal/icon-clear.svg";
 const ICON_EYES_SRC = "/assets/modal/icon_eyes.svg";
 const ICON_HIDDEN_SRC = "/assets/modal/icon_hidden.svg";
 
+function blurInputRef(ref: React.Ref<HTMLInputElement>) {
+  if (ref && typeof ref === "object" && "current" in ref) {
+    ref.current?.blur();
+  }
+}
+
 const CHECKBOX_CHECKMARK =
   'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 10 10\' fill=\'none\'%3E%3Cpath d=\'M8.5 2.5L4 7L1.5 4.5\' stroke=\'white\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")';
 
@@ -308,7 +314,7 @@ function LoginSmsView({
     const error = validatePhone(phone);
     if (error) {
       onPhoneError(error);
-      phoneInputRef.current?.blur();
+      blurInputRef(phoneInputRef);
       return;
     }
 
@@ -741,7 +747,7 @@ export function LoginModal() {
     const error = validatePhone(phone);
     if (error) {
       setPhoneError(error);
-      phoneInputRef.current?.blur();
+      blurInputRef(phoneInputRef);
       return;
     }
     setPhoneError(null);

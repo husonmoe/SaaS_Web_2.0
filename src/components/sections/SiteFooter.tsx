@@ -183,7 +183,9 @@ function FooterProductColumn() {
                 type="button"
                 className={FOOTER_LINK_CLASS}
                 onClick={
-                  link.action === "login" ? openLogin : () => openTrial()
+                  link.action === "login"
+                    ? () => openLogin()
+                    : () => openTrial()
                 }
               >
                 {link.label}
