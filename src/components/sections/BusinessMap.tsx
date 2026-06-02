@@ -240,7 +240,7 @@ function maskSouthChinaInsetInWater(root: HTMLElement) {
 }
 
 function prepareMapSvg(root: HTMLElement) {
-  let columnsGroup = findLayer(root, ["light-columns", "light_columns"]);
+  const columnsGroup = findLayer(root, ["light-columns", "light_columns"]);
   if (!columnsGroup) {
     const svg = root.querySelector("svg");
     if (!svg) return;
