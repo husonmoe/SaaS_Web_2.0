@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
-export type TrialModalView = "form" | "success";
+export type TrialModalView = "form" | "success" | "qrcode" | "clinic-prompt";
 
 export type TrialModalOpenOptions = {
   view?: TrialModalView;

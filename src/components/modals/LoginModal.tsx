@@ -1,18 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModalShell } from "@/components/modals/ModalShell";
 import { Button } from "@/components/ui/Button";
+import { CLINIC_SELECT_DEV_PRESET_KEY } from "@/components/modals/clinicSelectMockData";
+import { useClinicSelectModal } from "@/contexts/ClinicSelectModalContext";
+import { useForgotPasswordModal } from "@/contexts/ForgotPasswordModalContext";
 import { useLoginModal } from "@/contexts/LoginModalContext";
 import { useTrialModal } from "@/contexts/TrialModalContext";
 import { cn } from "@/lib/cn";
+import { handoffModal } from "@/lib/modalHandoff";
+import { MODAL_LOGIN_PANEL_BG_SRC } from "@/lib/modalPanelAssets";
 import { validatePhone } from "@/lib/validatePhone";
 
-const LOGIN_PANEL_BG_SRC = "/assets/modal/modal_login_bg.png";
 const ICON_WECHAT_SRC = "/assets/modal/icon_wechat.svg";
 const LOGIN_QRCODE_SRC = "/assets/modal/login_qrcode.png";
+const ICON_CHECK_CIRCLE_FILL_SRC = "/assets/modal/icon_check_circle_fill.svg";
 const ICON_LAST_LOGIN_ARROW_SRC = "/assets/modal/icon_last_login_arrow.svg";
 const ICON_CLEAR_SRC = "/assets/trial-modal/icon-clear.svg";
 const ICON_EYES_SRC = "/assets/modal/icon_eyes.svg";
@@ -22,6 +27,40 @@ const CHECKBOX_CHECKMARK =
   'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 10 10\' fill=\'none\'%3E%3Cpath d=\'M8.5 2.5L4 7L1.5 4.5\' stroke=\'white\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")';
 
 const SMS_COUNTDOWN_SECONDS = 59;
+/** 生产 60s；本地 dev 8s 便于快速看过期样式 */
+const WECHAT_QR_TTL_SECONDS =
+  process.env.NODE_ENV === "development" ? 8 : 60;
+const WECHAT_SCAN_POLL_MS = 2000;
+const WECHAT_QR_DEV_PRESET_KEY = "wechatQr";
+/** 本地 dev：?noClinic=1 时登录成功后打开「未加入诊所」创建提示 */
+const NO_CLINIC_DEV_PRESET_KEY = "noClinic";
+
+function shouldOpenClinicSelectAfterLogin(): boolean {
+  if (process.env.NODE_ENV !== "development") {
+    // TODO: 登录接口返回已加入多个诊所时返回 true
+    return false;
+  }
+  return (
+    new URLSearchParams(window.location.search).get(
+      CLINIC_SELECT_DEV_PRESET_KEY,
+    ) === "1"
+  );
+}
+
+function shouldOpenClinicCreatePromptAfterLogin(): boolean {
+  if (process.env.NODE_ENV !== "development") {
+    // TODO: 登录接口返回未加入诊所时返回 true
+    return false;
+  }
+  return (
+    new URLSearchParams(window.location.search).get(NO_CLINIC_DEV_PRESET_KEY) ===
+    "1"
+  );
+}
+/** 样式调完后改为 true：扫码成功 1.5s 后自动关闭弹窗 */
+const WECHAT_SUCCESS_AUTO_CLOSE_ENABLED = false;
+
+type WechatQrStatus = "active" | "expired" | "success";
 
 const LAST_LOGIN_STORAGE_KEY = "saas-login-last-method";
 
@@ -97,19 +136,119 @@ function LoginMethodTabs({
   );
 }
 
-function LoginWechatView() {
+function LoginWechatView({ onLoginComplete }: { onLoginComplete?: () => void }) {
+  const [status, setStatus] = useState<WechatQrStatus>("active");
+  const [qrSession, setQrSession] = useState(0);
+
+  const handleRefresh = useCallback(() => {
+    setStatus("active");
+    setQrSession((prev) => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+
+    const preset = new URLSearchParams(window.location.search).get(
+      WECHAT_QR_DEV_PRESET_KEY,
+    );
+    if (preset === "expired" || preset === "success") {
+      setStatus(preset);
+    }
+  }, [qrSession]);
+
+  useEffect(() => {
+    if (status !== "active") return;
+
+    const expireTimer = window.setTimeout(() => {
+      setStatus("expired");
+    }, WECHAT_QR_TTL_SECONDS * 1000);
+
+    return () => window.clearTimeout(expireTimer);
+  }, [status, qrSession]);
+
+  useEffect(() => {
+    if (status !== "active") return;
+
+    const pollScanStatus = () => {
+      // TODO: 接入微信扫码状态轮询，确认后 setStatus("success")
+    };
+
+    pollScanStatus();
+    const pollTimer = window.setInterval(pollScanStatus, WECHAT_SCAN_POLL_MS);
+    return () => window.clearInterval(pollTimer);
+  }, [status, qrSession]);
+
+  useEffect(() => {
+    if (!WECHAT_SUCCESS_AUTO_CLOSE_ENABLED || status !== "success") return;
+
+    const doneTimer = window.setTimeout(() => {
+      onLoginComplete?.();
+    }, 1500);
+
+    return () => window.clearTimeout(doneTimer);
+  }, [onLoginComplete, status]);
+
   return (
     <div className="flex w-full max-w-[280px] flex-col items-center gap-6 pt-6">
-      <div className="flex size-[200px] items-center justify-center overflow-hidden rounded-xl border border-[var(--border-light)] bg-white">
+      <div className="relative size-[200px] overflow-hidden rounded-xl border border-[var(--border-light)] bg-white">
         <Image
+          key={qrSession}
           src={LOGIN_QRCODE_SRC}
           alt="微信扫码登录二维码"
           width={200}
           height={200}
-          className="size-full object-cover"
+          className={cn(
+            "size-full object-cover transition-opacity",
+            status !== "active" && "opacity-40",
+          )}
           unoptimized
         />
+
+        {status === "expired" ? (
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-white/85 pt-2"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex flex-col items-center gap-3">
+              <Button
+                type="button"
+                className="h-10 min-h-10 md:h-10 md:min-h-10 rounded-lg px-4 text-sm leading-[22px]"
+                onClick={handleRefresh}
+              >
+                点击刷新
+              </Button>
+              <p className="text-base font-medium leading-6 text-[var(--text-base)]">
+                二维码已过期
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        {status === "success" ? (
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-white/85 pt-2"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex flex-col items-center gap-3">
+              <Image
+                src={ICON_CHECK_CIRCLE_FILL_SRC}
+                alt=""
+                width={48}
+                height={48}
+                className="size-12 shrink-0"
+                aria-hidden
+                unoptimized
+              />
+              <p className="text-base font-medium leading-6 text-[var(--text-base)]">
+                扫码成功
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
+
       <div className="flex items-center gap-2">
         <Image
           src={ICON_WECHAT_SRC}
@@ -141,7 +280,7 @@ function LoginSmsView({
   phone: string;
   code: string;
   phoneError: string | null;
-  phoneInputRef: React.RefObject<HTMLInputElement | null>;
+  phoneInputRef: React.Ref<HTMLInputElement>;
   onPhoneChange: (value: string) => void;
   onCodeChange: (value: string) => void;
   onPhoneError: (error: string | null) => void;
@@ -305,14 +444,16 @@ function LoginPasswordView({
   phoneInputRef,
   onPhoneChange,
   onPasswordChange,
+  onForgotPassword,
   onSubmit,
 }: {
   phone: string;
   password: string;
   phoneError: string | null;
-  phoneInputRef: React.RefObject<HTMLInputElement | null>;
+  phoneInputRef: React.Ref<HTMLInputElement>;
   onPhoneChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
+  onForgotPassword: () => void;
   onSubmit: (event: React.FormEvent) => void;
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -455,9 +596,7 @@ function LoginPasswordView({
           <button
             type="button"
             className="text-sm leading-[22px] text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
-            onClick={() => {
-              // TODO: 接入忘记密码流程
-            }}
+            onClick={onForgotPassword}
           >
             忘记密码?
           </button>
@@ -487,8 +626,10 @@ function LoginModalCreateFooter({ onCreate }: { onCreate: () => void }) {
 }
 
 export function LoginModal() {
-  const { isOpen, close } = useLoginModal();
+  const { isOpen, close, openOptions } = useLoginModal();
   const { open: openTrialModal } = useTrialModal();
+  const { open: openClinicSelectModal } = useClinicSelectModal();
+  const { open: openForgotPasswordModal } = useForgotPasswordModal();
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
@@ -519,27 +660,38 @@ export function LoginModal() {
   }, []);
 
   const handleCreateAccount = useCallback(() => {
+    handoffModal(openTrialModal, () => {
+      close();
+      resetForm();
+    });
+  }, [close, openTrialModal, resetForm]);
+
+  const handleForgotPassword = useCallback(() => {
+    const currentPhone = phone;
     close();
     resetForm();
-    openTrialModal();
-  }, [close, openTrialModal, resetForm]);
+    openForgotPasswordModal({ phone: currentPhone });
+  }, [close, openForgotPasswordModal, phone, resetForm]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isOpen) return;
     const lastTab = readLastLoginTab();
     setLastLoginTab(lastTab);
-    setActiveTab(lastTab);
+    setActiveTab(openOptions.tab ?? lastTab);
     resetForm();
-  }, [isOpen, resetForm]);
+  }, [isOpen, openOptions.tab, resetForm]);
 
   useEffect(() => {
     if (!isOpen || activeTab === "wechat") return;
 
-    const timer = window.setTimeout(() => phoneInputRef.current?.focus(), 0);
+    const timer = window.setTimeout(
+      () => phoneInputRef.current?.focus({ preventScroll: true }),
+      0,
+    );
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") handleClose();
@@ -563,6 +715,27 @@ export function LoginModal() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeTab, handleClose, isOpen]);
 
+  const openClinicSelectIfNeeded = useCallback(() => {
+    if (!shouldOpenClinicSelectAfterLogin()) return false;
+    handoffModal(openClinicSelectModal, () => {
+      close();
+      resetForm();
+    });
+    return true;
+  }, [close, openClinicSelectModal, resetForm]);
+
+  const openClinicCreatePromptIfNeeded = useCallback(() => {
+    if (!shouldOpenClinicCreatePromptAfterLogin()) return false;
+    handoffModal(
+      () => openTrialModal({ view: "clinic-prompt" }),
+      () => {
+        close();
+        resetForm();
+      },
+    );
+    return true;
+  }, [close, openTrialModal, resetForm]);
+
   const handleCredentialSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const error = validatePhone(phone);
@@ -574,7 +747,9 @@ export function LoginModal() {
     setPhoneError(null);
     writeLastLoginTab(activeTab);
     setLastLoginTab(activeTab);
-    // TODO: 接入登录接口
+    // TODO: 接入登录接口；若已加入诊所则 openClinicSelectIfNeeded()，未加入则 openClinicCreatePromptIfNeeded()
+    if (openClinicSelectIfNeeded()) return;
+    if (openClinicCreatePromptIfNeeded()) return;
   };
 
   const handlePhoneChange = (value: string) => {
@@ -582,14 +757,28 @@ export function LoginModal() {
     if (phoneError) setPhoneError(null);
   };
 
+  const handleWechatLoginComplete = useCallback(() => {
+    writeLastLoginTab("wechat");
+    setLastLoginTab("wechat");
+    // TODO: 接入微信扫码登录完成后的跳转或会话建立
+    if (openClinicSelectIfNeeded()) return;
+    if (openClinicCreatePromptIfNeeded()) return;
+    handleClose();
+  }, [
+    handleClose,
+    openClinicCreatePromptIfNeeded,
+    openClinicSelectIfNeeded,
+  ]);
+
   if (!mounted || !isOpen) return null;
 
   return createPortal(
     <ModalShell
       titleId={titleId}
       dialogRef={dialogRef}
-      panelBgSrc={LOGIN_PANEL_BG_SRC}
+      panelBgSrc={MODAL_LOGIN_PANEL_BG_SRC}
       onClose={handleClose}
+      zIndex={201}
     >
       <div className="flex w-full max-w-[380px] flex-1 flex-col items-center justify-start gap-6">
         <div className="flex w-full flex-col items-center gap-6">
@@ -608,7 +797,7 @@ export function LoginModal() {
 
         <div className="flex w-full max-w-[280px] flex-1 flex-col">
           {activeTab === "wechat" ? (
-            <LoginWechatView />
+            <LoginWechatView onLoginComplete={handleWechatLoginComplete} />
           ) : activeTab === "sms" ? (
             <LoginSmsView
               phone={phone}
@@ -628,6 +817,7 @@ export function LoginModal() {
               phoneInputRef={phoneInputRef}
               onPhoneChange={handlePhoneChange}
               onPasswordChange={setPassword}
+              onForgotPassword={handleForgotPassword}
               onSubmit={handleCredentialSubmit}
             />
           )}

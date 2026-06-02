@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { ModalShell } from "@/components/modals/ModalShell";
 import { useLoginModal } from "@/contexts/LoginModalContext";
 import {
@@ -11,12 +12,22 @@ import {
 } from "@/contexts/TrialModalContext";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { handoffModal } from "@/lib/modalHandoff";
+import { MODAL_TRIAL_PANEL_BG_SRC } from "@/lib/modalPanelAssets";
+import { PATHS } from "@/lib/paths";
 import { validatePhone } from "@/lib/validatePhone";
 
-const TRIAL_PANEL_BG_SRC = "/assets/modal/modal_trial_bg.png";
+const TRIAL_QRCODE_SRC = "/assets/modal/login_qrcode.png";
+const ICON_WECHAT_SRC = "/assets/modal/icon_wechat.svg";
 const ICON_SUCCESS_SRC = "/assets/modal/icon_check_circle_fill.svg";
 const SERVICE_CARD_SRC = "/assets/modal/serviceCard.png";
 const ICON_CLEAR_SRC = "/assets/trial-modal/icon-clear.svg";
+const ICON_CHEVRON_LEFT_SRC = "/assets/icon_chervon_right_s.svg";
+
+/** 本地 dev：?trialQr=1 自动打开扫码创建视图 */
+const TRIAL_QR_DEV_PRESET_KEY = "trialQr";
+/** 本地 dev：?clinicCreate=1 自动打开「未加入诊所」创建提示 */
+const CLINIC_CREATE_DEV_PRESET_KEY = "clinicCreate";
 
 function TrialModalLoginFooter() {
   const { open: openLoginModal } = useLoginModal();
@@ -29,8 +40,7 @@ function TrialModalLoginFooter() {
         type="button"
         className="ml-1 text-[var(--color-primary)] hover:underline"
         onClick={() => {
-          closeTrialModal();
-          openLoginModal();
+          handoffModal(() => openLoginModal(), closeTrialModal);
         }}
       >
         立即登录
@@ -53,7 +63,7 @@ function TrialModalFormView({
   phone: string;
   orgName: string;
   phoneError: string | null;
-  phoneInputRef: React.RefObject<HTMLInputElement | null>;
+  phoneInputRef: React.Ref<HTMLInputElement>;
   onPhoneChange: (value: string) => void;
   onOrgNameChange: (value: string) => void;
   onSubmit: (event: React.FormEvent) => void;
@@ -219,8 +229,106 @@ function TrialModalSuccessView({ titleId }: { titleId: string }) {
   );
 }
 
+/** Figma login_clinic_create：登录后未加入诊所时的创建提示 */
+function TrialModalClinicPromptView({
+  titleId,
+  onRegister,
+  onSwitchToSmsLogin,
+}: {
+  titleId: string;
+  onRegister: () => void;
+  onSwitchToSmsLogin: () => void;
+}) {
+  return (
+    <>
+      <button
+        type="button"
+        className="absolute left-6 top-4 flex h-10 items-center gap-1 rounded-lg border border-[var(--border-light)] bg-white py-2.5 pl-3 pr-4 text-sm leading-[22px] text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)]"
+        onClick={onSwitchToSmsLogin}
+      >
+        <Image
+          src={ICON_CHEVRON_LEFT_SRC}
+          alt=""
+          width={16}
+          height={16}
+          className="size-4 shrink-0 rotate-180"
+          aria-hidden
+          unoptimized
+        />
+        切换至手机号登录
+      </button>
+
+      <div className="flex w-full max-w-[380px] flex-1 flex-col items-center justify-center gap-12">
+        <h2
+          id={titleId}
+          className="text-center text-2xl font-medium leading-8 text-[var(--text-base)]"
+        >
+          您尚未加入诊所，是否创建？
+        </h2>
+        <Button
+          type="button"
+          className="h-12 min-h-12 w-[168px] rounded-[10px] px-5"
+          onClick={onRegister}
+        >
+          报名创建
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function TrialModalQrcodeView({ titleId }: { titleId: string }) {
+  return (
+    <>
+      <div className="flex w-full max-w-[380px] flex-1 flex-col items-center gap-6">
+        <div className="flex w-full flex-col items-center gap-2 pt-6 text-center">
+          <p className="text-base leading-6 text-[var(--color-primary)]">
+            您尚未加入诊所，扫码即可创建
+          </p>
+          <h2
+            id={titleId}
+            className="text-2xl font-medium leading-8 text-[var(--text-base)]"
+          >
+            2步创建诊所 15天免费试用
+          </h2>
+        </div>
+
+        <div className="flex w-full flex-col items-center gap-6 pt-6">
+          <div className="size-[200px] overflow-hidden rounded-xl border border-[var(--border-light)] bg-white">
+            <Image
+              src={TRIAL_QRCODE_SRC}
+              alt="微信扫码创建诊所"
+              width={200}
+              height={200}
+              className="size-full object-cover"
+              unoptimized
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Image
+              src={ICON_WECHAT_SRC}
+              alt=""
+              width={20}
+              height={20}
+              className="size-5 shrink-0"
+              aria-hidden
+              unoptimized
+            />
+            <p className="text-base leading-6 text-[var(--text-base)]">
+              使用「微信」扫一扫
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function TrialModal() {
-  const { isOpen, close, openOptions } = useTrialModal();
+  const { isOpen, close, open, openOptions } = useTrialModal();
+  const { open: openLoginModal } = useLoginModal();
+  const router = useRouter();
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
@@ -243,9 +351,32 @@ export function TrialModal() {
     resetForm();
   }, [close, resetForm]);
 
+  const handleSwitchToSmsLogin = useCallback(() => {
+    handoffModal(
+      () => openLoginModal({ tab: "sms" }),
+      () => {
+        close();
+        resetForm();
+      },
+    );
+  }, [close, openLoginModal, resetForm]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get(TRIAL_QR_DEV_PRESET_KEY) === "1") {
+      open({ view: "qrcode" });
+      return;
+    }
+    if (params.get(CLINIC_CREATE_DEV_PRESET_KEY) === "1") {
+      open({ view: "clinic-prompt" });
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -292,13 +423,19 @@ export function TrialModal() {
     if (phoneError) setPhoneError(null);
   };
 
+  const handleRegisterCreateClinic = useCallback(() => {
+    close();
+    resetForm();
+    router.push(PATHS.createClinic);
+  }, [close, resetForm, router]);
+
   if (!mounted || !isOpen) return null;
 
   return createPortal(
     <ModalShell
       titleId={titleId}
       dialogRef={dialogRef}
-      panelBgSrc={TRIAL_PANEL_BG_SRC}
+      panelBgSrc={MODAL_TRIAL_PANEL_BG_SRC}
       onClose={handleClose}
     >
       {view === "form" ? (
@@ -312,8 +449,16 @@ export function TrialModal() {
           onOrgNameChange={setOrgName}
           onSubmit={handleSubmit}
         />
-      ) : (
+      ) : view === "success" ? (
         <TrialModalSuccessView titleId={titleId} />
+      ) : view === "clinic-prompt" ? (
+        <TrialModalClinicPromptView
+          titleId={titleId}
+          onRegister={handleRegisterCreateClinic}
+          onSwitchToSmsLogin={handleSwitchToSmsLogin}
+        />
+      ) : (
+        <TrialModalQrcodeView titleId={titleId} />
       )}
     </ModalShell>,
     document.body,

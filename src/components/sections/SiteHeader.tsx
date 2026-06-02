@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LoginModalButton } from "@/components/modals/LoginModalButton";
 import { TrialModalButton } from "@/components/modals/TrialModalButton";
+import { useForgotPasswordModal } from "@/contexts/ForgotPasswordModalContext";
 import { useLoginModal } from "@/contexts/LoginModalContext";
 import { useTrialModal } from "@/contexts/TrialModalContext";
+import { useWechatBindModal } from "@/contexts/WechatBindModalContext";
 import { cn } from "@/lib/cn";
 import { EXTERNAL_PATHS, PATHS } from "@/lib/paths";
 
@@ -90,7 +92,9 @@ function NavLink({
 export function SiteHeader() {
   const { isOpen: loginOpen } = useLoginModal();
   const { isOpen: trialOpen } = useTrialModal();
-  const modalOpen = loginOpen || trialOpen;
+  const { isOpen: forgotOpen } = useForgotPasswordModal();
+  const { isOpen: bindWechatOpen } = useWechatBindModal();
+  const modalOpen = loginOpen || trialOpen || forgotOpen || bindWechatOpen;
 
   const headerRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);

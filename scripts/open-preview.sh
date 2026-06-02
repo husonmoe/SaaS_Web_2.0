@@ -3,8 +3,11 @@
 set -euo pipefail
 
 BASE="${1:-http://localhost:3000}"
-BASE="${BASE%%\?*}"
-URL="${BASE}?dev=$(date +%s)"
+if [[ "$BASE" == *"?"* ]]; then
+  URL="${BASE}&dev=$(date +%s)"
+else
+  URL="${BASE}?dev=$(date +%s)"
+fi
 CURSOR_BIN="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
 CURSOR_CLI="$(command -v cursor 2>/dev/null || true)"
 

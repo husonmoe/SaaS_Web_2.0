@@ -4,28 +4,32 @@
 
 ## 技术栈
 
-- Next.js 14 (App Router)
+- Next.js 15 (App Router)
 - React 18 + TypeScript
 - Tailwind CSS 3
-- 三端栅格：Mobile 4列 / Pad 8列 / Web 12列（见 `design.md`）
+- 三端栅格：Mobile 4列 / Pad 8列 / Web 12列（见 [`design.md`](./design.md)）
 
 ## 开发
 
 ```bash
 npm install
-npm run dev
+npm run dev:fresh
+npm run preview:open
 ```
 
 浏览器打开 http://localhost:3000
 
 ## 当前进度
 
-| 区块 | 状态 |
-| --- | --- |
-| 顶栏 Header | ✅ |
-| Hero 首屏 | ✅（产品 mockup 占位） |
-| 数据统计 | ✅ |
-| 页脚 Footer | ✅ |
-| 中间 5 个内容区 | ⏳ 占位，待按 Figma 节点继续实现 |
+**Web 端：** 首页 11 个区块、4 个内页、5 类营销弹窗、创建诊所流程均已实现。
 
-设计规范详见 [`design.md`](./design.md)。
+**下一阶段：** Pad（834px）与 Mobile（375px）适配，详见 [`design.md` §5](./design.md#5-下一阶段pad--mobile-适配)。
+
+| 模块 | Web | Pad | Mobile |
+| --- | --- | --- | --- |
+| 首页全区块 | ✅ | ⏳ | ⏳ |
+| 版本对比 / 操作指南 / 用户手册 | ✅ | ⏳ | ⏳ |
+| 登录 / 试用 / 选诊所等弹窗 | ✅ | ⏳ | ⏳ |
+| 创建诊所 | ✅ | ⏳ | ⏳ |
+
+完整规划与打勾清单见 [`design.md`](./design.md)。

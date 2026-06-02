@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MODAL_PANEL_BG_PRELOAD_SRCS } from "@/lib/modalPanelAssets";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,6 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        {MODAL_PANEL_BG_PRELOAD_SRCS.map((href) => (
+          <link key={href} rel="preload" as="image" href={href} />
+        ))}
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );

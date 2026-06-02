@@ -8,6 +8,8 @@
     "dev:fresh": "bash scripts/dev-fresh.sh 3000",
     "preview:verify": "bash scripts/verify-local-preview.sh 3000",
     "preview:open": "bash scripts/open-preview.sh http://localhost:3000",
+    "preview:bind-wechat": "bash scripts/open-preview.sh 'http://localhost:3000?bindWechat=1'",
+    "preview:trial-qr": "bash scripts/open-preview.sh 'http://localhost:3000?trialQr=1'",
     "preview:share": "bash scripts/share-preview.sh 3000",
     "preview:share:prod": "bash scripts/share-preview-prod.sh 3000",
     "start": "next start",

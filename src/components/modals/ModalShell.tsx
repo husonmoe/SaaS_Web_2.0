@@ -11,6 +11,8 @@ type ModalShellProps = {
   panelBgSrc: string;
   onClose: () => void;
   children: ReactNode;
+  /** 叠在其它营销弹窗之上时使用（默认 200） */
+  zIndex?: number;
 };
 
 /** 营销弹窗共用外壳：左侧插画 + 右侧内容区 */
@@ -20,9 +22,13 @@ export function ModalShell({
   panelBgSrc,
   onClose,
   children,
+  zIndex = 200,
 }: ModalShellProps) {
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden overscroll-none p-4">
+    <div
+      className="fixed inset-0 flex items-center justify-center overflow-hidden overscroll-none p-4"
+      style={{ zIndex }}
+    >
       <button
         type="button"
         className="absolute inset-0 bg-[#000000]/40"
@@ -49,7 +55,7 @@ export function ModalShell({
           />
         </aside>
 
-        <div className="relative flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-6 pb-10 pt-16 sm:px-[60px] sm:pb-10 sm:pt-20">
+        <div className="relative flex min-h-[480px] flex-1 flex-col items-center overflow-y-auto px-6 pb-10 pt-16 sm:min-h-0 sm:px-[60px] sm:pb-10 sm:pt-20">
           <button
             type="button"
             className="absolute right-4 top-4 flex size-11 items-center justify-center rounded-full transition-colors hover:bg-[#f1f3f6]"

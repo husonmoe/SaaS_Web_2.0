@@ -4,6 +4,7 @@ export const PATHS = {
   versionComparison: "/version-comparison",
   operationsGuide: "/operations-guide",
   userManual: "/user-manual",
+  createClinic: "/create-clinic",
 } as const;
 
 /** 站外链接 */
