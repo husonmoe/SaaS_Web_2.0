@@ -59,7 +59,7 @@ export function CustomerCasesMapPanel() {
         isInView && "customer-cases-map-panel--entering",
       )}
     >
-      <div className="relative aspect-[624/520] w-fit min-h-[240px] lg:h-[520px] lg:min-h-0 lg:shrink-0">
+      <div className="relative aspect-[725/521] w-fit min-h-[240px] lg:h-[520px] lg:min-h-0 lg:shrink-0">
         <BusinessMap
           dotsActive={dotsActive}
           columnsActive={columnsActive}

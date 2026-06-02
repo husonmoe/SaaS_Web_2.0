@@ -27,17 +27,17 @@
   z-index: 1;
 }
 
-/* 以高度 520px 为基准等比缩放（设计稿 624×520） */
+/* 以高度 520px 为基准等比缩放（设计稿 725×521） */
 .business-map-root svg {
   display: block;
   flex-shrink: 0;
   height: 100%;
   width: auto;
-  aspect-ratio: 624 / 520;
+  aspect-ratio: 725 / 521;
 }
 
 .business-map-water svg {
-  aspect-ratio: 623 / 520;
+  aspect-ratio: auto;
 }
 
 /* 水域层：透明度由 CSS 变量控制，入场与地图面板同步 */
@@ -75,8 +75,10 @@
 
 /* 地图出现前：光点 / 光柱保持透明 */
 .business-map-root .map-dot-anim,
+.business-map-root .map-dot-fallback,
 .business-map-root #light-columns > .map-column-item,
 .business-map-root #light-columns > g:not(.map-column-item),
+.business-map-root .map-column-fallback,
 .business-map-root [id*="light-columns" i] > .map-column-item,
 .business-map-root [id*="light-columns" i] > g:not(.map-column-item) {
   opacity: 0;
@@ -107,6 +109,22 @@
   animation-delay: var(--map-ripple-delay, 0ms);
 }
 
+.business-map-root--dots-active .map-dot-ripple-fallback {
+  transform-box: fill-box;
+  transform-origin: center;
+  stroke-width: 0.5;
+  will-change: transform, opacity;
+  animation: map-dot-ripple var(--map-ripple-duration, 2.4s) ease-out infinite;
+  animation-delay: var(--map-ripple-delay, 0ms);
+}
+
+.business-map-root--dots-active .map-dot-fallback {
+  will-change: opacity;
+  animation: map-dot-pulse var(--map-dot-pulse-duration, 3s) ease-in-out infinite;
+  animation-delay: var(--map-dot-pulse-delay, 0ms);
+  opacity: var(--map-dot-base-opacity, 1);
+}
+
 /* 光柱：错峰淡入 + 持续亮度/拉伸呼吸 */
 .business-map-root--columns-active #light-columns > .map-column-item,
 .business-map-root--columns-active #light-columns > g:not(.map-column-item),
@@ -115,6 +133,16 @@
   will-change: opacity;
   animation: map-column-fade-in var(--map-effect-enter-duration, 0.8s) ease-out forwards;
   animation-delay: var(--map-column-fade-delay, 0ms);
+}
+
+.business-map-root--columns-active .map-column-fallback {
+  will-change: opacity, filter;
+  animation:
+    map-column-fade-in var(--map-effect-enter-duration, 0.8s) ease-out forwards,
+    map-column-glow var(--map-column-pulse-duration, 2.8s) ease-in-out infinite;
+  animation-delay:
+    var(--map-column-fade-delay, 0ms),
+    var(--map-column-pulse-delay, 0ms);
 }
 
 .business-map-root--columns-active .map-column-item path,
@@ -148,10 +176,10 @@
 @keyframes map-column-glow {
   0%,
   100% {
-    filter: brightness(1.5) saturate(1.28);
+    filter: brightness(1.9) saturate(1.45);
   }
   50% {
-    filter: brightness(var(--map-column-glow-peak, 2.25)) saturate(1.58);
+    filter: brightness(var(--map-column-glow-peak, 2.7)) saturate(1.92);
   }
 }
 
@@ -201,6 +229,8 @@
   }
 
   .business-map-root--dots-active .map-dot-node circle:not(.map-dot-ripple),
+  .business-map-root--dots-active .map-dot-fallback,
+  .business-map-root--dots-active .map-dot-ripple-fallback,
   .business-map-root--dots-active .map-dot-ripple {
     animation: none;
   }
@@ -217,7 +247,8 @@
   .business-map-root--columns-active
     [id*="light-columns" i]
     > g:not(.map-column-item)
-    path {
+  path,
+  .business-map-root--columns-active .map-column-fallback {
     animation: none;
     filter: brightness(1.45) saturate(1.2);
   }
