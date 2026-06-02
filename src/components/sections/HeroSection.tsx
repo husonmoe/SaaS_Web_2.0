@@ -71,7 +71,7 @@ export function HeroSection() {
           </div>
 
           <div className="col-span-full lg:col-span-7">
-            <div className="relative mx-auto w-full max-w-[680px] lg:max-w-none">
+            <div className="relative mx-auto w-full max-w-[660px] lg:max-w-none">
               <Image
                 src={HERO_MOCKUP_SRC}
                 alt="光谱云诊产品界面预览"

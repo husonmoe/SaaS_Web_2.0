@@ -43,13 +43,6 @@ const PHONE_ICON_SRC = "/assets/figma-cache/phone-icon.svg";
 const NAV_LINK_CLASS =
   "shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
 
-function openExternalUrl(url: string) {
-  const opened = window.open(url, "_blank", "noopener,noreferrer");
-  if (!opened) {
-    window.location.assign(url);
-  }
-}
-
 function NavLink({
   item,
   onNavigate,
@@ -63,14 +56,11 @@ function NavLink({
     return (
       <a
         href={item.href}
+        target="_blank"
         rel="noopener noreferrer"
         className={NAV_LINK_CLASS}
         onMouseEnter={onPointerEnter}
-        onClick={(event) => {
-          event.preventDefault();
-          onNavigate?.();
-          openExternalUrl(item.href);
-        }}
+        onClick={() => onNavigate?.()}
       >
         {item.label}
       </a>
