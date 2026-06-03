@@ -1,5 +1,6 @@
 import { PageContainer } from "@/components/layout/PageContainer";
 import { TiltCard } from "@/components/ui/TiltCard";
+import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import Image from "next/image";
 
 type WhyChooseItem = {
@@ -49,36 +50,41 @@ const WHY_CHOOSE_ITEMS: WhyChooseItem[] = [
 
 function WhyChooseCard({ item }: { item: WhyChooseItem }) {
   return (
-    <TiltCard className="flex flex-col items-center px-6 py-10 text-center">
-      <Image
-        src={item.iconSrc}
-        alt=""
-        width={48}
-        height={48}
-        className="mb-6 size-12 shrink-0"
-        unoptimized
-      />
-      <h3 className="text-xl font-semibold leading-7 text-[var(--text-base)]">
-        {item.title}
-      </h3>
-      <div className="mt-4 flex flex-col gap-1 text-base leading-6 text-[var(--text-secondary)]">
-        {item.lines.map((line) => (
-          <p key={line}>{line}</p>
-        ))}
-      </div>
-    </TiltCard>
+    <FadeInOnScroll as="div">
+      <TiltCard className="flex flex-col items-center rounded-xl px-4 py-6 text-center md:rounded-2xl md:px-6 md:py-10">
+        <Image
+          src={item.iconSrc}
+          alt=""
+          width={48}
+          height={48}
+          className="mb-4 size-8 shrink-0 md:mb-6 md:size-12"
+          unoptimized
+        />
+        <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-xl md:font-semibold md:leading-7">
+          {item.title}
+        </h3>
+        <div className="mt-1 flex flex-col gap-0.5 text-xs leading-5 text-[var(--text-secondary)] md:mt-4 md:gap-1 md:text-base md:leading-6">
+          {item.lines.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+      </TiltCard>
+    </FadeInOnScroll>
   );
 }
 
 export function WhyChooseSection() {
   return (
-    <section className="bg-[var(--bg-shell)] py-16 md:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-16">
-        <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+    <section className="bg-[var(--bg-shell)] py-[60px] md:py-[100px]">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
+        <FadeInOnScroll
+          as="h2"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+        >
           为什么选择光谱云诊
-        </h2>
+        </FadeInOnScroll>
 
-        <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 overflow-visible sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <div className="grid w-full max-w-[1200px] grid-cols-2 gap-3 overflow-visible md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {WHY_CHOOSE_ITEMS.map((item) => (
             <WhyChooseCard key={item.title} item={item} />
           ))}

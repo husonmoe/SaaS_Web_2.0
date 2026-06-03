@@ -2,6 +2,7 @@ import Image from "next/image";
 import { PageContainer, PageGrid } from "@/components/layout/PageContainer";
 import { PageHeroBgLayer } from "@/components/layout/PageHeroBgLayer";
 import { TrialModalButton } from "@/components/modals/TrialModalButton";
+import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 
 const LAUREL_LEFT = "/assets/figma-cache/laurel-left.svg";
 const LAUREL_RIGHT = "/assets/figma-cache/laurel-right.svg";
@@ -18,8 +19,11 @@ export function HeroSection() {
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10">
-        <PageGrid className="items-center">
-          <div className="col-span-full flex flex-col gap-10 lg:col-span-5">
+        <PageGrid className="hero-page-grid">
+          <FadeInOnScroll
+            as="div"
+            className="col-span-full flex flex-col gap-10 lg:col-span-5"
+          >
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-1">
                 <Image
@@ -68,9 +72,12 @@ export function HeroSection() {
             <TrialModalButton className="h-14 min-h-14 md:h-14 w-[152px] rounded-xl px-10 text-lg">
               免费试用
             </TrialModalButton>
-          </div>
+          </FadeInOnScroll>
 
-          <div className="col-span-full lg:col-span-7">
+          <FadeInOnScroll
+            as="div"
+            className="col-span-full w-[640px] max-w-[640px] shrink-0 lg:col-span-7"
+          >
             <div className="relative mx-auto w-full max-w-[660px] lg:max-w-none">
               <Image
                 src={HERO_MOCKUP_SRC}
@@ -82,7 +89,7 @@ export function HeroSection() {
                 sizes="(max-width: 1024px) 100vw, 58vw"
               />
             </div>
-          </div>
+          </FadeInOnScroll>
         </PageGrid>
       </PageContainer>
     </section>

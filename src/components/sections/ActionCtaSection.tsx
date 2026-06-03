@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PageContainer, PageGrid } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
+import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import { useTrialModal } from "@/contexts/TrialModalContext";
 import { ACTION_CTA_SECTION_ID } from "@/lib/floating-toolbar-anchor";
 import Image from "next/image";
@@ -26,13 +27,14 @@ export function ActionCtaSection() {
       <div className="action-cta-bg-layer" aria-hidden />
 
       <PageContainer className="relative z-10 h-full py-0">
-        <PageGrid className="h-full items-start gap-10 lg:gap-12">
+        <FadeInOnScroll as="div" className="h-full">
+          <PageGrid className="h-full items-start gap-10 lg:gap-12">
           <div className="col-span-full flex h-full flex-col items-start justify-center gap-6 self-stretch lg:col-span-5 lg:gap-8">
             <div className="flex flex-col gap-3">
               <h2 className="text-[28px] font-semibold leading-[36px] text-[var(--text-base)]">
                 体验光谱云诊
               </h2>
-              <p className="max-w-[520px] text-base leading-6 text-[var(--text-secondary)] md:text-lg md:leading-7">
+              <p className="max-w-[520px] text-base leading-6 text-[var(--text-secondary)]">
                 提供结构化智能病历模版、语音输入和常用模版功能，让医生数分钟内即可完成高质量病历，把更多时间还给患者。
               </p>
             </div>
@@ -87,7 +89,8 @@ export function ActionCtaSection() {
               />
             </div>
           </div>
-        </PageGrid>
+          </PageGrid>
+        </FadeInOnScroll>
       </PageContainer>
     </section>
   );

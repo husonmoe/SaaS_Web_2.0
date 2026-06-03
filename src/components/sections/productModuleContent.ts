@@ -213,3 +213,26 @@ export const PRODUCT_TAB_CONTENT: ProductTabContent[] = [
 ];
 
 export const DEFAULT_APP_IMAGE = "/assets/image_header.png";
+
+/** 某 Tab 下所有功能预览图 URL，用于预加载 */
+export function getProductTabMediaSrcs(content: ProductTabContent): string[] {
+  return content.features.map((feature) => {
+    if (feature.media) {
+      if (feature.media.type === "video") {
+        return feature.media.poster ?? feature.media.src;
+      }
+      return feature.media.src;
+    }
+    return feature.image ?? content.appImage ?? DEFAULT_APP_IMAGE;
+  });
+}
+
+export function getAllProductModuleMediaSrcs(): string[] {
+  const seen = new Set<string>();
+  for (const tab of PRODUCT_TAB_CONTENT) {
+    for (const src of getProductTabMediaSrcs(tab)) {
+      seen.add(src);
+    }
+  }
+  return [...seen];
+}

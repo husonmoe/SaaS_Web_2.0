@@ -3,7 +3,7 @@ import {
   VALUE_SERVICE_COLUMNS,
   type ValueServiceItem,
 } from "@/components/sections/valueServicesContent";
-import { Button } from "@/components/ui/Button";
+import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import Image from "next/image";
 
 function ValueServiceCard({ item }: { item: ValueServiceItem }) {
@@ -24,23 +24,29 @@ function ValueServiceCard({ item }: { item: ValueServiceItem }) {
 
 export function ValueAddedServicesSection() {
   return (
-    <section className="bg-white py-16 md:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-10 md:gap-16">
-        <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
-          更多增值服务
-        </h2>
+    <section className="bg-white py-[60px] md:py-[100px]">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
+        <FadeInOnScroll
+          as="h2"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+        >
+          更多进阶服务
+        </FadeInOnScroll>
 
         <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           {VALUE_SERVICE_COLUMNS.map((column) => (
             <div key={column.map((item) => item.id).join("-")} className="flex flex-col gap-4 md:gap-6">
               {column.map((item) => (
-                <ValueServiceCard key={item.id} item={item} />
+                <FadeInOnScroll key={item.id} as="div">
+                  <ValueServiceCard item={item} />
+                </FadeInOnScroll>
               ))}
             </div>
           ))}
         </div>
 
-        <Button
+        {/* 暂无「了解功能详情」落地页，恢复时取消注释并重新 import Button */}
+        {/* <Button
           variant="outline"
           className="h-[60px] min-h-[60px] gap-1 rounded-full pl-10 pr-8 text-[var(--text-secondary)] md:h-[60px] md:min-h-[60px]"
         >
@@ -53,7 +59,7 @@ export function ValueAddedServicesSection() {
             className="size-6 shrink-0"
             aria-hidden
           />
-        </Button>
+        </Button> */}
       </PageContainer>
     </section>
   );

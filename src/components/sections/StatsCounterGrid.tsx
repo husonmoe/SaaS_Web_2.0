@@ -47,32 +47,32 @@ export function StatsCounterGrid() {
       {STATS.map((stat, index) => (
         <div
           key={stat.label}
-          className="flex flex-col items-center gap-1 text-center"
+          className="flex items-center justify-center gap-1 text-center"
         >
-          <div className="flex items-center gap-1">
-            <Image
-              src={index === 0 ? ICON_LEFT : ICON_MID}
-              alt=""
-              width={48}
-              height={48}
-              className="size-12 shrink-0"
-              unoptimized
-            />
+          <Image
+            src={index === 0 ? ICON_LEFT : ICON_MID}
+            alt=""
+            width={48}
+            height={48}
+            className="size-12 shrink-0"
+            unoptimized
+          />
+          <div className="flex flex-col items-center gap-0">
             <AnimatedStatValue
               target={stat.target}
               suffix={stat.suffix}
               enabled={isInView}
             />
-            <Image
-              src={ICON_RIGHT}
-              alt=""
-              width={48}
-              height={48}
-              className="size-12 shrink-0 rotate-180 scale-y-[-1]"
-              unoptimized
-            />
+            <p className="text-lg text-[var(--text-secondary)]">{stat.label}</p>
           </div>
-          <p className="text-lg text-[var(--text-secondary)]">{stat.label}</p>
+          <Image
+            src={ICON_RIGHT}
+            alt=""
+            width={48}
+            height={48}
+            className="size-12 shrink-0 rotate-180 scale-y-[-1]"
+            unoptimized
+          />
         </div>
       ))}
     </div>

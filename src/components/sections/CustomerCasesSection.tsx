@@ -1,4 +1,5 @@
 import { PageContainer } from "@/components/layout/PageContainer";
+import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import { CustomerCaseCard } from "@/components/sections/CustomerCaseCard";
 import { CustomerCasesMapPanel } from "@/components/sections/CustomerCasesMapPanel";
 import { CustomerCasesScroller } from "@/components/sections/CustomerCasesScroller";
@@ -6,13 +7,16 @@ import { CUSTOMER_CASES } from "@/components/sections/customerCasesContent";
 
 export function CustomerCasesSection() {
   return (
-    <section className="relative overflow-hidden bg-[var(--bg-shell)] py-16 md:py-[100px]">
+    <section className="relative overflow-hidden bg-[var(--bg-shell)] py-[60px] md:py-[100px]">
       <div className="customer-cases-bg-layer" aria-hidden />
 
-      <PageContainer className="relative z-10 flex flex-col items-center gap-10 md:gap-16">
-        <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+      <PageContainer className="relative z-10 flex flex-col items-center gap-8 md:gap-16">
+        <FadeInOnScroll
+          as="h2"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+        >
           百万基层医护的共同选择
-        </h2>
+        </FadeInOnScroll>
 
         <div className="grid w-full max-w-[1200px] grid-cols-1 items-start gap-10 lg:h-[520px] lg:grid-cols-2 lg:gap-16 lg:items-stretch">
           <CustomerCasesMapPanel />

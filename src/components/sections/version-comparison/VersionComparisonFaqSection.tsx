@@ -4,6 +4,7 @@ import {
   VERSION_COMPARISON_FAQ_ITEMS,
   type VersionComparisonFaqItem,
 } from "@/components/sections/version-comparison/versionComparisonFaqContent";
+// import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import Image from "next/image";
 
 function FaqCard({ item }: { item: VersionComparisonFaqItem }) {
@@ -38,14 +39,17 @@ export function VersionComparisonFaqSection() {
   return (
     <section className="bg-[var(--bg-white)] py-16 md:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-10 md:gap-16">
-        <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
-          常见问题
-        </h2>
+        {/* FadeInOnScroll 暂关 */}
+        <div className="flex w-full flex-col items-center gap-10 md:gap-16">
+          <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+            常见问题
+          </h2>
 
-        <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-          {VERSION_COMPARISON_FAQ_ITEMS.map((item) => (
-            <FaqCard key={item.id} item={item} />
-          ))}
+          <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            {VERSION_COMPARISON_FAQ_ITEMS.map((item) => (
+              <FaqCard key={item.id} item={item} />
+            ))}
+          </div>
         </div>
       </PageContainer>
     </section>

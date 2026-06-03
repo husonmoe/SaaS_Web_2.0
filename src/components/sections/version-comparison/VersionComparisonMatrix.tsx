@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+// import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import { useTrialModal } from "@/contexts/TrialModalContext";
 import { cn } from "@/lib/cn";
 import {
@@ -101,7 +102,7 @@ function MatrixHeader({
   return (
     <div
       className={cn(
-        "grid min-w-[1200px] grid-cols-4 overflow-hidden rounded-xl border bg-[var(--bg-white)]",
+        "grid w-full grid-cols-4 overflow-hidden rounded-xl border bg-[var(--bg-white)]",
         stuck ? "border-transparent" : "border-[var(--border-light)]",
       )}
     >
@@ -200,7 +201,7 @@ function MatrixHeader({
 
 function MatrixRow({ row }: { row: ComparisonFeatureRow }) {
   return (
-    <div className="grid min-w-[1200px] grid-cols-4 border-b border-[var(--border-light)] bg-white last:border-b-0">
+    <div className="grid w-full grid-cols-4 border-b border-[var(--border-light)] bg-white last:border-b-0">
       <div className="flex items-center gap-2 border-r border-[var(--border-light)] px-6 py-3">
         <span
           className={`text-sm leading-[22px] text-[var(--text-base)] ${row.emphasis ? "font-medium" : ""}`}
@@ -245,7 +246,7 @@ function MatrixGroup({
       <button
         type="button"
         onClick={onToggle}
-        className={`flex w-full min-w-[1200px] items-center justify-between gap-2 bg-[var(--bg-shell)] px-6 py-4 text-left ${expanded ? "border-b border-[var(--border-light)]" : ""}`}
+        className={`flex w-full items-center justify-between gap-2 bg-[var(--bg-shell)] px-6 py-4 text-left ${expanded ? "border-b border-[var(--border-light)]" : ""}`}
         aria-expanded={expanded}
       >
         <span className="text-lg font-medium leading-[26px] text-[var(--text-base)]">
@@ -272,10 +273,7 @@ export function VersionComparisonMatrix() {
       VERSION_COMPARISON_GROUPS.map((g) => [g.id, g.defaultExpanded ?? true]),
     ),
   );
-  const bodyScrollRef = useRef<HTMLDivElement>(null);
-  const headerScrollRef = useRef<HTMLDivElement>(null);
   const stickySentinelRef = useRef<HTMLDivElement>(null);
-  const syncLockRef = useRef(false);
   const [headerStuck, setHeaderStuck] = useState(false);
 
   useEffect(() => {
@@ -292,23 +290,6 @@ export function VersionComparisonMatrix() {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
-
-  const syncHorizontalScroll = useCallback((source: "header" | "body") => {
-    const header = headerScrollRef.current;
-    const body = bodyScrollRef.current;
-    if (!header || !body || syncLockRef.current) return;
-
-    syncLockRef.current = true;
-    const scrollLeft = source === "header" ? header.scrollLeft : body.scrollLeft;
-    if (source === "header") {
-      body.scrollLeft = scrollLeft;
-    } else {
-      header.scrollLeft = scrollLeft;
-    }
-    requestAnimationFrame(() => {
-      syncLockRef.current = false;
-    });
   }, []);
 
   const visibleGroups = useMemo(
@@ -336,25 +317,16 @@ export function VersionComparisonMatrix() {
         }}
       >
         <div className={cn(headerStuck && "mx-auto w-full max-w-[1200px]")}>
-          <div
-            ref={headerScrollRef}
-            className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            onScroll={() => syncHorizontalScroll("header")}
-          >
-            <MatrixHeader
-              hideIdentical={hideIdentical}
-              onHideIdenticalChange={setHideIdentical}
-              stuck={headerStuck}
-            />
-          </div>
+          {/* FadeInOnScroll 暂关 */}
+          <MatrixHeader
+            hideIdentical={hideIdentical}
+            onHideIdenticalChange={setHideIdentical}
+            stuck={headerStuck}
+          />
         </div>
       </div>
 
-      <div
-        ref={bodyScrollRef}
-        className="overflow-x-auto"
-        onScroll={() => syncHorizontalScroll("body")}
-      >
+      <div className="w-full overflow-x-hidden">
         {visibleGroups.length === 0 ? (
           <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
             当前筛选下没有差异项

@@ -28,6 +28,25 @@
   max-height: 520px;
   padding: 0 24px;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
+
+.customer-cases-scroll-viewport--entering {
+  animation: customer-cases-map-panel-enter var(--map-panel-enter-duration, 1.2s)
+    ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-cases-scroll-viewport {
+    opacity: 1;
+    transform: none;
+  }
+
+  .customer-cases-scroll-viewport--entering {
+    animation: none;
+  }
 }
 
 /* 客户案例 · 卡片匀速上滚 */

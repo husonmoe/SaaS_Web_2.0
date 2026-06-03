@@ -4,6 +4,7 @@ import {
   VERSION_COMPARISON_STEPS,
   type VersionComparisonStep,
 } from "@/components/sections/version-comparison/versionComparisonStepsContent";
+// import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 import Image from "next/image";
 import { Fragment } from "react";
 
@@ -47,17 +48,20 @@ export function VersionComparisonStepsSection() {
   return (
     <section className="bg-[var(--bg-white)] py-16 md:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-10 md:gap-16">
-        <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
-          简单四步，开启诊所新体验
-        </h2>
+        {/* FadeInOnScroll 暂关 */}
+        <div className="flex w-full flex-col items-center gap-10 md:gap-16">
+          <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+            简单四步，开启诊所新体验
+          </h2>
 
-        <div className="flex w-full max-w-[1200px] flex-col items-center gap-0 md:flex-row md:justify-between">
-          {VERSION_COMPARISON_STEPS.map((item, index) => (
-            <Fragment key={item.step}>
-              {index > 0 ? <StepArrow /> : null}
-              <StepItem {...item} />
-            </Fragment>
-          ))}
+          <div className="flex w-full max-w-[1200px] flex-col items-center gap-0 md:flex-row md:justify-between">
+            {VERSION_COMPARISON_STEPS.map((item, index) => (
+              <Fragment key={item.step}>
+                {index > 0 ? <StepArrow /> : null}
+                <StepItem {...item} />
+              </Fragment>
+            ))}
+          </div>
         </div>
       </PageContainer>
     </section>

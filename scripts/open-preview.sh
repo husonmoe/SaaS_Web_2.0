@@ -13,24 +13,18 @@ CURSOR_CLI="$(command -v cursor 2>/dev/null || true)"
 
 open_in_simple_browser() {
   local bin="$1"
-  "$bin" --command "simpleBrowser.show" "$URL" >/dev/null 2>&1
+  "$bin" --command "simpleBrowser.show" "$URL" 2>/dev/null || true
 }
 
 # 只走一条打开路径，避免 Cursor CLI 失败后又 fallback 导致连开多个窗口
 if [[ -x "$CURSOR_BIN" ]]; then
-  if "$CURSOR_BIN" --help 2>/dev/null | rg -q -- "--command"; then
-    if open_in_simple_browser "$CURSOR_BIN"; then
-      exit 0
-    fi
-  fi
+  open_in_simple_browser "$CURSOR_BIN"
+  exit 0
 fi
 
 if [[ -n "$CURSOR_CLI" && "$CURSOR_CLI" != "$CURSOR_BIN" ]]; then
-  if "$CURSOR_CLI" --help 2>/dev/null | rg -q -- "--command"; then
-    if open_in_simple_browser "$CURSOR_CLI"; then
-      exit 0
-    fi
-  fi
+  open_in_simple_browser "$CURSOR_CLI"
+  exit 0
 fi
 
 open "$URL"

@@ -8,7 +8,10 @@ import type {
   ProductTabContent,
   HeadlinePart,
 } from "@/components/sections/productModuleContent";
-import { DEFAULT_APP_IMAGE } from "@/components/sections/productModuleContent";
+import {
+  DEFAULT_APP_IMAGE,
+  getProductTabMediaSrcs,
+} from "@/components/sections/productModuleContent";
 
 const AUTO_PLAY_INTERVAL_MS = 5000;
 /** 180° 翻转：装饰性动效建议 500–700ms，便于感知方向变化 */
@@ -16,6 +19,18 @@ const FEATURE_ICON_TRANSITION_MS = 500;
 
 const PREVIEW_MEDIA_CLASS =
   "block h-auto max-h-[500px] w-full rounded-3xl object-contain object-left";
+
+const PREVIEW_IMAGE_CLASS = cn(
+  PREVIEW_MEDIA_CLASS,
+  "origin-center transition-transform duration-300 ease-out motion-reduce:transition-none hover:scale-[1.05] motion-reduce:hover:scale-100",
+);
+
+function prefetchImageSrcs(srcs: string[]) {
+  for (const src of srcs) {
+    const img = new Image();
+    img.src = src;
+  }
+}
 
 function headlineColorClass(color: "primary" | "base") {
   return color === "primary"
@@ -103,13 +118,14 @@ function FeaturePreviewMedia({
         key={media.src}
         src={media.src}
         alt={alt}
-        className={PREVIEW_MEDIA_CLASS}
+        loading="eager"
+        decoding="async"
+        className={PREVIEW_IMAGE_CLASS}
       />
     );
   }
 
   return (
-    // 静态 PNG 直连 public，避免 Cloudflare 上 /_next/image 失败；用原生 img 避免宽高属性撑破布局
     // eslint-disable-next-line @next/next/no-img-element
     <img
       key={media.src}
@@ -117,9 +133,10 @@ function FeaturePreviewMedia({
       alt={alt}
       width={2388}
       height={1500}
-      loading="lazy"
+      loading="eager"
+      fetchPriority="high"
       decoding="async"
-      className={PREVIEW_MEDIA_CLASS}
+      className={PREVIEW_IMAGE_CLASS}
     />
   );
 }
@@ -153,10 +170,10 @@ function FeatureItem({
         </span>
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-xl font-medium leading-7 text-[var(--text-base)]">
+        <p className="text-base font-medium leading-6 text-[var(--text-base)] lg:text-xl lg:leading-7">
           {feature.title}
         </p>
-        <p className="mt-1 text-base leading-6 text-[var(--text-secondary)]">
+        <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)] lg:text-base lg:leading-6">
           {feature.description}
         </p>
       </div>
@@ -171,13 +188,20 @@ type ProductPreviewProps = {
 export function ProductPreview({ content }: ProductPreviewProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeFeature = content.features[activeIndex] ?? content.features[0];
-  const previewMedia = activeFeature
-    ? resolveFeatureMedia(content, activeFeature)
-    : {
-        type: "image" as const,
-        src: content.appImage ?? DEFAULT_APP_IMAGE,
-      };
   const previewAlt = `光谱云诊${content.label} · ${activeFeature?.title ?? ""}`;
+  const featureMedias = content.features.map((feature) => ({
+    title: feature.title,
+    media: resolveFeatureMedia(content, feature),
+    alt: `光谱云诊${content.label} · ${feature.title}`,
+  }));
+  const fallbackMedia: ProductFeatureMedia = {
+    type: "image",
+    src: content.appImage ?? DEFAULT_APP_IMAGE,
+  };
+
+  useEffect(() => {
+    prefetchImageSrcs(getProductTabMediaSrcs(content));
+  }, [content]);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -191,13 +215,13 @@ export function ProductPreview({ content }: ProductPreviewProps) {
     }, AUTO_PLAY_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
-  }, [content.features.length, content.id, activeIndex]);
+  }, [content.features.length, content.id]);
 
   return (
-    <div className="relative min-h-[500px] overflow-visible">
-      <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
-        <div className="flex w-full shrink-0 flex-col lg:w-[340px]">
-          <div className="pt-[26px] text-[32px] font-semibold leading-[44px] text-[var(--text-base)]">
+    <div className="relative min-h-0 overflow-visible md:min-h-[500px]">
+      <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-16">
+        <div className="flex w-full shrink-0 flex-col items-center text-center lg:w-[340px] lg:items-start lg:text-left">
+          <div className="text-2xl font-medium leading-8 text-[var(--text-base)] lg:pt-[26px] lg:text-[32px] lg:font-semibold lg:leading-[44px]">
             <p className="mb-0">
               <HeadlineLine part={content.headline[0]} />
             </p>
@@ -206,7 +230,7 @@ export function ProductPreview({ content }: ProductPreviewProps) {
             </p>
           </div>
 
-          <div className="mt-12 flex flex-col gap-9">
+          <div className="mt-6 flex w-full flex-col gap-6 lg:mt-12 lg:gap-9">
             {content.features.map((feature, index) => (
               <FeatureItem
                 key={feature.title}
@@ -218,12 +242,29 @@ export function ProductPreview({ content }: ProductPreviewProps) {
           </div>
         </div>
 
-        <div className="relative min-h-[280px] flex-1 lg:min-h-[500px] lg:max-w-[796px]">
+        <div className="relative min-h-[280px] flex-1 overflow-hidden bg-[image:var(--gradient-section-product)] lg:min-h-[500px] lg:max-w-[796px]">
           <div
-            key={`${content.id}-${activeIndex}`}
-            className="animate-product-preview-in motion-reduce:animate-none"
+            key={content.id}
+            className="relative min-h-[280px] max-h-[500px] overflow-hidden rounded-3xl lg:min-h-[500px]"
           >
-            <FeaturePreviewMedia media={previewMedia} alt={previewAlt} />
+            {featureMedias.length > 0 ? (
+              featureMedias.map((item, index) => (
+                <div
+                  key={item.title}
+                  className={cn(
+                    "absolute inset-0 transition-opacity duration-300 ease-out",
+                    index === activeIndex
+                      ? "z-10 opacity-100"
+                      : "z-0 opacity-0 pointer-events-none",
+                  )}
+                  aria-hidden={index !== activeIndex}
+                >
+                  <FeaturePreviewMedia media={item.media} alt={item.alt} />
+                </div>
+              ))
+            ) : (
+              <FeaturePreviewMedia media={fallbackMedia} alt={previewAlt} />
+            )}
           </div>
         </div>
       </div>

@@ -8,16 +8,37 @@ import { useTrialModal } from "@/contexts/TrialModalContext";
 import { SITE_FOOTER_ID } from "@/lib/floating-toolbar-anchor";
 import { EXTERNAL_PATHS } from "@/lib/paths";
 
+const FOOTER_SOCIAL_BUTTON_CLASS =
+  "inline-flex size-6 items-center justify-center rounded-full bg-[#BBC4CB] text-[#BBC4CB] transition-colors hover:bg-[#6D777E] hover:text-[#6D777E] group-hover:bg-[#6D777E] group-hover:text-[#6D777E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
+
 const ICONS = {
   logo: "/assets/LOGO.png",
   qr: "/assets/figma-cache/qr.png",
-  social: [
-    "/assets/figma-cache/social-1.svg",
-    "/assets/figma-cache/social-2.svg",
-    "/assets/figma-cache/social-3.svg",
-  ],
+  channelsQr: "/assets/figma-cache/footer-channels-qr.png",
+  officialAccountQr: "/assets/figma-cache/footer-official-account-qr.png",
+  social: {
+    wechat: "/assets/figma-cache/social-1.svg",
+    channels: "/assets/figma-cache/social-2.svg",
+    xiaohongshu: "/assets/figma-cache/social-xiaohongshu-glyph.svg",
+  },
   badge: "/assets/figma-cache/badge.png",
 };
+
+const FOOTER_SOCIAL_LINKS = [
+  {
+    id: "official-account",
+    label: "光谱云诊公众号",
+    hoverQr: ICONS.officialAccountQr,
+    hoverCaption: "光谱云诊公众号",
+  },
+  {
+    id: "channels",
+    label: "光谱云诊视频号",
+    hoverQr: ICONS.channelsQr,
+    hoverCaption: "光谱云诊视频号",
+  },
+  { id: "xiaohongshu", label: "小红书" },
+] as const;
 
 const SERVICES = [
   {
@@ -70,7 +91,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
   return (
     <footer id={SITE_FOOTER_ID} ref={ref} className="bg-[var(--bg-shell)]">
       <PageContainer>
-        <div className="grid gap-6 py-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 py-8 md:grid-cols-2 md:gap-6 md:py-12 lg:grid-cols-4">
           {SERVICES.map((item) => (
             <div key={item.title} className="flex items-center gap-2">
               <Image
@@ -78,14 +99,14 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
                 alt=""
                 width={44}
                 height={44}
-                className="size-11 shrink-0"
+                className="size-9 shrink-0 md:size-11"
                 unoptimized
               />
-              <div>
-                <p className="font-medium text-[var(--text-base)]">
+              <div className="min-w-0">
+                <p className="text-sm font-medium leading-[22px] text-[var(--text-base)] md:text-base">
                   {item.title}
                 </p>
-                <p className="text-sm text-[var(--text-tertiary)]">
+                <p className="text-xs leading-5 text-[var(--text-tertiary)] md:text-sm">
                   {item.desc}
                 </p>
               </div>
@@ -95,16 +116,16 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
         <hr className="border-[var(--border-light)]" />
 
-        <div className="grid gap-6 py-12 md:grid-cols-2 lg:grid-cols-4">
-          <div className="flex w-full flex-col gap-8">
+        <div className="grid gap-6 py-8 md:grid-cols-2 md:py-12 lg:grid-cols-4">
+          <div className="flex w-full flex-col items-center gap-6 md:items-start md:gap-8">
             <Image
               src={ICONS.logo}
               alt="光谱云诊"
               width={116}
               height={32}
-              className="h-8 w-[116px]"
+              className="h-6 w-[87px] md:h-8 md:w-[116px]"
             />
-            <div className="size-[110px] overflow-hidden rounded-md">
+            <div className="size-[100px] overflow-hidden rounded-md md:size-[110px]">
               <Image
                 src={ICONS.qr}
                 alt="二维码"
@@ -123,18 +144,10 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
         <hr className="border-[var(--border-light)]" />
 
-        <div className="flex flex-col gap-6 py-12 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col items-center gap-4 py-8 text-center md:items-start md:gap-6 md:py-12 md:text-left lg:flex-row lg:items-center lg:justify-between">
           <div className="flex gap-4">
-            {ICONS.social.map((src) => (
-              <Image
-                key={src}
-                src={src}
-                alt=""
-                width={24}
-                height={24}
-                className="size-6"
-                unoptimized
-              />
+            {FOOTER_SOCIAL_LINKS.map((item) => (
+              <FooterSocialIcon key={item.id} {...item} />
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-tertiary)]">
@@ -164,8 +177,8 @@ function FooterProductColumn() {
   const { open: openTrial } = useTrialModal();
 
   return (
-    <div className="w-full pl-[52px]">
-      <p className="mb-8 font-medium text-[var(--text-base)]">产品入口</p>
+    <div className="w-full md:pl-[52px]">
+      <p className="mb-4 font-medium text-[var(--text-base)] md:mb-8">产品入口</p>
       <ul className="flex flex-col gap-4">
         {PRODUCT_LINKS.map((link) => (
           <li key={link.label}>
@@ -198,6 +211,100 @@ function FooterProductColumn() {
   );
 }
 
+type FooterSocialIconProps = {
+  id: (typeof FOOTER_SOCIAL_LINKS)[number]["id"];
+  label: string;
+  hoverQr?: string;
+  hoverCaption?: string;
+};
+
+function FooterSocialGlyph({
+  id,
+  className = "size-6 shrink-0",
+}: {
+  id: FooterSocialIconProps["id"];
+  className?: string;
+}) {
+  const src =
+    id === "official-account"
+      ? ICONS.social.wechat
+      : id === "channels"
+        ? ICONS.social.channels
+        : ICONS.social.xiaohongshu;
+
+  return (
+    <Image
+      src={src}
+      alt=""
+      width={24}
+      height={24}
+      className={className}
+      unoptimized
+    />
+  );
+}
+
+function FooterSocialIcon({
+  id,
+  label,
+  hoverQr,
+  hoverCaption,
+}: FooterSocialIconProps) {
+  const tooltipId = `footer-social-${id}-tooltip`;
+  const iconImage = <FooterSocialGlyph id={id} />;
+
+  if (!hoverQr) {
+    return (
+      <span
+        className={FOOTER_SOCIAL_BUTTON_CLASS}
+        aria-label={label}
+      >
+        {iconImage}
+      </span>
+    );
+  }
+
+  return (
+    <div className="group relative h-6 shrink-0">
+      <button
+        type="button"
+        className={FOOTER_SOCIAL_BUTTON_CLASS}
+        aria-label={label}
+        aria-describedby={tooltipId}
+      >
+        {iconImage}
+      </button>
+
+      <div
+        id={tooltipId}
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
+      >
+        <div className="relative flex flex-col items-center gap-2 rounded-xl border border-[var(--border-light)] bg-white px-4 pb-4 pt-3 shadow-[0_8px_12px_rgba(15,47,76,0.08)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={hoverQr}
+            alt={hoverCaption ?? label}
+            width={140}
+            height={140}
+            className="block size-[140px] shrink-0 rounded-none border-0 object-contain outline-none"
+            decoding="async"
+          />
+          {hoverCaption ? (
+            <p className="text-sm leading-[22px] text-[var(--text-secondary)]">
+              {hoverCaption}
+            </p>
+          ) : null}
+          <span
+            className="absolute left-1/2 top-full size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r border-[var(--border-light)] bg-white"
+            aria-hidden
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FooterColumn({
   title,
   links,
@@ -208,8 +315,8 @@ function FooterColumn({
   interactive?: boolean;
 }) {
   return (
-    <div className="w-full pl-[52px]">
-      <p className="mb-8 font-medium text-[var(--text-base)]">{title}</p>
+    <div className="w-full md:pl-[52px]">
+      <p className="mb-4 font-medium text-[var(--text-base)] md:mb-8">{title}</p>
       <ul className="flex flex-col gap-4">
         {links.map((link) => (
           <li key={link}>
