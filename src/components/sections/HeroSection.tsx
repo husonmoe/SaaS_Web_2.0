@@ -15,7 +15,7 @@ const HERO_MOCKUP_HEIGHT = 1320;
 
 export function HeroSection() {
   return (
-    <section className="relative isolate min-h-[calc(653px+var(--hero-header-offset))] overflow-visible pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-24">
+    <section className="relative isolate h-fit overflow-visible pt-[calc(72px+2rem)] pb-16 md:pt-[calc(72px+3rem)] md:pb-20">
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10">
