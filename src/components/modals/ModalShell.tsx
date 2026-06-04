@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type { ReactNode, Ref } from "react";
+import { cn } from "@/lib/cn";
 
 const ICON_CLOSE_SRC = "/assets/modal/icon_close.svg";
 
@@ -13,6 +14,8 @@ type ModalShellProps = {
   children: ReactNode;
   /** 叠在其它营销弹窗之上时使用（默认 200） */
   zIndex?: number;
+  /** 覆盖右侧内容区默认间距/高度（如试用弹窗紧凑布局） */
+  contentClassName?: string;
 };
 
 /** 营销弹窗共用外壳：左侧插画 + 右侧内容区 */
@@ -23,6 +26,7 @@ export function ModalShell({
   onClose,
   children,
   zIndex = 200,
+  contentClassName,
 }: ModalShellProps) {
   return (
     <div
@@ -55,7 +59,12 @@ export function ModalShell({
           />
         </aside>
 
-        <div className="relative flex min-h-[480px] flex-1 flex-col items-center overflow-y-auto px-6 pb-10 pt-16 sm:min-h-0 sm:px-[60px] sm:pb-10 sm:pt-20">
+        <div
+          className={cn(
+            "relative flex min-h-[480px] flex-1 flex-col items-center overflow-y-auto px-6 pb-10 pt-16 sm:min-h-0 sm:px-[60px] sm:pb-10 sm:pt-20",
+            contentClassName,
+          )}
+        >
           <button
             type="button"
             className="absolute right-4 top-4 flex size-11 items-center justify-center rounded-full transition-colors hover:bg-[#f1f3f6]"

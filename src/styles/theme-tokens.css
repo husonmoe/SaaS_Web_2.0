@@ -56,7 +56,7 @@
   --font-size-stat: 40px;
 
   /* 统计数字区固定宽度（按最宽「5000万+」对齐） */
-  --stat-value-width: 72px;
+  --stat-value-width: 88px;
 
   --font-sans: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-brand: "DingTalk JinBuTi", var(--font-sans);

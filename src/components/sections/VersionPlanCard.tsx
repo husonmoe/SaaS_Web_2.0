@@ -58,7 +58,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
         />
       ) : null}
 
-      <div className="relative flex flex-1 flex-col px-6 py-4 md:px-12 md:py-8">
+      <div className="relative flex flex-1 flex-col px-4 py-4 md:px-12 md:py-8">
         <div className="flex gap-3 md:flex-col md:gap-0">
           <div className="flex w-[100px] shrink-0 flex-col md:w-auto">
             <div className="flex items-center gap-1.5 md:gap-2">
@@ -71,30 +71,22 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
                 unoptimized
               />
               <h3
-                className="text-lg font-semibold leading-[26px] md:text-[32px] md:leading-[44px]"
+                className="text-xl font-semibold leading-[28px] md:text-[32px] md:leading-[44px]"
                 style={{ color: theme.color }}
               >
                 {plan.title}
               </h3>
             </div>
 
-            <p className="mt-1 text-[10px] leading-[14px] text-[var(--text-secondary)] md:mt-2 md:text-base md:leading-6">
+            <p className="mt-1 text-xs leading-[14px] text-[var(--text-secondary)] md:mt-2 md:text-base md:leading-6">
               {plan.subtitle}
             </p>
 
             <div
-              className="mt-3 inline-flex h-5 w-fit items-center gap-0.5 rounded-full pl-1.5 pr-2 md:mt-4 md:h-9 md:gap-2 md:pl-4 md:pr-5"
+              className="mt-3 inline-flex h-fit w-fit items-start justify-start rounded-lg px-2 py-2 md:mt-4 md:h-fit md:px-4 md:py-2"
               style={{ backgroundColor: theme.badgeBg }}
             >
-              <Image
-                src={theme.personIcon}
-                alt=""
-                width={48}
-                height={48}
-                className="size-2.5 shrink-0 md:size-4"
-                unoptimized
-              />
-              <span className="text-[10px] leading-[14px] text-[var(--text-base)] md:text-base md:leading-6">
+              <span className="text-xs leading-[14px] text-[var(--text-base)] md:text-base md:leading-6">
                 专属 30 席位/店
               </span>
             </div>
@@ -106,7 +98,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           />
 
           <div className="flex flex-1 flex-col md:flex-none">
-            <p className="text-[10px] font-medium leading-[14px] text-[var(--text-base)] md:text-base md:font-normal md:leading-6">
+            <p className="text-xs font-medium leading-[14px] text-[var(--text-base)] md:text-base md:font-normal md:leading-6">
               {plan.featuresHeader}
             </p>
 
@@ -114,7 +106,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
               {plan.features.map((feature) => (
                 <li
                   key={feature}
-                  className="flex items-center gap-2 text-[10px] leading-[14px] text-[var(--text-secondary)] md:gap-3 md:text-base md:leading-6"
+                  className="flex items-center gap-2 text-xs leading-[14px] text-[var(--text-secondary)] md:gap-3 md:text-base md:leading-6"
                 >
                   <FeatureCheck color={theme.color} />
                   <span className="whitespace-nowrap">{feature}</span>

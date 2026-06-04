@@ -60,10 +60,10 @@ function WhyChooseCard({ item }: { item: WhyChooseItem }) {
           className="mb-4 size-8 shrink-0 md:mb-6 md:size-12"
           unoptimized
         />
-        <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-xl md:font-semibold md:leading-7">
+        <h3 className="text-lg font-medium leading-[26px] text-[var(--text-base)] md:text-xl md:font-semibold md:leading-7">
           {item.title}
         </h3>
-        <div className="mt-1 flex flex-col gap-0.5 whitespace-nowrap text-xs leading-5 text-[var(--text-secondary)] md:mt-4 md:gap-1 md:text-base md:leading-6">
+        <div className="mt-1 flex flex-col gap-0.5 whitespace-nowrap text-sm leading-[22px] text-[var(--text-secondary)] md:mt-4 md:gap-1 md:text-base md:leading-6">
           {item.lines.map((line) => (
             <p key={line}>{line}</p>
           ))}

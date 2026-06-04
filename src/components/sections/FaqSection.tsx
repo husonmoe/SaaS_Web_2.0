@@ -13,16 +13,16 @@ function FaqCard({ item }: { item: FaqItem }) {
             alt=""
             width={24}
             height={24}
-            className="size-4 md:size-6"
+            className="size-5 md:size-6"
             aria-hidden
             unoptimized
           />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-medium leading-[22px] text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7">
+          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7">
             {item.title}
           </h3>
-          <p className="mt-0.5 text-xs leading-5 text-[var(--text-secondary)] md:text-base md:leading-6">
+          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
             {item.answer}
           </p>
         </div>

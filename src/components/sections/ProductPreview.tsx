@@ -214,7 +214,7 @@ function ProductPreviewDots({
 
 function ProductPreviewHeadline({ content }: { content: ProductTabContent }) {
   return (
-    <div className="text-center text-xl font-medium leading-7 text-[var(--text-base)]">
+    <div className="text-center text-2xl font-medium leading-7 text-[var(--text-base)]">
       <p className="mb-0">
         <HeadlineLine part={content.headline[0]} />
       </p>
@@ -243,10 +243,10 @@ function MobilePreviewSlide({
       </div>
 
       <div className="flex flex-col gap-1 text-left">
-        <p className="text-base font-medium leading-6 text-[var(--text-base)]">
+        <p className="text-lg font-medium leading-[26px] text-[var(--text-base)]">
           {feature.title}
         </p>
-        <p className="text-xs leading-5 text-[var(--text-secondary)]">
+        <p className="text-sm leading-[22px] text-[var(--text-secondary)]">
           {feature.description}
         </p>
       </div>

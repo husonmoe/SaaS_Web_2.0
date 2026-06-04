@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { forwardRef } from "react";
+import { forwardRef, useCallback, useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useLoginModal } from "@/contexts/LoginModalContext";
 import { useTrialModal } from "@/contexts/TrialModalContext";
@@ -9,7 +10,7 @@ import { SITE_FOOTER_ID } from "@/lib/floating-toolbar-anchor";
 import { EXTERNAL_PATHS } from "@/lib/paths";
 
 const FOOTER_SOCIAL_BUTTON_CLASS =
-  "inline-flex size-6 items-center justify-center rounded-full bg-[#BBC4CB] text-[#BBC4CB] transition-colors hover:bg-[#6D777E] hover:text-[#6D777E] group-hover:bg-[#6D777E] group-hover:text-[#6D777E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
+  "inline-flex size-7 items-center justify-center rounded-full bg-[#BBC4CB] text-[#BBC4CB] transition-colors hover:bg-[#6D777E] hover:text-[#6D777E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
 
 const ICONS = {
   logo: "/assets/LOGO.png",
@@ -109,12 +110,12 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
               <Image
                 src={item.iconSrc}
                 alt=""
-                width={32}
-                height={32}
-                className="size-8 shrink-0"
+                width={40}
+                height={40}
+                className="size-10 shrink-0"
                 unoptimized
               />
-              <p className="text-center text-xs leading-5 text-[var(--text-secondary)]">
+              <p className="text-center text-sm leading-[22px] text-[var(--text-secondary)]">
                 {item.title}
               </p>
             </div>
@@ -155,7 +156,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
               alt="光谱云诊"
               width={116}
               height={32}
-              className="h-6 w-[87px]"
+              className="h-7 w-[101.5px]"
             />
             <div className="my-1 flex items-start gap-4">
               {FOOTER_SOCIAL_LINKS.map((item) => (
@@ -165,14 +166,14 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
           </div>
 
           <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-            <p className="text-sm font-medium leading-[22px] text-[var(--text-base)]">
+            <p className="text-base font-medium leading-6 text-[var(--text-base)]">
               联系我们
             </p>
             <ul className="flex w-full flex-col items-start gap-1">
               {CONTACT_MOBILE.map((line) => (
                 <li
                   key={line}
-                  className="text-xs leading-5 text-[var(--text-secondary)]"
+                  className="text-sm leading-[22px] text-[var(--text-secondary)]"
                 >
                   {line}
                 </li>
@@ -311,7 +312,7 @@ type FooterSocialIconProps = {
 
 function FooterSocialGlyph({
   id,
-  className = "size-6 shrink-0",
+  className = "size-7 shrink-0",
 }: {
   id: FooterSocialIconProps["id"];
   className?: string;
@@ -327,8 +328,8 @@ function FooterSocialGlyph({
     <Image
       src={src}
       alt=""
-      width={24}
-      height={24}
+      width={28}
+      height={28}
       className={className}
       unoptimized
     />
@@ -341,8 +342,31 @@ function FooterSocialIcon({
   hoverQr,
   hoverCaption,
 }: FooterSocialIconProps) {
-  const tooltipId = `footer-social-${id}-tooltip`;
+  const popupTitleId = useId();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const iconImage = <FooterSocialGlyph id={id} />;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const closePopup = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closePopup();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closePopup, open]);
 
   if (!hoverQr) {
     return (
@@ -353,43 +377,61 @@ function FooterSocialIcon({
   }
 
   return (
-    <div className="group relative h-6 shrink-0">
+    <>
       <button
         type="button"
         className={FOOTER_SOCIAL_BUTTON_CLASS}
         aria-label={label}
-        aria-describedby={tooltipId}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
       >
         {iconImage}
       </button>
 
-      <div
-        id={tooltipId}
-        role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none"
-      >
-        <div className="relative flex flex-col items-center gap-2 rounded-xl border border-[var(--border-light)] bg-white px-4 pb-4 pt-3 shadow-[0_8px_12px_rgba(15,47,76,0.08)]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={hoverQr}
-            alt={hoverCaption ?? label}
-            width={140}
-            height={140}
-            className="block size-[140px] shrink-0 rounded-none border-0 object-contain outline-none"
-            decoding="async"
-          />
-          {hoverCaption ? (
-            <p className="text-sm leading-[22px] text-[var(--text-secondary)]">
-              {hoverCaption}
-            </p>
-          ) : null}
-          <span
-            className="absolute left-1/2 top-full size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r border-[var(--border-light)] bg-white"
-            aria-hidden
-          />
-        </div>
-      </div>
-    </div>
+      {mounted && open
+        ? createPortal(
+            <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden overscroll-none p-4">
+              <button
+                type="button"
+                className="absolute inset-0 bg-[#000000]/40"
+                aria-label="关闭弹窗"
+                onClick={closePopup}
+              />
+
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={popupTitleId}
+                className="relative flex flex-col items-center gap-2 rounded-2xl border border-[var(--border-light)] bg-white px-4 pb-6 pt-[15px] shadow-[0_8px_12px_rgba(15,47,76,0.08)]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={hoverQr}
+                  alt={hoverCaption ?? label}
+                  width={220}
+                  height={220}
+                  className="block size-[220px] shrink-0 rounded-none border-0 object-contain outline-none"
+                  decoding="async"
+                />
+                {hoverCaption ? (
+                  <p
+                    id={popupTitleId}
+                    className="text-base leading-6 text-[var(--text-secondary)]"
+                  >
+                    {hoverCaption}
+                  </p>
+                ) : (
+                  <p id={popupTitleId} className="sr-only">
+                    {label}
+                  </p>
+                )}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }
 

@@ -47,14 +47,14 @@ export function HeroSection() {
                 />
               </div>
 
-              <h1 className="text-[32px] font-medium leading-[44px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
+              <h1 className="text-[36px] font-medium leading-[52px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
                 开诊所就用
                 <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-end)] bg-clip-text text-transparent">
                   光谱云诊
                 </span>
               </h1>
 
-              <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[var(--text-base)] md:text-xl lg:justify-start">
+              <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-[22px] text-[var(--text-base)] md:text-xl md:leading-normal lg:justify-start">
                 {FEATURES.map((item, i) => (
                   <li key={item} className="flex items-center gap-3">
                     {i > 0 && (

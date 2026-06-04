@@ -55,7 +55,7 @@ export function ProductModuleTabs() {
                 aria-selected={isActive}
                 onClick={() => setActiveId(tab.id)}
                 className={cn(
-                  "flex h-7 w-full min-w-0 flex-1 items-center justify-center rounded-md px-0 text-xs leading-5 transition-colors md:h-[52px] md:w-auto md:flex-none md:shrink-0 md:rounded-xl md:px-6 md:text-xl md:leading-7",
+                  "flex h-9 w-full min-w-0 flex-1 items-center justify-center rounded-md px-0 text-sm leading-[22px] transition-colors md:h-[52px] md:w-auto md:flex-none md:shrink-0 md:rounded-xl md:px-6 md:text-xl md:leading-7",
                   isActive
                     ? "bg-[image:var(--gradient-primary)] font-medium text-white"
                     : "font-normal text-[var(--text-base)] hover:bg-white/80",

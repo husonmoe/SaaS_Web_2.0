@@ -70,7 +70,7 @@ function TrialModalFormView({
 }) {
   return (
     <>
-      <div className="mb-6 flex h-[116px] w-full max-w-[280px] flex-col items-center gap-2 text-center">
+      <div className="mb-6 flex h-fit w-full max-w-[280px] flex-col items-center gap-2 text-center">
         <h2
           id={titleId}
           className="text-[32px] font-medium leading-[44px] text-[var(--text-base)]"
@@ -109,7 +109,7 @@ function TrialModalFormView({
                 aria-invalid={phoneError ? true : undefined}
                 aria-describedby="trial-phone-error"
                 className={cn(
-                  "h-10 w-full rounded-lg border bg-white px-3 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-quaternary)] focus:border-[var(--color-primary)]",
+                  "h-12 w-full rounded-lg border bg-white px-3 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-quaternary)] focus:border-[var(--color-primary)]",
                   phoneError
                     ? "border-[var(--text-error)]"
                     : "border-[var(--border-heavy)]",
@@ -166,7 +166,7 @@ function TrialModalFormView({
               onChange={(event) => onOrgNameChange(event.target.value)}
               placeholder="输入机构名称"
               autoComplete="organization"
-              className="h-10 w-full rounded-lg border border-[var(--border-heavy)] bg-white px-3 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-quaternary)] focus:border-[var(--color-primary)]"
+              className="h-12 w-full rounded-lg border border-[var(--border-heavy)] bg-white px-3 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-quaternary)] focus:border-[var(--color-primary)]"
             />
           </div>
         </div>
@@ -175,10 +175,6 @@ function TrialModalFormView({
           立即提交
         </Button>
       </form>
-
-      <div className="mt-6">
-        <TrialModalLoginFooter />
-      </div>
     </>
   );
 }
@@ -437,6 +433,7 @@ export function TrialModal() {
       dialogRef={dialogRef}
       panelBgSrc={MODAL_TRIAL_PANEL_BG_SRC}
       onClose={handleClose}
+      contentClassName="h-fit min-h-0 pt-10 sm:pt-10"
     >
       {view === "form" ? (
         <TrialModalFormView

@@ -34,12 +34,12 @@ export function ActionCtaSection() {
               <h2 className="text-2xl font-semibold leading-8 text-[var(--text-base)] lg:text-[28px] lg:leading-[36px]">
                 体验光谱云诊
               </h2>
-              <p className="max-w-[520px] text-xs leading-5 text-[var(--text-secondary)] lg:text-base lg:leading-6">
+              <p className="max-w-[520px] text-sm leading-[22px] text-[var(--text-secondary)] lg:text-base lg:leading-6">
                 提供结构化智能病历模版、语音输入和常用模版功能，让医生数分钟内即可完成高质量病历，把更多时间还给患者。
               </p>
             </div>
 
-            <div className="flex h-10 w-full max-w-[480px] flex-row items-stretch gap-2 lg:h-auto lg:gap-3">
+            <div className="flex h-12 w-full max-w-[480px] flex-row items-stretch gap-2 lg:h-auto lg:gap-3">
               <label className="relative min-w-0 flex-1">
                 <span className="sr-only">手机号</span>
                 <Image
@@ -64,12 +64,12 @@ export function ActionCtaSection() {
                   }}
                   placeholder="请输入手机号"
                   autoComplete="tel"
-                  className="h-10 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:h-12 lg:rounded-xl lg:pl-11 lg:pr-4 lg:text-base lg:leading-6"
+                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:h-12 lg:rounded-xl lg:pl-11 lg:pr-4 lg:text-base lg:leading-6"
                 />
               </label>
               <Button
                 type="button"
-                className="h-10 min-h-10 w-[88px] shrink-0 rounded-lg px-4 text-sm leading-[22px] lg:h-12 lg:min-h-12 lg:w-[152px] lg:rounded-xl lg:px-8 lg:text-base lg:leading-6"
+                className="h-12 min-h-12 w-[100px] shrink-0 rounded-lg px-4 text-sm leading-[22px] lg:h-12 lg:min-h-12 lg:w-[152px] lg:rounded-xl lg:px-8 lg:text-base lg:leading-6"
                 onClick={handleTrialClick}
               >
                 免费试用

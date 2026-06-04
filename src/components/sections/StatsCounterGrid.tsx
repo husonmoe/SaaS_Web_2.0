@@ -32,7 +32,7 @@ function AnimatedStatValue({
   return (
     <p
       className={cn(
-        "inline-flex min-w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-2xl font-bold leading-none tabular-nums text-transparent md:text-[40px]",
+        "inline-flex min-w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-[28px] font-bold leading-8 tabular-nums text-transparent md:text-[40px]",
       )}
     >
       {value}
@@ -64,7 +64,7 @@ export function StatsCounterGrid() {
             className="size-8 shrink-0 md:size-12"
             unoptimized
           />
-          <div className="flex flex-col items-center gap-0">
+          <div className="flex w-[var(--stat-value-width)] flex-col items-center gap-0">
             <AnimatedStatValue
               target={stat.target}
               suffix={stat.suffix}

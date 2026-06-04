@@ -154,7 +154,7 @@ function ToolbarButton({
   tabIndex?: number;
 }) {
   const buttonClass = cn(
-    "group relative flex size-9 shrink-0 items-center justify-center overflow-visible rounded-full transition-shadow",
+    "group relative flex size-12 shrink-0 items-center justify-center overflow-visible rounded-full transition-shadow",
     variant === "primary" &&
       "bg-[image:var(--gradient-primary)] shadow-[var(--shadow-card)] hover:opacity-95",
     variant === "outline" &&
@@ -167,9 +167,9 @@ function ToolbarButton({
       <Image
         src={iconSrc}
         alt=""
-        width={16}
-        height={16}
-        className="size-4"
+        width={24}
+        height={24}
+        className="size-6"
         aria-hidden
         unoptimized
       />

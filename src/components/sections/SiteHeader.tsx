@@ -188,7 +188,7 @@ export function SiteHeader() {
       {/* 背景层：默认透明；滚动 0–72px 渐显；hover 时 300ms 过渡到白底 */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-x-0 top-0 h-12 bg-white/95 backdrop-blur-sm lg:h-[72px]",
+          "pointer-events-none absolute inset-x-0 top-0 h-16 bg-white/95 backdrop-blur-sm lg:h-[72px]",
           "border-b border-[var(--border-light)]",
           menuOpen && "max-lg:border-b-0",
           useHoverTransition && "transition-opacity duration-300 ease-out",
@@ -197,7 +197,7 @@ export function SiteHeader() {
         aria-hidden
       />
 
-      <div className="relative z-10 flex h-12 w-full items-center justify-center gap-4 pl-4 pr-3 lg:h-[72px] lg:px-6">
+      <div className="relative z-10 flex h-16 w-full items-center justify-center gap-4 pl-4 pr-3 lg:h-[72px] lg:px-6">
         <Link
           href="/"
           className="flex w-[222px] shrink-0 items-center"
@@ -209,7 +209,7 @@ export function SiteHeader() {
             alt="光谱云诊"
             width={116}
             height={32}
-            className="h-6 w-auto lg:h-8"
+            className="h-7 w-auto lg:h-8"
             priority
           />
         </Link>
@@ -266,7 +266,7 @@ export function SiteHeader() {
           <button
             type="button"
             className={cn(
-              "inline-flex h-7 w-7 shrink-0 flex-col items-center justify-center gap-[3px] lg:hidden",
+              "inline-flex h-8 w-8 shrink-0 flex-col items-center justify-center gap-[3px] lg:hidden",
               menuOpen && "is-active",
             )}
             aria-label={menuOpen ? "关闭菜单" : "打开菜单"}
@@ -276,19 +276,19 @@ export function SiteHeader() {
           >
             <span
               className={cn(
-                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
                 menuOpen && "translate-y-[5px] rotate-45",
               )}
             />
             <span
               className={cn(
-                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
                 menuOpen && "opacity-0",
               )}
             />
             <span
               className={cn(
-                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
                 menuOpen && "-translate-y-[5px] -rotate-45",
               )}
             />
@@ -300,12 +300,12 @@ export function SiteHeader() {
         <>
           <button
             type="button"
-            className="fixed inset-0 top-12 z-40 bg-[#000000]/40 lg:hidden"
+            className="fixed inset-0 top-16 z-40 bg-[#000000]/40 lg:hidden"
             aria-label="关闭菜单"
             onClick={() => setMenuOpen(false)}
           />
           <nav
-            className="fixed inset-x-0 top-12 z-50 flex flex-col gap-0 bg-white lg:hidden"
+            className="fixed inset-x-0 top-16 z-50 flex flex-col gap-0 bg-white lg:hidden"
             aria-label="主导航"
           >
             {NAV_ITEMS.map((item) => (
