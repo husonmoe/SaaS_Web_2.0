@@ -32,12 +32,12 @@ export function MapStatsList({
     <div className={cn("flex flex-col gap-[2px]", className)}>
       <ul className="flex flex-col gap-[2px]">
         {MAP_STATS.map((item) => (
-          <li key={item.id} className="flex items-start gap-2">
+          <li key={item.id} className="flex items-center justify-start gap-2">
             <span
-              className="mt-2 size-1.5 shrink-0 rounded-full bg-[var(--text-tertiary)]"
+              className="size-1 shrink-0 rounded-full bg-[var(--text-tertiary)] lg:mt-2"
               aria-hidden
             />
-            <span className="text-base leading-6 text-[var(--text-secondary)]">
+            <span className="text-xs leading-5 text-[var(--text-secondary)] lg:text-base lg:leading-6">
               {item.before}
               <AnimatedMapStatNumber
                 target={item.target}

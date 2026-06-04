@@ -1,0 +1,34 @@
+/**
+ * 产品模块预览 · 移动端轮播与 Dot Indicators（Figma 149:12438 / 479:64009）
+ */
+.product-preview-dot {
+  border-radius: 100px;
+  background-color: var(--color-primary-soft);
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-preview-dot--active {
+  width: 12px;
+  height: 4px;
+}
+
+.product-preview-dot--inactive {
+  width: 4px;
+  height: 4px;
+}
+
+.product-preview-mobile-track {
+  width: 100%;
+  height: fit-content;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-preview-dot,
+  .product-preview-mobile-track {
+    transition: none;
+  }
+}

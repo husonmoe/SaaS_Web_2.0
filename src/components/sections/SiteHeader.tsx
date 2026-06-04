@@ -43,14 +43,19 @@ const PHONE_ICON_SRC = "/assets/figma-cache/phone-icon.svg";
 const NAV_LINK_CLASS =
   "shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
 
+const MOBILE_NAV_LINK_CLASS =
+  "flex h-12 shrink-0 items-center justify-start rounded-none px-[var(--page-margin-x)] text-base text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
+
 function NavLink({
   item,
   onNavigate,
   onPointerEnter,
+  linkClassName = NAV_LINK_CLASS,
 }: {
   item: NavItem;
   onNavigate?: () => void;
   onPointerEnter?: (event: React.MouseEvent) => void;
+  linkClassName?: string;
 }) {
   if (item.external) {
     return (
@@ -58,7 +63,7 @@ function NavLink({
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className={NAV_LINK_CLASS}
+        className={linkClassName}
         onMouseEnter={onPointerEnter}
         onClick={() => onNavigate?.()}
       >
@@ -70,7 +75,7 @@ function NavLink({
   return (
     <Link
       href={item.href}
-      className={NAV_LINK_CLASS}
+      className={linkClassName}
       onMouseEnter={onPointerEnter}
       onClick={() => onNavigate?.()}
     >
@@ -183,14 +188,16 @@ export function SiteHeader() {
       {/* 背景层：默认透明；滚动 0–72px 渐显；hover 时 300ms 过渡到白底 */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-x-0 top-0 h-[72px] border-b border-[var(--border-light)] bg-white/95 backdrop-blur-sm",
+          "pointer-events-none absolute inset-x-0 top-0 h-12 bg-white/95 backdrop-blur-sm lg:h-[72px]",
+          "border-b border-[var(--border-light)]",
+          menuOpen && "max-lg:border-b-0",
           useHoverTransition && "transition-opacity duration-300 ease-out",
         )}
         style={{ opacity: fillOpacity }}
         aria-hidden
       />
 
-      <div className="relative z-10 flex h-[72px] w-full items-center gap-4 px-[var(--page-margin-x)] lg:px-6">
+      <div className="relative z-10 flex h-12 w-full items-center justify-center gap-4 pl-4 pr-3 lg:h-[72px] lg:px-6">
         <Link
           href="/"
           className="flex w-[222px] shrink-0 items-center"
@@ -202,12 +209,12 @@ export function SiteHeader() {
             alt="光谱云诊"
             width={116}
             height={32}
-            className="h-8 w-auto"
+            className="h-6 w-auto lg:h-8"
             priority
           />
         </Link>
 
-        <div className="hidden min-w-0 flex-1 md:flex md:justify-center">
+        <div className="hidden min-w-0 flex-1 lg:flex lg:justify-center">
           <nav
             className="flex w-full max-w-[1200px] items-center gap-3"
             aria-label="主导航"
@@ -238,11 +245,11 @@ export function SiteHeader() {
           </nav>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
+        <div className="ml-auto flex shrink-0 items-center gap-3 lg:ml-0">
           <LoginModalButton
             variant="outline"
             className={cn(
-              "hidden sm:inline-flex",
+              "hidden lg:inline-flex",
               headerInverted &&
                 "border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] active:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)]",
             )}
@@ -251,56 +258,69 @@ export function SiteHeader() {
             登录诊所
           </LoginModalButton>
           <TrialModalButton
-            className="hidden sm:inline-flex"
+            className="hidden rounded-none lg:inline-flex"
             onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
           >
             免费试用
           </TrialModalButton>
           <button
             type="button"
-            className="inline-flex size-10 flex-col items-center justify-center gap-1 rounded-lg border border-[var(--border-light)] bg-white/80 md:hidden"
-            aria-label="打开菜单"
+            className={cn(
+              "inline-flex h-7 w-7 shrink-0 flex-col items-center justify-center gap-[3px] lg:hidden",
+              menuOpen && "is-active",
+            )}
+            aria-label={menuOpen ? "关闭菜单" : "打开菜单"}
             aria-expanded={menuOpen}
             onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
             onClick={() => setMenuOpen((v) => !v)}
           >
-            <span className="block h-0.5 w-5 bg-[var(--text-base)]" />
-            <span className="block h-0.5 w-5 bg-[var(--text-base)]" />
-            <span className="block h-0.5 w-5 bg-[var(--text-base)]" />
+            <span
+              className={cn(
+                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                menuOpen && "translate-y-[5px] rotate-45",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                menuOpen && "opacity-0",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-0.5 w-4 origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
+                menuOpen && "-translate-y-[5px] -rotate-45",
+              )}
+            />
           </button>
         </div>
       </div>
 
       {menuOpen ? (
-        <nav
-          className="relative z-10 flex flex-col gap-1 border-t border-[var(--border-light)] bg-white px-[var(--page-margin-x)] py-4 md:hidden"
-          aria-label="主导航"
-        >
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.label}
-              item={item}
-              onNavigate={() => setMenuOpen(false)}
-              onPointerEnter={(event) =>
-                activateHeader(event.clientX, event.clientY)
-              }
-            />
-          ))}
-          <span
-            className="flex items-center gap-2 px-5 py-3 text-lg text-[var(--text-muted)]"
-            aria-label="客服电话 400-666-5061"
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 top-12 z-40 bg-[#000000]/40 lg:hidden"
+            aria-label="关闭菜单"
+            onClick={() => setMenuOpen(false)}
+          />
+          <nav
+            className="fixed inset-x-0 top-12 z-50 flex flex-col gap-0 bg-white lg:hidden"
+            aria-label="主导航"
           >
-            <Image
-              src={PHONE_ICON_SRC}
-              alt=""
-              width={24}
-              height={24}
-              className="size-6"
-              unoptimized
-            />
-            400-666-5061
-          </span>
-        </nav>
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.label}
+                item={item}
+                linkClassName={MOBILE_NAV_LINK_CLASS}
+                onNavigate={() => setMenuOpen(false)}
+                onPointerEnter={(event) =>
+                  activateHeader(event.clientX, event.clientY)
+                }
+              />
+            ))}
+          </nav>
+        </>
       ) : null}
     </header>
   );

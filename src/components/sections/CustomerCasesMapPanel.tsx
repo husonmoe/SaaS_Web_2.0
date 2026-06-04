@@ -55,11 +55,11 @@ export function CustomerCasesMapPanel() {
     <div
       ref={ref}
       className={cn(
-        "customer-cases-map-panel flex min-h-0 w-fit flex-col gap-8 lg:relative lg:h-[520px] lg:gap-0",
+        "customer-cases-map-panel flex min-h-0 w-full flex-col gap-8 lg:relative lg:h-[520px] lg:w-fit lg:gap-0",
         isInView && "customer-cases-map-panel--entering",
       )}
     >
-      <div className="relative aspect-[725/521] w-fit min-h-[240px] lg:h-[520px] lg:min-h-0 lg:shrink-0">
+      <div className="relative aspect-[725/521] w-full lg:h-[520px] lg:w-fit lg:min-h-0 lg:shrink-0">
         <BusinessMap
           dotsActive={dotsActive}
           columnsActive={columnsActive}

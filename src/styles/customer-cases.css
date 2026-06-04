@@ -49,6 +49,46 @@
   }
 }
 
+/* 客户案例 · 移动端两行错位横向轮播（从右向左循环） */
+
+/* 通栏：突破 page-container 左右留白，铺满屏宽，卡片不被框架裁切 */
+.customer-cases-marquee-bleed {
+  margin-inline: calc(-1 * var(--page-margin-x));
+  width: calc(100% + 2 * var(--page-margin-x));
+}
+
+.customer-cases-marquee {
+  width: 100%;
+  /* 仅水平裁剪，纵向保留卡片投影 */
+  overflow-x: clip;
+  overflow-clip-margin: 24px;
+}
+
+.customer-cases-marquee-track {
+  animation: customer-cases-marquee-scroll 60s linear infinite;
+  will-change: transform;
+}
+
+/* 下行相位错开半个轨道，与上行形成砖墙式错位 */
+.customer-cases-marquee-track--offset {
+  animation-delay: -30s;
+}
+
+@keyframes customer-cases-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-cases-marquee-track {
+    animation: none;
+  }
+}
+
 /* 客户案例 · 卡片匀速上滚 */
 
 @keyframes customer-cases-scroll {

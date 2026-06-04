@@ -56,10 +56,14 @@
   --font-size-stat: 40px;
 
   /* 统计数字区固定宽度（按最宽「5000万+」对齐） */
-  --stat-value-width: 120px;
+  --stat-value-width: 72px;
 
   --font-sans: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-brand: "DingTalk JinBuTi", var(--font-sans);
+
+  /* 层叠顺序：浮标 < 顶栏(50) < 营销弹窗(200) < Toast(9999) */
+  --z-floating-toolbar: 40;
+  --z-modal: 200;
 }
 
 @media (min-width: 834px) {

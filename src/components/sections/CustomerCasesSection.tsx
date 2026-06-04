@@ -1,9 +1,8 @@
 import { PageContainer } from "@/components/layout/PageContainer";
 import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
-import { CustomerCaseCard } from "@/components/sections/CustomerCaseCard";
 import { CustomerCasesMapPanel } from "@/components/sections/CustomerCasesMapPanel";
+import { CustomerCasesMobileMarquee } from "@/components/sections/CustomerCasesMobileMarquee";
 import { CustomerCasesScroller } from "@/components/sections/CustomerCasesScroller";
-import { CUSTOMER_CASES } from "@/components/sections/customerCasesContent";
 
 export function CustomerCasesSection() {
   return (
@@ -21,11 +20,7 @@ export function CustomerCasesSection() {
         <div className="grid w-full max-w-[1200px] grid-cols-1 items-start gap-10 lg:h-[520px] lg:grid-cols-2 lg:gap-16 lg:items-stretch">
           <CustomerCasesMapPanel />
 
-          <div className="flex flex-col gap-4 lg:hidden">
-            {CUSTOMER_CASES.map((item) => (
-              <CustomerCaseCard key={item.id} {...item} />
-            ))}
-          </div>
+          <CustomerCasesMobileMarquee />
 
           <div className="hidden lg:block lg:h-[520px] lg:max-h-[520px] lg:w-[384px] lg:shrink-0 lg:justify-self-end lg:overflow-hidden">
             <CustomerCasesScroller />

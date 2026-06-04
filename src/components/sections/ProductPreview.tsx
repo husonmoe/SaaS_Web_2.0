@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import type {
   ProductFeature,
@@ -16,9 +16,10 @@ import {
 const AUTO_PLAY_INTERVAL_MS = 5000;
 /** 180° 翻转：装饰性动效建议 500–700ms，便于感知方向变化 */
 const FEATURE_ICON_TRANSITION_MS = 500;
+const SWIPE_THRESHOLD_PX = 48;
 
 const PREVIEW_MEDIA_CLASS =
-  "block h-auto max-h-[500px] w-full rounded-3xl object-contain object-left";
+  "block h-auto max-h-[500px] w-full rounded-xl object-contain object-left";
 
 const PREVIEW_IMAGE_CLASS = cn(
   PREVIEW_MEDIA_CLASS,
@@ -181,12 +182,87 @@ function FeatureItem({
   );
 }
 
+/** 仅作当前页同步示意，不可点击 */
+function ProductPreviewDots({
+  count,
+  activeIndex,
+}: {
+  count: number;
+  activeIndex: number;
+}) {
+  if (count <= 1) return null;
+
+  return (
+    <div
+      className="mb-4 flex items-center justify-center gap-1 pt-4 lg:hidden"
+      aria-hidden
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <span
+          key={index}
+          className={cn(
+            "product-preview-dot shrink-0",
+            index === activeIndex
+              ? "product-preview-dot--active"
+              : "product-preview-dot--inactive",
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ProductPreviewHeadline({ content }: { content: ProductTabContent }) {
+  return (
+    <div className="text-center text-xl font-medium leading-7 text-[var(--text-base)]">
+      <p className="mb-0">
+        <HeadlineLine part={content.headline[0]} />
+      </p>
+      <p className="mb-0">
+        <HeadlineLine part={content.headline[1]} />
+      </p>
+    </div>
+  );
+}
+
+function MobilePreviewSlide({
+  feature,
+  media,
+  alt,
+}: {
+  feature: ProductFeature;
+  media: ProductFeatureMedia;
+  alt: string;
+}) {
+  return (
+    <div className="flex w-full shrink-0 flex-col gap-4">
+      <div className="relative h-fit overflow-hidden bg-[image:var(--gradient-section-product)]">
+        <div className="relative h-fit max-h-[500px] w-full overflow-hidden rounded-xl">
+          <FeaturePreviewMedia media={media} alt={alt} />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1 text-left">
+        <p className="text-base font-medium leading-6 text-[var(--text-base)]">
+          {feature.title}
+        </p>
+        <p className="text-xs leading-5 text-[var(--text-secondary)]">
+          {feature.description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 type ProductPreviewProps = {
   content: ProductTabContent;
 };
 
 export function ProductPreview({ content }: ProductPreviewProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const pointerStartXRef = useRef<number | null>(null);
+  const featureCount = content.features.length;
+
   const activeFeature = content.features[activeIndex] ?? content.features[0];
   const previewAlt = `光谱云诊${content.label} · ${activeFeature?.title ?? ""}`;
   const featureMedias = content.features.map((feature) => ({
@@ -199,6 +275,54 @@ export function ProductPreview({ content }: ProductPreviewProps) {
     src: content.appImage ?? DEFAULT_APP_IMAGE,
   };
 
+  const goToIndex = useCallback(
+    (index: number) => {
+      if (featureCount <= 0) return;
+      setActiveIndex(((index % featureCount) + featureCount) % featureCount);
+    },
+    [featureCount],
+  );
+
+  const goNext = useCallback(() => {
+    goToIndex(activeIndex + 1);
+  }, [activeIndex, goToIndex]);
+
+  const goPrev = useCallback(() => {
+    goToIndex(activeIndex - 1);
+  }, [activeIndex, goToIndex]);
+
+  const finishPointerSwipe = useCallback(
+    (clientX: number) => {
+      const startX = pointerStartXRef.current;
+      pointerStartXRef.current = null;
+      if (startX == null || featureCount <= 1) return;
+
+      const deltaX = clientX - startX;
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
+
+      if (deltaX < 0) goNext();
+      else goPrev();
+    },
+    [featureCount, goNext, goPrev],
+  );
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (featureCount <= 1) return;
+    pointerStartXRef.current = event.clientX;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    finishPointerSwipe(event.clientX);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const handlePointerCancel = () => {
+    pointerStartXRef.current = null;
+  };
+
   useEffect(() => {
     prefetchImageSrcs(getProductTabMediaSrcs(content));
   }, [content]);
@@ -208,20 +332,20 @@ export function ProductPreview({ content }: ProductPreviewProps) {
   }, [content.id]);
 
   useEffect(() => {
-    if (content.features.length <= 1) return;
+    if (featureCount <= 1) return;
 
     const timer = window.setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % content.features.length);
+      setActiveIndex((prev) => (prev + 1) % featureCount);
     }, AUTO_PLAY_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
-  }, [content.features.length, content.id]);
+  }, [featureCount, content.id]);
 
   return (
-    <div className="relative min-h-0 overflow-visible md:min-h-[500px]">
-      <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-16">
+    <>
+      <div className="relative z-10 hidden flex-col gap-4 lg:flex lg:flex-row lg:items-start lg:gap-16">
         <div className="flex w-full shrink-0 flex-col items-center text-center lg:w-[340px] lg:items-start lg:text-left">
-          <div className="text-2xl font-medium leading-8 text-[var(--text-base)] lg:pt-[26px] lg:text-[32px] lg:font-semibold lg:leading-[44px]">
+          <div className="text-[32px] font-semibold leading-[44px] text-[var(--text-base)] lg:pt-[26px]">
             <p className="mb-0">
               <HeadlineLine part={content.headline[0]} />
             </p>
@@ -230,22 +354,22 @@ export function ProductPreview({ content }: ProductPreviewProps) {
             </p>
           </div>
 
-          <div className="mt-6 flex w-full flex-col gap-6 lg:mt-12 lg:gap-9">
+          <div className="mt-12 flex w-full flex-col gap-9">
             {content.features.map((feature, index) => (
               <FeatureItem
                 key={feature.title}
                 feature={feature}
                 isActive={index === activeIndex}
-                onSelect={() => setActiveIndex(index)}
+                onSelect={() => goToIndex(index)}
               />
             ))}
           </div>
         </div>
 
-        <div className="relative min-h-[280px] flex-1 overflow-hidden bg-[image:var(--gradient-section-product)] lg:min-h-[500px] lg:max-w-[796px]">
+        <div className="relative min-h-[500px] flex-1 overflow-hidden bg-[image:var(--gradient-section-product)] lg:max-w-[796px]">
           <div
             key={content.id}
-            className="relative min-h-[280px] max-h-[500px] overflow-hidden rounded-3xl lg:min-h-[500px]"
+            className="relative min-h-[500px] max-h-[500px] overflow-hidden rounded-3xl"
           >
             {featureMedias.length > 0 ? (
               featureMedias.map((item, index) => (
@@ -255,7 +379,7 @@ export function ProductPreview({ content }: ProductPreviewProps) {
                     "absolute inset-0 transition-opacity duration-300 ease-out",
                     index === activeIndex
                       ? "z-10 opacity-100"
-                      : "z-0 opacity-0 pointer-events-none",
+                      : "z-0 pointer-events-none opacity-0",
                   )}
                   aria-hidden={index !== activeIndex}
                 >
@@ -268,6 +392,50 @@ export function ProductPreview({ content }: ProductPreviewProps) {
           </div>
         </div>
       </div>
-    </div>
+
+      {featureCount > 0 ? (
+        <div
+          key={content.id}
+          className="animate-product-preview-in motion-reduce:animate-none w-full lg:hidden"
+        >
+          <ProductPreviewHeadline content={content} />
+
+          <div className="relative mt-4 min-h-0 overflow-visible">
+            <div
+              className="w-full touch-pan-y select-none overflow-hidden cursor-grab active:cursor-grabbing"
+              onPointerDown={handlePointerDown}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerCancel}
+              aria-live="polite"
+              aria-atomic
+            >
+              <div
+                className="product-preview-mobile-track flex h-fit w-full"
+                style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              >
+                {content.features.map((feature, index) => {
+                  const media =
+                    featureMedias[index]?.media ?? fallbackMedia;
+                  const alt =
+                    featureMedias[index]?.alt ??
+                    `光谱云诊${content.label} · ${feature.title}`;
+
+                  return (
+                    <MobilePreviewSlide
+                      key={feature.title}
+                      feature={feature}
+                      media={media}
+                      alt={alt}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <ProductPreviewDots count={featureCount} activeIndex={activeIndex} />
+    </>
   );
 }

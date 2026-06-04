@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useInViewOnce } from "@/hooks/useInViewOnce";
+import { cn } from "@/lib/cn";
 
 const ICON_LEFT = "/assets/figma-cache/stats-1.svg";
 const ICON_RIGHT = "/assets/figma-cache/stats-2.svg";
@@ -29,7 +30,11 @@ function AnimatedStatValue({
   const value = useCountUp(target, DURATION_MS, enabled);
 
   return (
-    <p className="inline-flex w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-3xl font-bold leading-none tabular-nums text-transparent md:text-[40px]">
+    <p
+      className={cn(
+        "inline-flex min-w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-2xl font-bold leading-none tabular-nums text-transparent md:text-[40px] lg:justify-start lg:text-left",
+      )}
+    >
       {value}
       {suffix}
     </p>
@@ -42,35 +47,37 @@ export function StatsCounterGrid() {
   return (
     <div
       ref={ref}
-      className="grid w-full max-w-[1200px] grid-cols-2 gap-8 md:grid-cols-4"
+      className="grid w-full max-w-[1200px] grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-4 md:gap-8"
     >
       {STATS.map((stat, index) => (
         <div
           key={stat.label}
-          className="flex items-center justify-center gap-1 text-center"
+          className={cn(
+            "flex items-center justify-center gap-1 text-center lg:justify-start lg:text-left",
+          )}
         >
           <Image
             src={index === 0 ? ICON_LEFT : ICON_MID}
             alt=""
             width={48}
             height={48}
-            className="size-12 shrink-0"
+            className="size-8 shrink-0 md:size-12"
             unoptimized
           />
-          <div className="flex flex-col items-center gap-0">
+          <div className={cn("flex flex-col items-center gap-0 lg:items-start")}>
             <AnimatedStatValue
               target={stat.target}
               suffix={stat.suffix}
               enabled={isInView}
             />
-            <p className="text-lg text-[var(--text-secondary)]">{stat.label}</p>
+            <p className="text-xs text-[var(--text-secondary)] md:text-lg">{stat.label}</p>
           </div>
           <Image
             src={ICON_RIGHT}
             alt=""
             width={48}
             height={48}
-            className="size-12 shrink-0 rotate-180 scale-y-[-1]"
+            className="size-8 shrink-0 rotate-180 scale-y-[-1] md:size-12"
             unoptimized
           />
         </div>

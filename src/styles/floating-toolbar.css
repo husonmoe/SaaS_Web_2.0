@@ -1,6 +1,23 @@
 /**
- * 右下角悬浮工具栏 · Figma 间距 right 24px / bottom 60px
+ * 右下角悬浮工具栏 · 间距 right 12px / bottom 12px
  */
+.floating-toolbar-root {
+  --floating-toolbar-slide-offset: 12px;
+  z-index: var(--z-floating-toolbar);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.floating-toolbar-root--visible {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.floating-toolbar-root--hidden {
+  transform: translateX(calc(100% + var(--floating-toolbar-slide-offset)));
+  pointer-events: none;
+}
+
 .floating-toolbar-tooltip {
   box-shadow: var(--shadow-card);
   border: 1px solid var(--border-light);
@@ -33,6 +50,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .floating-toolbar-root {
+    transition: none;
+  }
+
+  .floating-toolbar-root--hidden {
+    transform: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .floating-toolbar-root--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .floating-toolbar-back-slot {
     transition: none;
   }

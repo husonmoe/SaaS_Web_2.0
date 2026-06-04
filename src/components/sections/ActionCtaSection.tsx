@@ -22,24 +22,24 @@ export function ActionCtaSection() {
   return (
     <section
       id={ACTION_CTA_SECTION_ID}
-      className="relative h-[264px] overflow-hidden py-0"
+      className="relative h-fit overflow-hidden py-0 lg:h-[264px]"
     >
       <div className="action-cta-bg-layer" aria-hidden />
 
-      <PageContainer className="relative z-10 h-full py-0">
-        <FadeInOnScroll as="div" className="h-full">
-          <PageGrid className="h-full items-start gap-10 lg:gap-12">
-          <div className="col-span-full flex h-full flex-col items-start justify-center gap-6 self-stretch lg:col-span-5 lg:gap-8">
-            <div className="flex flex-col gap-3">
-              <h2 className="text-[28px] font-semibold leading-[36px] text-[var(--text-base)]">
+      <PageContainer className="relative z-10 h-fit w-full py-6 lg:h-full lg:py-0">
+        <FadeInOnScroll as="div" className="h-fit lg:h-full">
+          <PageGrid className="h-fit items-start gap-10 lg:h-full lg:gap-12">
+          <div className="col-span-full flex flex-col items-start justify-center gap-6 self-stretch lg:col-span-5 lg:h-full lg:gap-8">
+            <div className="flex flex-col gap-2 lg:gap-3">
+              <h2 className="text-2xl font-semibold leading-8 text-[var(--text-base)] lg:text-[28px] lg:leading-[36px]">
                 体验光谱云诊
               </h2>
-              <p className="max-w-[520px] text-base leading-6 text-[var(--text-secondary)]">
+              <p className="max-w-[520px] text-xs leading-5 text-[var(--text-secondary)] lg:text-base lg:leading-6">
                 提供结构化智能病历模版、语音输入和常用模版功能，让医生数分钟内即可完成高质量病历，把更多时间还给患者。
               </p>
             </div>
 
-            <div className="flex w-full max-w-[480px] flex-col gap-3 sm:flex-row sm:items-stretch">
+            <div className="flex h-10 w-full max-w-[480px] flex-row items-stretch gap-2 lg:h-auto lg:gap-3">
               <label className="relative min-w-0 flex-1">
                 <span className="sr-only">手机号</span>
                 <Image
@@ -47,7 +47,7 @@ export function ActionCtaSection() {
                   alt=""
                   width={20}
                   height={20}
-                  className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2"
+                  className="pointer-events-none absolute left-2 top-1/2 size-5 -translate-y-1/2 lg:left-4"
                   aria-hidden
                   unoptimized
                 />
@@ -64,12 +64,12 @@ export function ActionCtaSection() {
                   }}
                   placeholder="请输入手机号"
                   autoComplete="tel"
-                  className="h-12 w-full rounded-xl border border-[var(--border-light)] bg-white pl-11 pr-4 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)]"
+                  className="h-10 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:h-12 lg:rounded-xl lg:pl-11 lg:pr-4 lg:text-base lg:leading-6"
                 />
               </label>
               <Button
                 type="button"
-                className="h-12 shrink-0 rounded-xl px-8 sm:w-[152px]"
+                className="h-10 min-h-10 w-[88px] shrink-0 rounded-lg px-4 text-sm leading-[22px] lg:h-12 lg:min-h-12 lg:w-[152px] lg:rounded-xl lg:px-8 lg:text-base lg:leading-6"
                 onClick={handleTrialClick}
               >
                 免费试用
@@ -77,7 +77,7 @@ export function ActionCtaSection() {
             </div>
           </div>
 
-          <div className="col-span-full lg:col-span-7 lg:flex lg:justify-end">
+          <div className="col-span-full hidden lg:col-span-7 lg:flex lg:justify-end">
             <div className="relative mx-auto w-full max-w-[486px] shrink-0 lg:mx-0 lg:w-[486px] lg:max-w-[486px]">
               <Image
                 src={ACTION_MOCKUP_SRC}

@@ -80,8 +80,16 @@ const PRODUCT_LINKS: ProductFooterLink[] = [
     href: EXTERNAL_PATHS.yaoshibangLogin,
   },
 ];
+
 const FRIEND_LINKS = ["药师帮官网", "光谱健康官网", "掌店易Pro"];
-const CONTACT = [
+
+const CONTACT_MOBILE = [
+  "400-666-5061",
+  "zhengsuo@ysbang.cn",
+  "09:30 - 18:30",
+];
+
+const CONTACT_DESKTOP = [
   "客服 400-666-5061",
   "邮箱 zhengsuo@ysbang.cn",
   "服务时间 09:30 - 18:30",
@@ -91,22 +99,45 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
   return (
     <footer id={SITE_FOOTER_ID} ref={ref} className="bg-[var(--bg-shell)]">
       <PageContainer>
-        <div className="grid grid-cols-2 gap-4 py-8 md:grid-cols-2 md:gap-6 md:py-12 lg:grid-cols-4">
+        {/* 移动端 · 服务特性：四列图标 + 标题 */}
+        <div className="flex justify-between gap-0 py-6 md:hidden">
           {SERVICES.map((item) => (
-            <div key={item.title} className="flex items-center gap-2">
+            <div
+              key={item.title}
+              className="flex h-fit w-fit flex-col items-center gap-1"
+            >
+              <Image
+                src={item.iconSrc}
+                alt=""
+                width={32}
+                height={32}
+                className="size-8 shrink-0"
+                unoptimized
+              />
+              <p className="text-center text-xs leading-5 text-[var(--text-secondary)]">
+                {item.title}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* 桌面端 · 服务特性：图标 + 标题 + 描述 */}
+        <div className="hidden grid-cols-2 gap-6 py-12 md:grid lg:grid-cols-4">
+          {SERVICES.map((item) => (
+            <div key={item.title} className="flex flex-col gap-2">
               <Image
                 src={item.iconSrc}
                 alt=""
                 width={44}
                 height={44}
-                className="size-9 shrink-0 md:size-11"
+                className="size-11 shrink-0"
                 unoptimized
               />
               <div className="min-w-0">
-                <p className="text-sm font-medium leading-[22px] text-[var(--text-base)] md:text-base">
+                <p className="text-base font-medium leading-6 text-[var(--text-base)]">
                   {item.title}
                 </p>
-                <p className="text-xs leading-5 text-[var(--text-tertiary)] md:text-sm">
+                <p className="text-sm leading-[22px] text-[var(--text-tertiary)]">
                   {item.desc}
                 </p>
               </div>
@@ -116,16 +147,51 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
         <hr className="border-[var(--border-light)]" />
 
-        <div className="grid gap-6 py-8 md:grid-cols-2 md:py-12 lg:grid-cols-4">
-          <div className="flex w-full flex-col items-center gap-6 md:items-start md:gap-8">
+        {/* 移动端 · 品牌 + 社交 / 联系我们 */}
+        <div className="grid grid-cols-2 items-stretch py-6 md:hidden">
+          <div className="flex w-full flex-col items-start justify-between gap-1 self-stretch">
             <Image
               src={ICONS.logo}
               alt="光谱云诊"
               width={116}
               height={32}
-              className="h-6 w-[87px] md:h-8 md:w-[116px]"
+              className="h-6 w-[87px]"
             />
-            <div className="size-[100px] overflow-hidden rounded-md md:size-[110px]">
+            <div className="my-1 flex items-start gap-4">
+              {FOOTER_SOCIAL_LINKS.map((item) => (
+                <FooterSocialIcon key={item.id} {...item} />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start justify-start gap-2 self-stretch">
+            <p className="text-sm font-medium leading-[22px] text-[var(--text-base)]">
+              联系我们
+            </p>
+            <ul className="flex w-full flex-col items-start gap-1">
+              {CONTACT_MOBILE.map((line) => (
+                <li
+                  key={line}
+                  className="text-xs leading-5 text-[var(--text-secondary)]"
+                >
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* 桌面端 · 品牌 / 产品入口 / 友情链接 / 联系我们 */}
+        <div className="hidden gap-6 py-12 md:grid md:grid-cols-2 lg:grid-cols-4">
+          <div className="flex w-full flex-col items-start gap-8">
+            <Image
+              src={ICONS.logo}
+              alt="光谱云诊"
+              width={116}
+              height={32}
+              className="h-8 w-[116px]"
+            />
+            <div className="size-[110px] overflow-hidden rounded-md">
               <Image
                 src={ICONS.qr}
                 alt="二维码"
@@ -139,12 +205,37 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
 
           <FooterProductColumn />
           <FooterColumn title="友情链接" links={FRIEND_LINKS} />
-          <FooterColumn title="联系我们" links={CONTACT} interactive={false} />
+          <FooterColumn
+            title="联系我们"
+            links={CONTACT_DESKTOP}
+            interactive={false}
+          />
         </div>
 
         <hr className="border-[var(--border-light)]" />
 
-        <div className="flex flex-col items-center gap-4 py-8 text-center md:items-start md:gap-6 md:py-12 md:text-left lg:flex-row lg:items-center lg:justify-between">
+        {/* 移动端 · 版权信息 */}
+        <div className="flex flex-col items-center gap-2 py-6 text-center md:hidden">
+          <p className="text-xs leading-5 text-[var(--text-tertiary)]">
+            © 2023 广州光谱健康科技有限公司版权所有
+          </p>
+          <p className="inline-flex flex-wrap items-center justify-center gap-1 text-xs leading-5 text-[var(--text-tertiary)]">
+            <span>粤ICP备2021101844号-2</span>
+            <span className="inline-flex items-center gap-1">
+              <Image
+                src={ICONS.badge}
+                alt=""
+                width={16}
+                height={16}
+                unoptimized
+              />
+              粤B2-20220314
+            </span>
+          </p>
+        </div>
+
+        {/* 桌面端 · 社交 + 版权 */}
+        <div className="hidden flex-col items-start gap-6 py-12 text-left md:flex lg:flex-row lg:items-center lg:justify-between">
           <div className="flex gap-4">
             {FOOTER_SOCIAL_LINKS.map((item) => (
               <FooterSocialIcon key={item.id} {...item} />
@@ -178,7 +269,7 @@ function FooterProductColumn() {
 
   return (
     <div className="w-full md:pl-[52px]">
-      <p className="mb-4 font-medium text-[var(--text-base)] md:mb-8">产品入口</p>
+      <p className="mb-8 font-medium text-[var(--text-base)]">产品入口</p>
       <ul className="flex flex-col gap-4">
         {PRODUCT_LINKS.map((link) => (
           <li key={link.label}>
@@ -255,10 +346,7 @@ function FooterSocialIcon({
 
   if (!hoverQr) {
     return (
-      <span
-        className={FOOTER_SOCIAL_BUTTON_CLASS}
-        aria-label={label}
-      >
+      <span className={FOOTER_SOCIAL_BUTTON_CLASS} aria-label={label}>
         {iconImage}
       </span>
     );
@@ -316,7 +404,7 @@ function FooterColumn({
 }) {
   return (
     <div className="w-full md:pl-[52px]">
-      <p className="mb-4 font-medium text-[var(--text-base)] md:mb-8">{title}</p>
+      <p className="mb-8 font-medium text-[var(--text-base)]">{title}</p>
       <ul className="flex flex-col gap-4">
         {links.map((link) => (
           <li key={link}>
