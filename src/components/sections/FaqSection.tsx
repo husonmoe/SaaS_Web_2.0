@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: FaqItem }) {
   return (
-    <article className="rounded-xl bg-[var(--bg-shell)] px-3 py-3 md:rounded-2xl md:px-8 md:py-7">
+    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
       <div className="flex gap-3 md:gap-4">
         <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
