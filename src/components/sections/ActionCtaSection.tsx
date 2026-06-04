@@ -26,7 +26,7 @@ export function ActionCtaSection() {
     >
       <div className="action-cta-bg-layer" aria-hidden />
 
-      <PageContainer className="relative z-10 h-fit w-full py-6 lg:h-full lg:py-0">
+      <PageContainer className="relative z-10 h-fit w-full py-8 lg:h-full lg:py-0">
         <FadeInOnScroll as="div" className="h-fit lg:h-full">
           <PageGrid className="h-fit items-start gap-10 lg:h-full lg:gap-12">
           <div className="col-span-full flex flex-col items-start justify-center gap-6 self-stretch lg:col-span-5 lg:h-full lg:gap-8">

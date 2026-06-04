@@ -53,14 +53,14 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           alt="推荐版本"
           width={288}
           height={123}
-          className="pointer-events-none absolute top-4 -right-2 z-10 h-auto w-12 select-none md:-top-4 md:right-6 md:w-[96px]"
+          className="pointer-events-none absolute top-4 -right-2 z-10 h-8 w-[72px] select-none md:-top-4 md:right-6 md:h-auto md:w-[96px]"
           unoptimized
         />
       ) : null}
 
       <div className="relative flex flex-1 flex-col px-4 py-4 md:px-12 md:py-8">
         <div className="flex gap-3 md:flex-col md:gap-0">
-          <div className="flex w-[100px] shrink-0 flex-col md:w-auto">
+          <div className="flex w-[120px] shrink-0 flex-col md:w-auto">
             <div className="flex items-center gap-1.5 md:gap-2">
               <Image
                 src={theme.diamondIcon}
@@ -78,7 +78,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
               </h3>
             </div>
 
-            <p className="mt-1 text-xs leading-[14px] text-[var(--text-secondary)] md:mt-2 md:text-base md:leading-6">
+            <p className="mt-1 text-sm leading-[22px] text-[var(--text-secondary)] md:mt-2 md:text-base md:leading-6">
               {plan.subtitle}
             </p>
 
@@ -98,7 +98,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           />
 
           <div className="flex flex-1 flex-col md:flex-none">
-            <p className="text-xs font-medium leading-[14px] text-[var(--text-base)] md:text-base md:font-normal md:leading-6">
+            <p className="text-sm font-medium leading-[22px] text-[var(--text-base)] md:text-base md:font-normal md:leading-6">
               {plan.featuresHeader}
             </p>
 
@@ -106,7 +106,7 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
               {plan.features.map((feature) => (
                 <li
                   key={feature}
-                  className="flex items-center gap-2 text-xs leading-[14px] text-[var(--text-secondary)] md:gap-3 md:text-base md:leading-6"
+                  className="flex items-center gap-2 text-sm leading-[22px] text-[var(--text-secondary)] md:gap-3 md:text-base md:leading-6"
                 >
                   <FeatureCheck color={theme.color} />
                   <span className="whitespace-nowrap">{feature}</span>
