@@ -50,8 +50,8 @@ const WHY_CHOOSE_ITEMS: WhyChooseItem[] = [
 
 function WhyChooseCard({ item }: { item: WhyChooseItem }) {
   return (
-    <FadeInOnScroll as="div">
-      <TiltCard className="flex flex-col items-center rounded-xl px-4 py-6 text-center md:rounded-2xl md:px-6 md:py-10">
+    <FadeInOnScroll as="div" className="h-full">
+      <TiltCard className="flex h-full flex-col items-center rounded-xl px-4 py-6 text-center md:rounded-2xl md:px-6 md:py-10">
         <Image
           src={item.iconSrc}
           alt=""
@@ -63,7 +63,7 @@ function WhyChooseCard({ item }: { item: WhyChooseItem }) {
         <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-xl md:font-semibold md:leading-7">
           {item.title}
         </h3>
-        <div className="mt-1 flex flex-col gap-0.5 text-xs leading-5 text-[var(--text-secondary)] md:mt-4 md:gap-1 md:text-base md:leading-6">
+        <div className="mt-1 flex flex-col gap-0.5 whitespace-nowrap text-xs leading-5 text-[var(--text-secondary)] md:mt-4 md:gap-1 md:text-base md:leading-6">
           {item.lines.map((line) => (
             <p key={line}>{line}</p>
           ))}

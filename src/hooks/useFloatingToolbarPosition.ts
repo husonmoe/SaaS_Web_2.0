@@ -7,13 +7,13 @@ import {
 } from "@/lib/floating-toolbar-anchor";
 
 /** 设计稿：右边距 / 下边距 */
-export const FLOATING_TOOLBAR_MARGIN_RIGHT = 24;
-export const FLOATING_TOOLBAR_MARGIN_BOTTOM = 60;
+export const FLOATING_TOOLBAR_MARGIN_RIGHT = 12;
+export const FLOATING_TOOLBAR_MARGIN_BOTTOM = 12;
 /** 滚动超过该距离后显示置顶按钮 */
 export const FLOATING_TOOLBAR_SCROLL_THRESHOLD = 300;
-/** 单坑位高度（按钮 48px + 坑位间距 16px）；最后一坑无下间距，总高 176px */
-export const FLOATING_TOOLBAR_BUTTON_SIZE = 48;
-export const FLOATING_TOOLBAR_SLOT_GAP = 16;
+/** 单坑位高度（按钮 36px + 坑位间距 12px）；最后一坑无下间距，总高 132px */
+export const FLOATING_TOOLBAR_BUTTON_SIZE = 36;
+export const FLOATING_TOOLBAR_SLOT_GAP = 12;
 export const FLOATING_TOOLBAR_TOTAL_HEIGHT =
   FLOATING_TOOLBAR_BUTTON_SIZE * 3 +
   FLOATING_TOOLBAR_SLOT_GAP * 2;

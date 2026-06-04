@@ -106,7 +106,7 @@ export function TiltCard({
   return (
     <div
       className={cn(
-        "relative [perspective:1000px]",
+        "relative h-full [perspective:1000px]",
         tilt.isHovered && "z-10",
       )}
       onMouseEnter={handleMouseMove}

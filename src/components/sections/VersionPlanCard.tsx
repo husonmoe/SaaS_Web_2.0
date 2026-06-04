@@ -13,7 +13,7 @@ const CHECK_ICON_SRC = "/assets/icon_check.svg";
 function FeatureCheck({ color }: { color: string }) {
   return (
     <span
-      className="inline-block size-4 shrink-0"
+      className="inline-block size-3 shrink-0 md:size-4"
       style={{
         backgroundColor: color,
         mask: `url(${CHECK_ICON_SRC}) center / contain no-repeat`,
@@ -53,69 +53,78 @@ export function VersionPlanCard({ plan }: { plan: VersionPlan }) {
           alt="推荐版本"
           width={288}
           height={123}
-          className="pointer-events-none absolute -top-4 right-6 z-10 h-auto w-[96px] select-none"
+          className="pointer-events-none absolute top-4 -right-2 z-10 h-auto w-12 select-none md:-top-4 md:right-6 md:w-[96px]"
           unoptimized
         />
       ) : null}
 
-      <div className="relative flex flex-1 flex-col px-6 py-8 md:px-12 md:py-8">
-        <div className="flex items-center gap-2">
-          <Image
-            src={theme.diamondIcon}
-            alt=""
-            width={113}
-            height={113}
-            className="size-8 shrink-0 md:size-[37.5px]"
-            unoptimized
-          />
-          <h3
-            className="text-xl font-semibold leading-7 md:text-[32px] md:leading-[44px]"
-            style={{ color: theme.color }}
-          >
-            {plan.title}
-          </h3>
-        </div>
+      <div className="relative flex flex-1 flex-col px-6 py-4 md:px-12 md:py-8">
+        <div className="flex gap-3 md:flex-col md:gap-0">
+          <div className="flex w-[100px] shrink-0 flex-col md:w-auto">
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <Image
+                src={theme.diamondIcon}
+                alt=""
+                width={113}
+                height={113}
+                className="size-5 shrink-0 md:size-[37.5px]"
+                unoptimized
+              />
+              <h3
+                className="text-lg font-semibold leading-[26px] md:text-[32px] md:leading-[44px]"
+                style={{ color: theme.color }}
+              >
+                {plan.title}
+              </h3>
+            </div>
 
-        <p className="mt-2 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
-          {plan.subtitle}
-        </p>
+            <p className="mt-1 text-[10px] leading-[14px] text-[var(--text-secondary)] md:mt-2 md:text-base md:leading-6">
+              {plan.subtitle}
+            </p>
 
-        <div
-          className="mt-4 inline-flex h-9 w-fit items-center gap-2 rounded-full pl-4 pr-5"
-          style={{ backgroundColor: theme.badgeBg }}
-        >
-          <Image
-            src={theme.personIcon}
-            alt=""
-            width={48}
-            height={48}
-            className="size-4 shrink-0"
-            unoptimized
-          />
-          <span className="text-base leading-6 text-[var(--text-base)]">
-            专属 30 席位/店
-          </span>
-        </div>
-
-        <hr className="my-6 border-[var(--border-light)]" />
-
-        <p className="text-base leading-6 text-[var(--text-base)]">
-          {plan.featuresHeader}
-        </p>
-
-        <ul className="mt-4 flex min-h-[120px] flex-col gap-2">
-          {plan.features.map((feature) => (
-            <li
-              key={feature}
-              className="flex items-center gap-3 text-base leading-6 text-[var(--text-secondary)]"
+            <div
+              className="mt-3 inline-flex h-5 w-fit items-center gap-0.5 rounded-full pl-1.5 pr-2 md:mt-4 md:h-9 md:gap-2 md:pl-4 md:pr-5"
+              style={{ backgroundColor: theme.badgeBg }}
             >
-              <FeatureCheck color={theme.color} />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+              <Image
+                src={theme.personIcon}
+                alt=""
+                width={48}
+                height={48}
+                className="size-2.5 shrink-0 md:size-4"
+                unoptimized
+              />
+              <span className="text-[10px] leading-[14px] text-[var(--text-base)] md:text-base md:leading-6">
+                专属 30 席位/店
+              </span>
+            </div>
+          </div>
 
-        <div className="mt-8 flex gap-3">
+          <div
+            className="w-px shrink-0 self-stretch bg-[var(--border-light)] md:my-6 md:h-px md:w-full md:self-auto"
+            aria-hidden
+          />
+
+          <div className="flex flex-1 flex-col md:flex-none">
+            <p className="text-[10px] font-medium leading-[14px] text-[var(--text-base)] md:text-base md:font-normal md:leading-6">
+              {plan.featuresHeader}
+            </p>
+
+            <ul className="mt-2 flex flex-col gap-1.5 md:mt-4 md:min-h-[120px] md:gap-2">
+              {plan.features.map((feature) => (
+                <li
+                  key={feature}
+                  className="flex items-center gap-2 text-[10px] leading-[14px] text-[var(--text-secondary)] md:gap-3 md:text-base md:leading-6"
+                >
+                  <FeatureCheck color={theme.color} />
+                  <span className="whitespace-nowrap">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-8 hidden gap-3 md:flex">
           <button
             type="button"
             className="inline-flex h-12 min-h-12 flex-1 items-center justify-center rounded-[10px] border border-[var(--border-light)] bg-white text-base leading-6 text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)]"

@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTrialModal } from "@/contexts/TrialModalContext";
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   FLOATING_TOOLBAR_BUTTON_SIZE,
-  FLOATING_TOOLBAR_SLOT_GAP,
   FLOATING_TOOLBAR_TOTAL_HEIGHT,
   useFloatingToolbarPosition,
 } from "@/hooks/useFloatingToolbarPosition";
+import { useFloatingToolbarScrollReveal } from "@/hooks/useFloatingToolbarScrollReveal";
 import { cn } from "@/lib/cn";
 
 const ICONS = {
@@ -19,19 +20,23 @@ const ICONS = {
 } as const;
 
 const SLOT_STYLE = {
-  height: FLOATING_TOOLBAR_BUTTON_SIZE + FLOATING_TOOLBAR_SLOT_GAP,
-} as const;
-
-const LAST_SLOT_STYLE = {
   height: FLOATING_TOOLBAR_BUTTON_SIZE,
 } as const;
+
+const LAST_SLOT_STYLE = SLOT_STYLE;
 
 const TOOLTIP_WRAP_CLASS =
   "pointer-events-none absolute right-full top-1/2 z-[60] mr-3 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100";
 
 export function FloatingToolbar() {
+  const [mounted, setMounted] = useState(false);
   const { showBackToTop, mode, coords } = useFloatingToolbarPosition();
+  const revealed = useFloatingToolbarScrollReveal();
   const { open: openTrialModal } = useTrialModal();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -50,19 +55,22 @@ export function FloatingToolbar() {
           height: FLOATING_TOOLBAR_TOTAL_HEIGHT,
         };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <aside
       aria-label="页面快捷操作"
+      aria-hidden={!revealed}
       className={cn(
-        "z-[100] w-12 overflow-visible",
+        "floating-toolbar-root w-fit overflow-visible",
+        revealed
+          ? "floating-toolbar-root--visible"
+          : "floating-toolbar-root--hidden",
         mode === "fixed" ? "fixed" : "absolute",
       )}
       style={positionStyle}
     >
-      <div
-        className="flex h-full flex-col items-center overflow-visible"
-        style={{ width: FLOATING_TOOLBAR_BUTTON_SIZE }}
-      >
+      <div className="flex h-fit w-fit flex-col items-center gap-3 overflow-visible">
         <ToolbarSlot style={SLOT_STYLE}>
           <ToolbarButton
             variant="primary"
@@ -101,7 +109,8 @@ export function FloatingToolbar() {
           />
         </ToolbarSlot>
       </div>
-    </aside>
+    </aside>,
+    document.body,
   );
 }
 
@@ -117,7 +126,7 @@ function ToolbarSlot({
   return (
     <div
       className={cn(
-        "flex w-full shrink-0 items-start justify-center overflow-visible",
+        "flex w-full shrink-0 items-center justify-center overflow-visible",
         className,
       )}
       style={style}
@@ -145,7 +154,7 @@ function ToolbarButton({
   tabIndex?: number;
 }) {
   const buttonClass = cn(
-    "group relative flex size-12 shrink-0 items-center justify-center overflow-visible rounded-full transition-shadow",
+    "group relative flex size-9 shrink-0 items-center justify-center overflow-visible rounded-full transition-shadow",
     variant === "primary" &&
       "bg-[image:var(--gradient-primary)] shadow-[var(--shadow-card)] hover:opacity-95",
     variant === "outline" &&
@@ -158,9 +167,9 @@ function ToolbarButton({
       <Image
         src={iconSrc}
         alt=""
-        width={24}
-        height={24}
-        className="size-6"
+        width={16}
+        height={16}
+        className="size-4"
         aria-hidden
         unoptimized
       />
