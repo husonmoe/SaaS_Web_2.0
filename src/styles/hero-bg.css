@@ -56,12 +56,26 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  justify-content: space-between;
   align-items: center;
 }
 
 @media (min-width: 1200px) {
   .hero-page-grid.page-grid {
-    flex-direction: row;
+    display: grid;
+    /* 左侧文案 autofill + 24px 间距 + 右侧 640px 图 */
+    grid-template-columns: minmax(0, 1fr) 640px;
+    gap: var(--grid-gutter);
+    align-items: center;
+  }
+
+  .hero-page-grid.page-grid > :first-child {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .hero-page-grid.page-grid > :last-child {
+    grid-column: 2;
+    width: 640px;
+    max-width: 640px;
   }
 }

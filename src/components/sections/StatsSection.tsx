@@ -6,20 +6,14 @@ import { cn } from "@/lib/cn";
 export function StatsSection() {
   return (
     <section className="bg-white py-[60px] md:py-[100px]">
-      <PageContainer
-        className={cn("flex h-fit flex-col items-center lg:items-start")}
-      >
+      <PageContainer className={cn("w-full")}>
         <FadeInOnScroll
           as="div"
           className={cn(
-            "flex w-full max-w-[1200px] flex-col items-center gap-8 lg:items-start lg:gap-16",
+            "flex w-full flex-col items-center gap-8 lg:gap-16",
           )}
         >
-          <div
-            className={cn(
-              "flex flex-col items-center text-center lg:items-start lg:text-left",
-            )}
-          >
+          <div className="flex flex-col items-center text-center">
             <h2 className="text-[28px] font-semibold leading-[36px] text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
               资源覆盖百万基层
             </h2>

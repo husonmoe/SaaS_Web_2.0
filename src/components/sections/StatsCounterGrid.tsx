@@ -32,7 +32,7 @@ function AnimatedStatValue({
   return (
     <p
       className={cn(
-        "inline-flex min-w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-2xl font-bold leading-none tabular-nums text-transparent md:text-[40px] lg:justify-start lg:text-left",
+        "inline-flex min-w-[var(--stat-value-width)] shrink-0 items-center justify-center whitespace-nowrap bg-[image:var(--gradient-primary)] bg-clip-text text-center text-2xl font-bold leading-none tabular-nums text-transparent md:text-[40px]",
       )}
     >
       {value}
@@ -47,13 +47,13 @@ export function StatsCounterGrid() {
   return (
     <div
       ref={ref}
-      className="grid w-full max-w-[1200px] grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-4 md:gap-8"
+      className="grid w-full grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-4 md:gap-8"
     >
       {STATS.map((stat, index) => (
         <div
           key={stat.label}
           className={cn(
-            "flex items-center justify-center gap-1 text-center lg:justify-start lg:text-left",
+            "flex items-center justify-center gap-1 text-center lg:justify-center",
           )}
         >
           <Image
@@ -64,7 +64,7 @@ export function StatsCounterGrid() {
             className="size-8 shrink-0 md:size-12"
             unoptimized
           />
-          <div className={cn("flex flex-col items-center gap-0 lg:items-start")}>
+          <div className="flex flex-col items-center gap-0">
             <AnimatedStatValue
               target={stat.target}
               suffix={stat.suffix}

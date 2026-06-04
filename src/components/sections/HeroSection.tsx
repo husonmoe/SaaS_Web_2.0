@@ -15,17 +15,17 @@ const HERO_MOCKUP_HEIGHT = 1320;
 
 export function HeroSection() {
   return (
-    <section className="relative isolate h-fit overflow-visible pt-8 pb-8 md:pt-[calc(72px+3rem)] md:pb-20">
+    <section className="relative isolate h-fit overflow-visible pt-8 pb-8 md:pt-[calc(72px+3rem)] md:pb-20 lg:pt-[calc(72px+2rem)] lg:pb-16">
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10">
         <PageGrid className="hero-page-grid">
           <FadeInOnScroll
             as="div"
-            className="col-span-full flex flex-col items-center gap-6 text-center md:gap-10 lg:col-span-5 lg:items-stretch lg:text-left"
+            className="hero-page-grid-text col-span-full flex flex-col items-center gap-6 text-center md:gap-10 lg:items-start lg:gap-10 lg:text-left"
           >
             <div className="flex flex-col gap-2 md:gap-5 lg:gap-6">
-              <div className="flex items-center justify-center gap-1">
+              <div className="flex items-center justify-center gap-1 lg:justify-start">
                 <Image
                   src={LAUREL_LEFT}
                   alt=""
@@ -76,7 +76,7 @@ export function HeroSection() {
 
           <FadeInOnScroll
             as="div"
-            className="col-span-full mt-16 w-full max-w-[640px] shrink-0 md:mt-20 lg:mt-0 lg:w-[640px] lg:col-span-7"
+            className="hero-page-grid-media col-span-full mt-16 w-full max-w-[640px] shrink-0 md:mt-20 lg:mt-0"
           >
             <div className="relative mx-auto w-full max-w-[660px] lg:max-w-none">
               <Image

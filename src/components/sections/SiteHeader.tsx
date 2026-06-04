@@ -258,7 +258,7 @@ export function SiteHeader() {
             登录诊所
           </LoginModalButton>
           <TrialModalButton
-            className="hidden rounded-none lg:inline-flex"
+            className="hidden lg:inline-flex"
             onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
           >
             免费试用
