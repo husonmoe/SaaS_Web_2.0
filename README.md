@@ -23,7 +23,7 @@ npm run preview:open
 
 **Web 端：** 首页 11 个区块、4 个内页、5 类营销弹窗、创建诊所流程均已实现。
 
-**下一阶段：** Pad（834px）与 Mobile（375px）适配，详见 [`design.md` §5](./design.md#5-下一阶段pad--mobile-适配)。
+**下一阶段：** Pad（768–1023px）与 Mobile（375–767px）适配，详见 [`design.md` §5](./design.md#5-下一阶段pad--mobile-适配)。
 
 | 模块 | Web | Pad | Mobile |
 | --- | --- | --- | --- |

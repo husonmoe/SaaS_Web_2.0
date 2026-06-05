@@ -1,5 +1,6 @@
 /**
- * 响应式栅格 · Mobile 4 / Pad 8 / Web 12
+ * 响应式栅格 · Mobile 375–767 / Pad 768–1023 / Web ≥1024
+ * Mobile 4 列 · Pad 8 列 · Web 12 列
  */
 :root {
   --grid-columns: 4;
@@ -8,14 +9,14 @@
   --container-max: none;
 }
 
-@media (min-width: 834px) {
+@media (min-width: 768px) {
   :root {
     --grid-columns: 8;
     --page-margin-x: 64px;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   :root {
     --grid-columns: 12;
     --page-margin-x: 0px;

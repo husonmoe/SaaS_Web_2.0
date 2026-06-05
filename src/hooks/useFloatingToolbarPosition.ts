@@ -111,9 +111,16 @@ export function useFloatingToolbarPosition() {
       const fixedBottomEdge = viewportHeight - bottomMargin;
       const pinnedBottomEdge = boundaryRect.top - bottomMargin;
       const hysteresis = FLOATING_TOOLBAR_PIN_HYSTERESIS;
+      const maxScrollY = Math.max(
+        0,
+        document.documentElement.scrollHeight - viewportHeight,
+      );
+      const nearPageBottom = scrollY >= maxScrollY - hysteresis * 4;
 
       let nextMode = modeRef.current;
-      if (modeRef.current === "fixed") {
+      if (nearPageBottom && modeRef.current === "absolute") {
+        nextMode = "absolute";
+      } else if (modeRef.current === "fixed") {
         if (pinnedBottomEdge < fixedBottomEdge - hysteresis) {
           nextMode = "absolute";
         }
@@ -134,7 +141,9 @@ export function useFloatingToolbarPosition() {
             }
           : {
               right: FLOATING_TOOLBAR_MARGIN_RIGHT,
-              top: scrollY + pinnedBottomEdge - toolbarHeight,
+              top: Math.round(
+                scrollY + pinnedBottomEdge - toolbarHeight,
+              ),
             };
 
       if (!coordsEqual(coordsRef.current, nextCoords)) {

@@ -22,6 +22,12 @@
 *.pem
 .cursor/
 
+# Cursor Simple Browser 误生成的本地预览路径文件
+http:/
+
+# Figma 导出临时目录（正式参考图放 design-ref/）
+.figma-tmp/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

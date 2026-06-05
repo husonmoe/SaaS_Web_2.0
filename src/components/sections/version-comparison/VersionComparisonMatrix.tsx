@@ -24,7 +24,7 @@ const COLUMN_IDS: VersionColumnId[] = ["basic", "insurance", "pro"];
 /** 与 SiteHeader 一致：Mobile h-16 / Web lg:h-[72px] */
 const MATRIX_STICKY_TOP_MOBILE_PX = 64;
 const MATRIX_STICKY_TOP_DESKTOP_PX = 72;
-const MATRIX_STICKY_TOP_LG_MQ = "(min-width: 1200px)";
+const MATRIX_STICKY_TOP_LG_MQ = "(min-width: 1024px)";
 function planByColumn(columnId: VersionColumnId): VersionPlan {
   const plan = VERSION_PLANS.find((p) => p.id === columnId);
   if (!plan) throw new Error(`Unknown column: ${columnId}`);

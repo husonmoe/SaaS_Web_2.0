@@ -86,7 +86,7 @@ export function HeroSection() {
                 height={HERO_MOCKUP_HEIGHT}
                 className="h-auto w-full object-contain"
                 priority
-                sizes="(max-width: 1024px) 100vw, 58vw"
+                sizes="(max-width: 1023px) 100vw, 58vw"
               />
             </div>
           </FadeInOnScroll>

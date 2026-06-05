@@ -13,13 +13,13 @@
 
 ## 2. 响应式栅格
 
-| 档位 | 画板宽 | 列数 | Gutter | 边距/容器 |
-| --- | --- | --- | --- | --- |
-| Mobile | 375 | 4 | 24px | 左右 24px |
-| Pad | 834 | 8 | 24px | 左右 64px |
-| Web | 1920 | 12 | 24px | 内容 max 1200px 居中 |
+| 档位 | 视口范围 | 画板宽 | 列数 | Gutter | 边距/容器 |
+| --- | --- | --- | --- | --- | --- |
+| Mobile | 375–767px | 375 | 4 | 24px | 左右 24px |
+| Pad | 768–1023px | 834 | 8 | 24px | 左右 64px |
+| Web | ≥1024px | 1920 | 12 | 24px | 内容 max 1200px 居中 |
 
-**代码断点：** 默认 Mobile · `md: 834px` · `lg: 1200px`
+**代码断点：** 默认 Mobile · `md: 768px` · `lg: 1024px`（版芯内容 max 1200px）
 
 实现：`src/styles/grid-tokens.css` + `PageContainer` / `PageGrid`
 
@@ -98,14 +98,14 @@
 
 ## 5. 下一阶段：Pad / Mobile 适配
 
-> 对照 Figma Pad（834px）与 Mobile（375px）画板，按页面逐项验收。
+> 对照 Figma Pad（834px 画板）与 Mobile（375px 画板），按视口 768–1023 / 375–767 验收。
 
 ### 5.1 全局与布局
 
 - [ ] `SiteHeader`：Pad 导航收缩、Mobile 汉堡菜单与抽屉
 - [ ] `SiteFooter`：Pad / Mobile 列布局与链接分组
 - [ ] `FloatingToolbar`：Pad / Mobile 位置与显隐
-- [ ] `PageContainer` / `PageGrid`：核对 834 / 375 边距与列跨度
+- [ ] `PageContainer` / `PageGrid`：核对 768 / 375 边距与列跨度
 
 ### 5.2 首页各 Section
 
@@ -131,7 +131,7 @@
 
 ### 5.5 验收方式
 
-1. Chrome DevTools：375 / 834 / 1920 三档截图对比 Figma
+1. Chrome DevTools：375 / 768 / 1024 / 1920 四档截图对比 Figma
 2. 真机：iOS Safari 滚动锁、弹窗、表单输入
 3. 每完成一页在本文档对应 `[ ]` 改为 `[x]`
 

@@ -6,10 +6,24 @@ import { useEffect, useRef, useState } from "react";
 export const FLOATING_TOOLBAR_SCROLL_END_MS = 200;
 /** 低于该位移视为无实际滚动（橡皮筋回弹等），不触发隐藏 */
 export const FLOATING_TOOLBAR_SCROLL_DELTA_MIN = 1;
+/** 距页面底部该范围内锁定显示，避免拖滚动条时反复隐藏/滑出 */
+export const FLOATING_TOOLBAR_BOTTOM_REVEAL_LOCK_PX = 64;
+
+function getMaxScrollY(): number {
+  return Math.max(
+    0,
+    document.documentElement.scrollHeight - window.innerHeight,
+  );
+}
+
+function isNearPageBottom(scrollY = window.scrollY): boolean {
+  return scrollY >= getMaxScrollY() - FLOATING_TOOLBAR_BOTTOM_REVEAL_LOCK_PX;
+}
 
 /**
  * 滚动时向右滑出隐藏，停止滚动（防抖）后滑回。
  * 仅在 scrollY 实际变化时隐藏，忽略底部橡皮筋回弹等零位移事件，避免重复滑入滑出。
+ * 页面底部锁定显示，避免拖滚动条时微小位移触发反复隐藏/滑出。
  * 仅在 revealed 状态变化时 setState，避免滚动过程中重复渲染。
  */
 export function useFloatingToolbarScrollReveal(
@@ -38,6 +52,14 @@ export function useFloatingToolbarScrollReveal(
 
     const onScroll = () => {
       const scrollY = window.scrollY;
+
+      if (isNearPageBottom(scrollY)) {
+        lastScrollYRef.current = scrollY;
+        clearRevealTimer();
+        setRevealedIfChanged(true);
+        return;
+      }
+
       const delta = Math.abs(scrollY - lastScrollYRef.current);
 
       if (delta < FLOATING_TOOLBAR_SCROLL_DELTA_MIN) {

@@ -15,7 +15,7 @@ function ValueServiceCard({ item }: { item: ValueServiceItem }) {
         width={item.width}
         height={item.height}
         className="h-auto w-full"
-        sizes="(max-width: 834px) 100vw, 588px"
+        sizes="(max-width: 767px) 100vw, 588px"
         unoptimized
       />
     </article>

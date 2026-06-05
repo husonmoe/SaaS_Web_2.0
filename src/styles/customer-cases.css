@@ -1,7 +1,7 @@
 /**
  * 客户案例板块纹理 bg_map.png (5760×2520)
- * - 视口 < 1200px：background-size 1920px，水平居中
- * - 视口 ≥ 1200px：background-size 100% auto，等比铺满宽度
+ * - 视口 < 1024px：background-size 1920px，水平居中
+ * - 视口 ≥ 1024px：background-size 100% auto，等比铺满宽度
  */
 .customer-cases-bg-layer {
   position: absolute;
@@ -15,7 +15,7 @@
   background-size: 1920px auto;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .customer-cases-bg-layer {
     background-size: 100% auto;
   }

@@ -120,7 +120,7 @@ export function ActionCtaSection() {
                 width={1458}
                 height={792}
                 className="h-auto w-full object-contain"
-                sizes="(max-width: 1199px) 100vw, 486px"
+                sizes="(max-width: 1023px) 100vw, 486px"
               />
             </div>
           </div>
