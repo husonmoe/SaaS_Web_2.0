@@ -6,14 +6,14 @@ import { VERSION_PLANS } from "@/components/sections/versionSchemeContent";
 
 export function VersionComparisonHeroSection() {
   return (
-    <section className="page-hero-section relative isolate overflow-visible pt-[100px] pb-16 md:pb-[100px]">
+    <section className="page-hero-section relative isolate overflow-visible pt-[60px] pb-[60px] md:pb-[100px]">
       <PageHeroBgLayer />
 
-      <PageContainer className="relative z-10 flex flex-col items-center gap-10 md:gap-16">
+      <PageContainer className="relative z-10 flex flex-col items-center gap-8 md:gap-16">
         {/* FadeInOnScroll 暂关 */}
-        <div className="flex w-full flex-col items-center gap-10 md:gap-16">
+        <div className="flex w-full flex-col items-center gap-8 md:gap-16">
           <header className="flex max-w-[1200px] flex-col items-center gap-4 text-center">
-            <h1 className="text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
+            <h1 className="text-3xl font-semibold leading-[38px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
               数字化升级方案
             </h1>
             <p className="text-lg text-[var(--text-secondary)] md:text-xl">

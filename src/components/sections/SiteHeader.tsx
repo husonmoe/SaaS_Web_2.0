@@ -101,6 +101,17 @@ export function SiteHeader() {
     setScrollFill(Math.min(getEffectiveScrollY() / HEADER_HEIGHT, 1));
   };
 
+  const resetHeaderInteractionState = useCallback(() => {
+    setHovered(false);
+    setPointerInHeader(false);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setMenuOpen(false);
+    resetHeaderInteractionState();
+    requestAnimationFrame(syncScrollFill);
+  }, [resetHeaderInteractionState]);
+
   const updatePointerInHeader = useCallback(
     (clientX: number, clientY: number) => {
       const header = headerRef.current;
@@ -135,11 +146,16 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", syncScrollFill);
   }, []);
 
-  /** 锁滚动后 window.scrollY 归零，需在 body.fixed 生效后按真实偏移重算背景 */
+  /** 锁滚动后 window.scrollY 归零；弹窗关闭后重置 hover 态并按真实偏移重算背景 */
   useEffect(() => {
-    const id = requestAnimationFrame(syncScrollFill);
+    const id = requestAnimationFrame(() => {
+      if (!modalOpen) {
+        resetHeaderInteractionState();
+      }
+      syncScrollFill();
+    });
     return () => cancelAnimationFrame(id);
-  }, [modalOpen]);
+  }, [modalOpen, resetHeaderInteractionState]);
 
   /** 弹窗遮罩会触发 header 的 mouseleave，用坐标判断指针是否仍在顶栏区域 */
   useEffect(() => {
@@ -266,30 +282,43 @@ export function SiteHeader() {
           <button
             type="button"
             className={cn(
-              "inline-flex h-8 w-8 shrink-0 flex-col items-center justify-center gap-[3px] lg:hidden",
+              "relative inline-flex h-8 w-8 shrink-0 items-center justify-center lg:hidden",
               menuOpen && "is-active",
             )}
             aria-label={menuOpen ? "关闭菜单" : "打开菜单"}
             aria-expanded={menuOpen}
             onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              if (menuOpen) {
+                closeMobileMenu();
+              } else {
+                setMenuOpen(true);
+              }
+            }}
           >
             <span
+              aria-hidden
               className={cn(
-                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
-                menuOpen && "translate-y-[5px] rotate-45",
+                "absolute left-1/2 top-1/2 block h-0.5 w-[18px] origin-center -translate-x-1/2 bg-[var(--text-base)] transition-all duration-300 ease-out",
+                menuOpen
+                  ? "-translate-y-1/2 rotate-45"
+                  : "-translate-y-[calc(50%+5px)]",
               )}
             />
             <span
+              aria-hidden
               className={cn(
-                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
-                menuOpen && "opacity-0",
+                "absolute left-1/2 top-1/2 block h-0.5 w-[18px] origin-center -translate-x-1/2 -translate-y-1/2 bg-[var(--text-base)] transition-[opacity,transform] duration-300 ease-out",
+                menuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
               )}
             />
             <span
+              aria-hidden
               className={cn(
-                "block h-0.5 w-[18px] origin-center bg-[var(--text-base)] transition-all duration-300 ease-out",
-                menuOpen && "-translate-y-[5px] -rotate-45",
+                "absolute left-1/2 top-1/2 block h-0.5 w-[18px] origin-center -translate-x-1/2 bg-[var(--text-base)] transition-all duration-300 ease-out",
+                menuOpen
+                  ? "-translate-y-1/2 -rotate-45"
+                  : "-translate-y-[calc(50%-5px)]",
               )}
             />
           </button>
@@ -302,7 +331,7 @@ export function SiteHeader() {
             type="button"
             className="fixed inset-0 top-16 z-40 bg-[#000000]/40 lg:hidden"
             aria-label="关闭菜单"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMobileMenu}
           />
           <nav
             className="fixed inset-x-0 top-16 z-50 flex flex-col gap-0 bg-white lg:hidden"
@@ -313,7 +342,7 @@ export function SiteHeader() {
                 key={item.label}
                 item={item}
                 linkClassName={MOBILE_NAV_LINK_CLASS}
-                onNavigate={() => setMenuOpen(false)}
+                onNavigate={closeMobileMenu}
                 onPointerEnter={(event) =>
                   activateHeader(event.clientX, event.clientY)
                 }

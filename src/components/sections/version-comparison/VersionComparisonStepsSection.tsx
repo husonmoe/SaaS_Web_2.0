@@ -38,28 +38,40 @@ function StepArrow() {
       alt=""
       width={24}
       height={24}
-      className="size-6 shrink-0 rotate-90 md:rotate-0"
+      className="size-6 shrink-0"
       aria-hidden
     />
   );
 }
 
+const STEP_ROW_PAIRS = [
+  VERSION_COMPARISON_STEPS.slice(0, 2),
+  VERSION_COMPARISON_STEPS.slice(2, 4),
+] as const;
+
 export function VersionComparisonStepsSection() {
   return (
-    <section className="bg-[var(--bg-white)] py-16 md:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-10 md:gap-16">
+    <section className="bg-[var(--bg-white)] py-[60px] md:py-[100px]">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         {/* FadeInOnScroll 暂关 */}
-        <div className="flex w-full flex-col items-center gap-10 md:gap-16">
-          <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+        <div className="flex w-full flex-col items-center gap-8 md:gap-16">
+          <h2 className="max-w-[1200px] text-center text-[28px] font-semibold leading-[36px] text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
             简单四步，开启诊所新体验
           </h2>
 
-          <div className="flex w-full max-w-[1200px] flex-col items-center gap-0 md:flex-row md:justify-between">
-            {VERSION_COMPARISON_STEPS.map((item, index) => (
-              <Fragment key={item.step}>
-                {index > 0 ? <StepArrow /> : null}
-                <StepItem {...item} />
-              </Fragment>
+          <div className="flex w-full max-w-[1200px] flex-col items-center gap-8">
+            {STEP_ROW_PAIRS.map((row) => (
+              <div
+                key={row[0].step}
+                className="flex w-full items-center justify-between gap-2 sm:justify-center sm:gap-12 md:gap-16"
+              >
+                {row.map((item, index) => (
+                  <Fragment key={item.step}>
+                    {index > 0 ? <StepArrow /> : null}
+                    <StepItem {...item} />
+                  </Fragment>
+                ))}
+              </div>
             ))}
           </div>
         </div>

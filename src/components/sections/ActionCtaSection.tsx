@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PageContainer, PageGrid } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
@@ -11,9 +11,38 @@ import Image from "next/image";
 const ACTION_MOCKUP_SRC = "/assets/image_action/image_action.png";
 const PHONE_ICON_SRC = "/assets/image_action/icon_telephone.svg";
 
+function centerInputInVisualViewport(input: HTMLInputElement) {
+  const viewport = window.visualViewport;
+  if (!viewport) {
+    input.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
+    return;
+  }
+
+  const rect = input.getBoundingClientRect();
+  const visibleCenterY = viewport.offsetTop + viewport.height / 2;
+  const inputCenterY = rect.top + rect.height / 2;
+  window.scrollBy({ top: inputCenterY - visibleCenterY, behavior: "smooth" });
+}
+
 export function ActionCtaSection() {
   const { open } = useTrialModal();
   const [phone, setPhone] = useState("");
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    const input = phoneInputRef.current;
+    if (!viewport || !input) return;
+
+    const handleViewportResize = () => {
+      if (document.activeElement === input) {
+        centerInputInVisualViewport(input);
+      }
+    };
+
+    viewport.addEventListener("resize", handleViewportResize);
+    return () => viewport.removeEventListener("resize", handleViewportResize);
+  }, []);
 
   const handleTrialClick = () => {
     open({ phone: phone.trim() });
@@ -52,10 +81,16 @@ export function ActionCtaSection() {
                   unoptimized
                 />
                 <input
+                  ref={phoneInputRef}
                   type="tel"
                   name="phone"
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
+                  onFocus={() => {
+                    const input = phoneInputRef.current;
+                    if (!input) return;
+                    window.setTimeout(() => centerInputInVisualViewport(input), 300);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
                       event.preventDefault();
@@ -64,7 +99,7 @@ export function ActionCtaSection() {
                   }}
                   placeholder="请输入手机号"
                   autoComplete="tel"
-                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-sm leading-[22px] text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:h-12 lg:rounded-xl lg:pl-11 lg:pr-4 lg:text-base lg:leading-6"
+                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:rounded-xl lg:pl-11 lg:pr-4"
                 />
               </label>
               <Button

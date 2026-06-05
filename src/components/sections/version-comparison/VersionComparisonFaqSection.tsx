@@ -9,24 +9,24 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: VersionComparisonFaqItem }) {
   return (
-    <article className="rounded-2xl bg-[var(--bg-shell)] px-6 py-6 md:px-8 md:py-7">
-      <div className="flex gap-4">
-        <span className="h-fit shrink-0 py-[2px]">
+    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
+      <div className="flex gap-3 md:gap-4">
+        <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
             src={VERSION_COMPARISON_FAQ_ICON}
             alt=""
             width={24}
             height={24}
-            className="size-6"
+            className="size-5 md:size-6"
             aria-hidden
             unoptimized
           />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-semibold leading-7 text-[var(--text-base)]">
+          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7">
             {item.title}
           </h3>
-          <p className="mt-2 text-base leading-6 text-[var(--text-secondary)]">
+          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
             {item.answer}
           </p>
         </div>
@@ -37,11 +37,11 @@ function FaqCard({ item }: { item: VersionComparisonFaqItem }) {
 
 export function VersionComparisonFaqSection() {
   return (
-    <section className="bg-[var(--bg-white)] py-16 md:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-10 md:gap-16">
+    <section className="bg-[var(--bg-white)] py-[60px] md:py-[100px]">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         {/* FadeInOnScroll 暂关 */}
-        <div className="flex w-full flex-col items-center gap-10 md:gap-16">
-          <h2 className="max-w-[1200px] text-center text-3xl font-semibold leading-tight text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+        <div className="flex w-full flex-col items-center gap-8 md:gap-16">
+          <h2 className="max-w-[1200px] text-center text-[28px] font-semibold leading-[36px] text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
             常见问题
           </h2>
 

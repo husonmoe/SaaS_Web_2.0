@@ -10,7 +10,10 @@ import {
   FLOATING_TOOLBAR_TOTAL_HEIGHT,
   useFloatingToolbarPosition,
 } from "@/hooks/useFloatingToolbarPosition";
-import { useFloatingToolbarScrollReveal } from "@/hooks/useFloatingToolbarScrollReveal";
+import {
+  FLOATING_TOOLBAR_SCROLL_END_MS,
+  useFloatingToolbarScrollReveal,
+} from "@/hooks/useFloatingToolbarScrollReveal";
 import { cn } from "@/lib/cn";
 
 const ICONS = {
@@ -31,7 +34,7 @@ const TOOLTIP_WRAP_CLASS =
 export function FloatingToolbar() {
   const [mounted, setMounted] = useState(false);
   const { showBackToTop, mode, coords } = useFloatingToolbarPosition();
-  const revealed = useFloatingToolbarScrollReveal();
+  const revealed = useFloatingToolbarScrollReveal(FLOATING_TOOLBAR_SCROLL_END_MS);
   const { open: openTrialModal } = useTrialModal();
 
   useEffect(() => {
