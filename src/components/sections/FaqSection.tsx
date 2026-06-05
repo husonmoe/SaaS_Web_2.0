@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: FaqItem }) {
   return (
-    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
+    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-6 md:py-7">
       <div className="flex gap-3 md:gap-4">
         <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
@@ -33,8 +33,8 @@ function FaqCard({ item }: { item: FaqItem }) {
 
 export function FaqSection() {
   return (
-    <section className="bg-white px-6 py-[60px] md:px-0 md:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-8 md:gap-16 !px-0 md:!px-16 lg:!px-0">
+    <section className="bg-white py-[60px] md:py-[100px]">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         <FadeInOnScroll
           as="h2"
           className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
@@ -44,7 +44,7 @@ export function FaqSection() {
 
         <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           {FAQ_ITEMS.map((item) => (
-            <FadeInOnScroll key={item.id} as="div">
+            <FadeInOnScroll key={item.id} as="div" className="h-full">
               <FaqCard item={item} />
             </FadeInOnScroll>
           ))}
