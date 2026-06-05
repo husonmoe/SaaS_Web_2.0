@@ -29,7 +29,7 @@ const PREVIEW_IMAGE_CLASS = cn(
 function prefetchImageSrcs(srcs: string[]) {
   for (const src of srcs) {
     const img = new Image();
-    img.src = src;
+    img.src = encodeURI(src);
   }
 }
 
@@ -117,7 +117,7 @@ function FeaturePreviewMedia({
       // eslint-disable-next-line @next/next/no-img-element
       <img
         key={media.src}
-        src={media.src}
+        src={encodeURI(media.src)}
         alt={alt}
         loading="eager"
         decoding="async"
@@ -130,7 +130,7 @@ function FeaturePreviewMedia({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       key={media.src}
-      src={media.src}
+      src={encodeURI(media.src)}
       alt={alt}
       width={2388}
       height={1500}
@@ -214,11 +214,9 @@ function ProductPreviewDots({
 
 function ProductPreviewHeadline({ content }: { content: ProductTabContent }) {
   return (
-    <div className="text-center text-2xl font-medium leading-7 text-[var(--text-base)]">
+    <div className="text-center text-2xl font-medium leading-7 text-[var(--text-base)] md:text-[32px] md:leading-[44px]">
       <p className="mb-0">
-        <HeadlineLine part={content.headline[0]} />
-      </p>
-      <p className="mb-0">
+        <HeadlineLine part={content.headline[0]} />{" "}
         <HeadlineLine part={content.headline[1]} />
       </p>
     </div>
@@ -235,7 +233,7 @@ function MobilePreviewSlide({
   alt: string;
 }) {
   return (
-    <div className="flex w-full shrink-0 flex-col gap-4">
+    <div className="flex w-full shrink-0 flex-col gap-6">
       <div className="relative h-fit overflow-hidden bg-[image:var(--gradient-section-product)]">
         <div className="relative h-fit max-h-[500px] w-full overflow-hidden rounded-xl">
           <FeaturePreviewMedia media={media} alt={alt} />
@@ -243,10 +241,10 @@ function MobilePreviewSlide({
       </div>
 
       <div className="flex flex-col gap-1 text-left">
-        <p className="text-lg font-medium leading-[26px] text-[var(--text-base)]">
+        <p className="text-lg font-medium leading-[26px] text-[var(--text-base)] md:text-[24px] md:font-semibold md:leading-8">
           {feature.title}
         </p>
-        <p className="text-sm leading-[22px] text-[var(--text-secondary)]">
+        <p className="text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
           {feature.description}
         </p>
       </div>
@@ -396,7 +394,7 @@ export function ProductPreview({ content }: ProductPreviewProps) {
       {featureCount > 0 ? (
         <div
           key={content.id}
-          className="animate-product-preview-in motion-reduce:animate-none w-full lg:hidden"
+          className="animate-product-preview-in motion-reduce:animate-none flex w-full flex-col gap-6 lg:hidden"
         >
           <ProductPreviewHeadline content={content} />
 

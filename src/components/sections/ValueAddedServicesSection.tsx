@@ -24,7 +24,7 @@ function ValueServiceCard({ item }: { item: ValueServiceItem }) {
 
 export function ValueAddedServicesSection() {
   return (
-    <section className="bg-white py-[60px] md:py-[100px]">
+    <section className="bg-white py-[60px] md:py-[80px]">
       <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         <FadeInOnScroll
           as="h2"
@@ -33,7 +33,7 @@ export function ValueAddedServicesSection() {
           更多进阶服务
         </FadeInOnScroll>
 
-        <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+        <div className="flex w-full max-w-[1200px] flex-col gap-4 md:gap-6">
           {VALUE_SERVICE_COLUMNS.map((column) => (
             <div key={column.map((item) => item.id).join("-")} className="flex flex-col gap-4 md:gap-6">
               {column.map((item) => (

@@ -213,10 +213,10 @@ export function SiteHeader() {
         aria-hidden
       />
 
-      <div className="relative z-10 flex h-16 w-full items-center justify-center gap-4 pl-4 pr-3 lg:h-[72px] lg:px-6">
+      <div className="relative z-10 flex h-16 w-full items-center justify-between gap-4 pl-4 pr-3 lg:h-[72px] lg:justify-center lg:px-6">
         <Link
           href="/"
-          className="flex w-[222px] shrink-0 items-center"
+          className="flex shrink-0 items-center lg:w-[222px]"
           aria-label="光谱云诊"
           onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
         >
