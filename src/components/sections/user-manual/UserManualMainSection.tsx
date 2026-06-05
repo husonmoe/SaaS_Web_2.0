@@ -27,14 +27,14 @@ export function UserManualMainSection({
     (topic) => topic.categoryId === activeCategoryId,
   );
   const article = USER_MANUAL_ARTICLES[activeTopicId];
-  const showSystemLayout = activeCategoryId === "system" && topics.length > 0;
+  const showTopicLayout = topics.length > 0;
 
   return (
-    <section className="pb-12 md:pb-[100px]">
-      <PageContainer className="flex flex-col items-center gap-[100px]">
-        {showSystemLayout ? (
-          <div className="mt-16 flex w-full max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-6">
-            <aside className="w-full shrink-0 lg:w-[282px] lg:sticky lg:z-30 lg:self-start user-manual-sidebar">
+    <section>
+      <PageContainer className="flex flex-col items-center gap-[60px] py-[60px]">
+        {showTopicLayout ? (
+          <div className="flex w-full max-w-[1200px] flex-col gap-12 lg:mt-16 lg:flex-row lg:gap-6">
+            <aside className="user-manual-sidebar hidden w-full shrink-0 lg:block lg:w-[282px] lg:sticky lg:z-30 lg:self-start">
               <p className="pb-5 text-sm leading-[22px] text-[var(--text-tertiary)]">
                 目录
               </p>
@@ -107,9 +107,6 @@ function UserManualPlaceholder({
 export function getDefaultTopicForCategory(
   categoryId: UserManualCategoryId,
 ): UserManualTopicId {
-  if (categoryId === "system") {
-    return USER_MANUAL_DEFAULT_TOPIC;
-  }
   const first = USER_MANUAL_TOPICS.find((t) => t.categoryId === categoryId);
   return first?.id ?? USER_MANUAL_DEFAULT_TOPIC;
 }

@@ -71,34 +71,40 @@ export const USER_MANUAL_CATEGORIES: UserManualCategory[] = [
   { id: "faq", label: "常见问题" },
 ];
 
-export const USER_MANUAL_TOPICS: UserManualTopic[] = [
-  { id: "install-and-login", label: "安装和登录", categoryId: "system" },
-  { id: "menu-settings", label: "管理菜单设置", categoryId: "system" },
-  { id: "consultation-menu", label: "问诊菜单", categoryId: "system" },
-  { id: "inventory", label: "库存管理", categoryId: "system" },
-  { id: "appointment", label: "预约挂号", categoryId: "system" },
-  { id: "billing-menu", label: "收费菜单", categoryId: "system" },
-  { id: "marketing-menu", label: "营销菜单", categoryId: "system" },
-  { id: "statistics-menu", label: "统计菜单", categoryId: "system" },
+/** 各分类共用同一套目录结构（验证切换效果，暂用首篇内容填充） */
+const USER_MANUAL_TOPIC_ENTRIES: { id: UserManualTopicId; label: string }[] = [
+  { id: "install-and-login", label: "安装和登录" },
+  { id: "menu-settings", label: "管理菜单设置" },
+  { id: "consultation-menu", label: "问诊菜单" },
+  { id: "inventory", label: "库存管理" },
+  { id: "appointment", label: "预约挂号" },
+  { id: "billing-menu", label: "收费菜单" },
+  { id: "marketing-menu", label: "营销菜单" },
+  { id: "statistics-menu", label: "统计菜单" },
 ];
+
+export const USER_MANUAL_TOPICS: UserManualTopic[] =
+  USER_MANUAL_CATEGORIES.flatMap((category) =>
+    USER_MANUAL_TOPIC_ENTRIES.map((topic) => ({
+      id: topic.id,
+      label: topic.label,
+      categoryId: category.id,
+    })),
+  );
 
 const CLIENT_DOWNLOAD_URL =
   "https://com-cms-pub.guangpuyun.cn/cms-clinic-electron/dist/production/guangpuyunzhen-setup.exe";
 
 const WEB_PORTAL_URL = "https://zs.guangpuyun.cn";
 
-export const USER_MANUAL_ARTICLES: Record<
-  UserManualTopicId,
-  UserManualArticle | undefined
-> = {
-  "install-and-login": {
-    topicId: "install-and-login",
-    title: "光谱云诊安装和登录",
-    intro:
-      "本章节将指引您完成光谱云诊客户端的下载、环境配置与首次登录，开启智能诊疗第一步。",
-    terminals:
-      "适用终端： Windows 桌面客户端（支持 Win10 及以上系统） / 医疗机构管理端",
-    sections: [
+const USER_MANUAL_BASE_ARTICLE: UserManualArticle = {
+  topicId: "install-and-login",
+  title: "光谱云诊安装和登录",
+  intro:
+    "本章节将指引您完成光谱云诊客户端的下载、环境配置与首次登录，开启智能诊疗第一步。",
+  terminals:
+    "适用终端： Windows 桌面客户端（支持 Win10 及以上系统） / 医疗机构管理端",
+  sections: [
       {
         id: "windows-install",
         heading: "1、Windows系统如何下载、安装客户端",
@@ -188,15 +194,34 @@ export const USER_MANUAL_ARTICLES: Record<
         ],
       },
     ],
-  },
-  "menu-settings": undefined,
-  "consultation-menu": undefined,
-  "inventory": undefined,
-  "appointment": undefined,
-  "billing-menu": undefined,
-  "marketing-menu": undefined,
-  "statistics-menu": undefined,
 };
+
+function cloneArticleForTopic(
+  topicId: UserManualTopicId,
+  label: string,
+): UserManualArticle {
+  return {
+    topicId,
+    title: `光谱云诊${label}`,
+    intro: USER_MANUAL_BASE_ARTICLE.intro,
+    terminals: USER_MANUAL_BASE_ARTICLE.terminals,
+    sections: USER_MANUAL_BASE_ARTICLE.sections.map((section) => ({
+      ...section,
+      blocks: section.blocks.map((block) => ({ ...block })),
+    })),
+  };
+}
+
+/** 暂用首篇内容填充全部目录，便于验证分类/目录切换 */
+export const USER_MANUAL_ARTICLES: Record<
+  UserManualTopicId,
+  UserManualArticle | undefined
+> = Object.fromEntries(
+  USER_MANUAL_TOPIC_ENTRIES.map((topic) => [
+    topic.id,
+    cloneArticleForTopic(topic.id, topic.label),
+  ]),
+) as Record<UserManualTopicId, UserManualArticle | undefined>;
 
 export const USER_MANUAL_DEFAULT_CATEGORY: UserManualCategoryId = "system";
 export const USER_MANUAL_DEFAULT_TOPIC: UserManualTopicId = "install-and-login";

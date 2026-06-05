@@ -7,9 +7,8 @@ import { useState } from "react";
 const THUMB_ICON = "/assets/user-manual/icon-thumb.svg";
 const SUCCESS_ICON = "/assets/user-manual/icon-check-circle.svg";
 
-/** 设计稿固定高度，点击前后保持一致避免版面跳动 */
 const FEEDBACK_SHELL_CLASS =
-  "mx-auto flex h-[88px] w-full max-w-[1200px] items-center rounded-xl bg-[var(--bg-shell)] px-8";
+  "mx-auto flex w-full max-w-[1200px] rounded-xl bg-[var(--bg-shell)] px-4 py-3";
 
 type FeedbackValue = "helpful" | "unsolved" | null;
 
@@ -18,7 +17,7 @@ export function UserManualFeedback() {
 
   if (value !== null) {
     return (
-      <div className={cn(FEEDBACK_SHELL_CLASS, "gap-2")}>
+      <div className={cn(FEEDBACK_SHELL_CLASS, "h-fit items-center gap-2")}>
         <Image
           src={SUCCESS_ICON}
           alt=""
@@ -36,11 +35,11 @@ export function UserManualFeedback() {
   }
 
   return (
-    <div className={cn(FEEDBACK_SHELL_CLASS, "justify-between gap-6")}>
-      <p className="shrink-0 text-xl font-medium leading-7 text-[var(--text-base)]">
+    <div className={cn(FEEDBACK_SHELL_CLASS, "h-fit flex-col gap-3")}>
+      <p className="shrink-0 text-center text-xl font-medium leading-7 text-[var(--text-base)]">
         内容是否有帮助？
       </p>
-      <div className="flex shrink-0 gap-3">
+      <div className="flex w-full items-center justify-center gap-3">
         <FeedbackButton
           label="有帮助"
           selected={value === "helpful"}
@@ -73,7 +72,7 @@ function FeedbackButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex h-10 min-w-[108px] items-center justify-center gap-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-white)] px-4 text-sm leading-[22px] text-[var(--text-base)] transition-colors hover:bg-[var(--user-manual-chip-hover)]",
+        "inline-flex h-10 w-full items-center justify-center gap-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-white)] px-4 text-sm leading-[22px] text-[var(--text-base)] transition-colors hover:bg-[var(--user-manual-chip-hover)]",
         selected && "border-[var(--color-primary)] bg-[var(--user-manual-chip-hover)]",
       )}
     >

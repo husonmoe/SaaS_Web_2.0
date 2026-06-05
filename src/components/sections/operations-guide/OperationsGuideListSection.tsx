@@ -6,6 +6,7 @@ import {
   OPERATIONS_GUIDE_ARTICLES,
   OPERATIONS_GUIDE_PAGE_SIZE,
 } from "@/components/sections/operations-guide/operationsGuideContent";
+import { cn } from "@/lib/cn";
 import { useState } from "react";
 
 export function OperationsGuideListSection() {
@@ -16,7 +17,7 @@ export function OperationsGuideListSection() {
   return (
     <section className="operations-guide-list-section pb-12 md:pb-16">
       <PageContainer className="flex flex-col items-center gap-12 md:gap-16">
-        <div className="grid w-full max-w-[1200px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid w-full max-w-[1200px] grid-cols-2 items-start gap-x-3 gap-y-6 md:gap-x-6 lg:grid-cols-4">
           {visibleArticles.map((article) => (
             <OperationsGuideArticleCard key={article.id} {...article} />
           ))}
@@ -30,7 +31,9 @@ export function OperationsGuideListSection() {
                 Math.min(count + OPERATIONS_GUIDE_PAGE_SIZE, OPERATIONS_GUIDE_ARTICLES.length),
               )
             }
-            className="inline-flex h-[60px] min-w-[188px] items-center justify-center rounded-full border border-[var(--border-light)] bg-[var(--bg-white)] px-10 text-lg leading-[26px] text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)]"
+            className={cn(
+              "inline-flex h-14 min-h-14 w-[200px] items-center justify-center rounded-full border border-[var(--border-light)] bg-white px-5 text-base text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)] md:h-[60px] md:min-h-[60px] md:w-auto md:px-10 md:text-lg md:leading-[26px]",
+            )}
           >
             加载更多内容
           </button>

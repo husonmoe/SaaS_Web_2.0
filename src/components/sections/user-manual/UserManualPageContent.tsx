@@ -38,6 +38,8 @@ export function UserManualPageContent() {
         <UserManualCategoryBar
           activeCategoryId={activeCategoryId}
           onCategoryChange={handleCategoryChange}
+          activeTopicId={activeTopicId}
+          onTopicChange={setActiveTopicId}
           scopeRef={stickyScopeRef}
         />
 

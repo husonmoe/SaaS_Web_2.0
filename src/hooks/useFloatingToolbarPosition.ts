@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ACTION_CTA_SECTION_ID,
   SITE_FOOTER_ID,
@@ -17,6 +17,8 @@ export const FLOATING_TOOLBAR_SLOT_GAP = 12;
 export const FLOATING_TOOLBAR_TOTAL_HEIGHT =
   FLOATING_TOOLBAR_BUTTON_SIZE * 3 +
   FLOATING_TOOLBAR_SLOT_GAP * 2;
+/** fixed ↔ absolute 切换迟滞，避免页脚边界来回抖动 */
+export const FLOATING_TOOLBAR_PIN_HYSTERESIS = 16;
 
 export type FloatingToolbarPositionMode = "fixed" | "absolute";
 
@@ -33,6 +35,15 @@ function getBoundaryElement(): HTMLElement | null {
   );
 }
 
+function coordsEqual(
+  a: FloatingToolbarCoords,
+  b: FloatingToolbarCoords,
+): boolean {
+  return (
+    a.right === b.right && a.bottom === b.bottom && a.top === b.top
+  );
+}
+
 export function useFloatingToolbarPosition() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mode, setMode] = useState<FloatingToolbarPositionMode>("fixed");
@@ -40,6 +51,9 @@ export function useFloatingToolbarPosition() {
     right: FLOATING_TOOLBAR_MARGIN_RIGHT,
     bottom: FLOATING_TOOLBAR_MARGIN_BOTTOM,
   });
+  const modeRef = useRef<FloatingToolbarPositionMode>("fixed");
+  const showBackToTopRef = useRef(false);
+  const coordsRef = useRef(coords);
 
   useEffect(() => {
     let rafId = 0;
@@ -54,7 +68,7 @@ export function useFloatingToolbarPosition() {
           cancelAnimationFrame(rafId);
           rafId = requestAnimationFrame(update);
         },
-        { root: null, threshold: [0, 0.25, 0.5, 0.75, 1] },
+        { root: null, threshold: 0 },
       );
       observer.observe(boundary);
       observedBoundary = boundary;
@@ -62,7 +76,11 @@ export function useFloatingToolbarPosition() {
 
     const update = () => {
       const scrollY = window.scrollY;
-      setShowBackToTop(scrollY > FLOATING_TOOLBAR_SCROLL_THRESHOLD);
+      const nextShowBackToTop = scrollY > FLOATING_TOOLBAR_SCROLL_THRESHOLD;
+      if (nextShowBackToTop !== showBackToTopRef.current) {
+        showBackToTopRef.current = nextShowBackToTop;
+        setShowBackToTop(nextShowBackToTop);
+      }
 
       const boundary = getBoundaryElement();
       if (boundary) {
@@ -70,11 +88,18 @@ export function useFloatingToolbarPosition() {
       }
 
       if (!boundary) {
-        setMode("fixed");
-        setCoords({
+        const nextCoords = {
           right: FLOATING_TOOLBAR_MARGIN_RIGHT,
           bottom: FLOATING_TOOLBAR_MARGIN_BOTTOM,
-        });
+        };
+        if (modeRef.current !== "fixed") {
+          modeRef.current = "fixed";
+          setMode("fixed");
+        }
+        if (!coordsEqual(coordsRef.current, nextCoords)) {
+          coordsRef.current = nextCoords;
+          setCoords(nextCoords);
+        }
         return;
       }
 
@@ -85,21 +110,37 @@ export function useFloatingToolbarPosition() {
 
       const fixedBottomEdge = viewportHeight - bottomMargin;
       const pinnedBottomEdge = boundaryRect.top - bottomMargin;
+      const hysteresis = FLOATING_TOOLBAR_PIN_HYSTERESIS;
 
-      if (pinnedBottomEdge >= fixedBottomEdge) {
-        setMode("fixed");
-        setCoords({
-          right: FLOATING_TOOLBAR_MARGIN_RIGHT,
-          bottom: bottomMargin,
-        });
-        return;
+      let nextMode = modeRef.current;
+      if (modeRef.current === "fixed") {
+        if (pinnedBottomEdge < fixedBottomEdge - hysteresis) {
+          nextMode = "absolute";
+        }
+      } else if (pinnedBottomEdge >= fixedBottomEdge + hysteresis) {
+        nextMode = "fixed";
       }
 
-      setMode("absolute");
-      setCoords({
-        right: FLOATING_TOOLBAR_MARGIN_RIGHT,
-        top: scrollY + pinnedBottomEdge - toolbarHeight,
-      });
+      if (nextMode !== modeRef.current) {
+        modeRef.current = nextMode;
+        setMode(nextMode);
+      }
+
+      const nextCoords: FloatingToolbarCoords =
+        nextMode === "fixed"
+          ? {
+              right: FLOATING_TOOLBAR_MARGIN_RIGHT,
+              bottom: bottomMargin,
+            }
+          : {
+              right: FLOATING_TOOLBAR_MARGIN_RIGHT,
+              top: scrollY + pinnedBottomEdge - toolbarHeight,
+            };
+
+      if (!coordsEqual(coordsRef.current, nextCoords)) {
+        coordsRef.current = nextCoords;
+        setCoords(nextCoords);
+      }
     };
 
     const scheduleUpdate = () => {
