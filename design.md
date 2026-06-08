@@ -39,24 +39,24 @@
 
 ## 4. 实施进度总览
 
-> **当前阶段：** Web 端功能与视觉基本完成 → **下一阶段：Pad / Mobile 适配**
+> **当前阶段：** Pad 首页适配进行中（`feat-pad-adapt`）→ Mobile 适配待续
 
-### 4.1 首页区块（Web 1920）
+### 4.1 首页区块
 
-| 顺序 | 区块 | Figma node | 前端 | Web |
-| --- | --- | --- | --- | --- |
-| 1 | Header | `163:49698` | `SiteHeader` | ✅ |
-| 2 | Hero | `97:33949` | `HeroSection` | ✅ |
-| 3 | 数据统计 | `97:36263` | `StatsSection` | ✅ |
-| 4 | 功能亮点 | `97:37256` | `WhyChooseSection` | ✅ |
-| 5 | 产品模块 | `97:36338` | `ProductSection` + `ProductPreview` | ✅ |
-| 6 | 增值服务 | — | `ValueAddedServicesSection` | ✅ |
-| 7 | 版本方案 | `97:37432` | `VersionSchemeSection` | ✅ |
-| 8 | 客户案例 | `140:15673` | `CustomerCasesSection` | ✅ |
-| 9 | FAQ | `97:37587` | `FaqSection` | ✅ |
-| 10 | CTA | `228:17347` | `ActionCtaSection` | ✅ |
-| 11 | Footer | `185:12946` | `SiteFooter` | ✅ |
-| — | 悬浮工具栏 | — | `FloatingToolbar` | ✅ |
+| 顺序 | 区块 | Figma node | 前端 | Web | Pad |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Header | `163:49698` | `SiteHeader` | ✅ | ✅ |
+| 2 | Hero | `97:33949` | `HeroSection` | ✅ | ✅ |
+| 3 | 数据统计 | `97:36263` | `StatsSection` | ✅ | ✅ |
+| 4 | 功能亮点 | `97:37256` | `WhyChooseSection` | ✅ | ✅ |
+| 5 | 产品模块 | `97:36338` | `ProductSection` + `ProductPreview` | ✅ | ✅ |
+| 6 | 增值服务 | — | `ValueAddedServicesSection` | ✅ | ✅ |
+| 7 | 版本方案 | `97:37432` | `VersionSchemeSection` | ✅ | ✅ |
+| 8 | 客户案例 | `140:15673` | `CustomerCasesSection` | ✅ | ✅ |
+| 9 | FAQ | `97:37587` | `FaqSection` | ✅ | ✅ |
+| 10 | CTA | `228:17347` | `ActionCtaSection` | ✅ | ✅ |
+| 11 | Footer | `185:12946` | `SiteFooter` | ✅ | ✅ |
+| — | 悬浮工具栏 | — | `FloatingToolbar` | ✅ | ⏳ |
 
 ### 4.2 内页（Web）
 
@@ -98,46 +98,33 @@
 
 ## 5. Pad / Mobile 适配
 
-### 5.0 分支策略（必读）
+### 5.0 分支策略
 
-| 分支 | 职责 | 合并目标 |
-| --- | --- | --- |
-| `main` | Web（≥1024px）+ 已合并的 Mobile | 生产部署 |
-| `feat-mobile-adapt` | 仅 Mobile（375–767，无前缀类名） | → `main` |
-| `feat-pad-adapt` | **仅 Pad（768–1023，`md:`）** | → `main`（验收后） |
+| 分支 | 职责 |
+| --- | --- |
+| `main` | Web（≥1024px）+ 已合并 Mobile |
+| `feat-pad-adapt` | **仅 Pad（768–1023，`md:`）** — 本分支样式 |
+| `feat-mobile-adapt` | 仅 Mobile（375–767） |
 
-**Pad 开发铁律：** 不改 Mobile 基线、不破坏 Web（`lg:` 须与 `main` 一致）。
-
-#### Pad 断点写法
-
-1. **Mobile 基线不动**：不修改无前缀 class。
-2. **Pad 用 `md:`**：768–1023px 差异只写 `md:`。
-3. **Web 用 `lg:` 锁回**：`md:` 会延续到 ≥1024px 时，必须补 `lg:` 恢复 `main` 样式。
-
-```tsx
-// ✅ Pad 单列，Web 双列
-<div className="grid grid-cols-1 gap-4 md:flex md:flex-col md:gap-6 lg:grid lg:grid-cols-2 lg:gap-6" />
-```
-
-自定义 CSS 的 Pad 规则使用 `@media (min-width: 768px) and (max-width: 1023px)`，避免污染 Web。
+合并 `main` 前须在 1024px / 1920px 回归 Web，避免 `md:` 污染大屏（必要时补 `lg:` 锁回）。
 
 > 对照 Figma Pad（834px 画板）与 Mobile（375px 画板），按视口 768–1023 / 375–767 验收。
 
 ### 5.1 全局与布局
 
-- [ ] `SiteHeader`：Pad 导航收缩、Mobile 汉堡菜单与抽屉
-- [ ] `SiteFooter`：Pad / Mobile 列布局与链接分组
-- [ ] `FloatingToolbar`：Pad / Mobile 位置与显隐
-- [ ] `PageContainer` / `PageGrid`：核对 768 / 375 边距与列跨度
+- [x] `SiteHeader`：Pad 顶栏 `justify-between`、Logo 宽度与 Web 居中切换
+- [x] `SiteFooter`：Pad 四列 flex 布局、服务条横排、间距与版权区对齐
+- [ ] `FloatingToolbar`：Pad 位置与显隐
+- [x] `PageContainer` / `PageGrid`：首页各 Section 已按 768 边距验收（沿用全局 Token）
 
 ### 5.2 首页各 Section
 
-- [ ] `HeroSection`：Pad / Mobile 排版、mockup 尺寸与背景裁切
-- [ ] `StatsSection` / `WhyChooseSection`
-- [ ] `ProductSection` / `ProductPreview`：Tab 与预览区 Mobile 布局
-- [ ] `ValueAddedServicesSection` / `VersionSchemeSection`
-- [ ] `CustomerCasesSection`：地图与案例卡片 Mobile 滚动
-- [ ] `FaqSection` / `ActionCtaSection`
+- [x] `HeroSection`：Pad 顶栏偏移 64px、标题单行、特性标签横排、mockup 间距
+- [x] `StatsSection` / `WhyChooseSection`：Pad 区块间距 `py-80`
+- [x] `ProductSection` / `ProductPreview`：Pad Tab 与 Mobile 预览 headline/文案字号；中文预览图 SSR 需 `encodeURI`（见 §8）
+- [x] `ValueAddedServicesSection` / `VersionSchemeSection`：Pad 纵向卡片堆叠与字号
+- [x] `CustomerCasesSection`：Pad 卡片定高、跑马灯宽度与间距
+- [x] `FaqSection` / `ActionCtaSection`：Pad 栅格与 CTA 双列（`action-cta.css`）
 
 ### 5.3 内页
 
@@ -152,11 +139,15 @@
 - [ ] 登录 / 试用 / 选诊所 / 忘记密码 / 微信绑定：内容与 Tab Mobile 排版
 - [ ] 创建诊所页 `ServiceContactPopover`：Mobile 定位与触控区域
 
-### 5.5 验收方式
+### 5.5 Mobile 首页（待 `feat-mobile-adapt` 合并后核对）
+
+- [ ] 各 Section 375px 画板逐项打勾（Mobile 分支已有部分实现，需与 Pad 分支对齐）
+
+### 5.6 验收方式
 
 1. Chrome DevTools：375 / 768 / 1024 / 1920 四档截图对比 Figma
 2. 真机：iOS Safari 滚动锁、弹窗、表单输入
-3. 每完成一页在本文档对应 `[ ]` 改为 `[x]`
+3. 每完成一项在本文档对应 `[ ]` 改为 `[x]`
 
 ---
 
@@ -187,3 +178,20 @@ npm run preview:open # 打开 Simple Browser 预览
 | `?clinicSelect=1` | 选择诊所弹窗 |
 | `?createClinic=1` | 创建诊所页 |
 | `?createClinicStep=2` | 创建诊所第二步 |
+
+---
+
+## 8. 实现备忘
+
+### 8.1 中文静态资源路径
+
+`public/assets/image_product_module/` 下预览图文件名含中文。SSR 时若 `<img src>` 直接使用 Unicode 路径，Next.js dev 可能报 `ByteString` 错误。
+
+**约定：** 数据层（`productModuleContent.ts`）存原始路径；仅在渲染/预加载时对 `src` 调用一次 `encodeURI`（见 `ProductPreview.tsx`、`ProductModuleTabs.tsx`）。**禁止**在数据层与渲染层重复编码，否则静态资源 404。
+
+### 8.2 Pad 首页样式补充
+
+| 文件 | 说明 |
+| --- | --- |
+| `src/styles/hero-bg.css` | Mobile/Pad 顶栏偏移 64px，Web（≥1024）72px |
+| `src/styles/action-cta.css` | Pad+ CTA 双列：`minmax(0,1fr) + auto` |

@@ -23,13 +23,13 @@ npm run preview:open
 
 **Web 端：** 首页 11 个区块、4 个内页、5 类营销弹窗、创建诊所流程均已实现。
 
-**Pad 端：** 在 `feat-pad-adapt` 分支开发，**仅改 `md:` 断点**，合并前须回归 Web（1024px+）。规则见 [`design.md` §5.0](./design.md#50-分支策略必读)。
+**Pad 端（`feat-pad-adapt`）：** 首页 11 个区块已完成 Pad（768–1023px）布局与样式适配；悬浮工具栏与内页、弹窗待续。
 
-**Mobile 端：** 在 `feat-mobile-adapt` 分支开发（已部分合并 `main`）。
+**Mobile 端：** 部分实现于 `feat-mobile-adapt`，待与 Pad 分支对齐后统一验收。
 
 | 模块 | Web | Pad | Mobile |
 | --- | --- | --- | --- |
-| 首页全区块 | ✅ | 🔧 `feat-pad-adapt` | ⏳ |
+| 首页全区块 | ✅ | ✅ | ⏳ |
 | 版本对比 / 操作指南 / 用户手册 | ✅ | ⏳ | ⏳ |
 | 登录 / 试用 / 选诊所等弹窗 | ✅ | ⏳ | ⏳ |
 | 创建诊所 | ✅ | ⏳ | ⏳ |
