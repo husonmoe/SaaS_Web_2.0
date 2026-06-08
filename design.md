@@ -96,7 +96,30 @@
 
 ---
 
-## 5. 下一阶段：Pad / Mobile 适配
+## 5. Pad / Mobile 适配
+
+### 5.0 分支策略（必读）
+
+| 分支 | 职责 | 合并目标 |
+| --- | --- | --- |
+| `main` | Web（≥1024px）+ 已合并的 Mobile | 生产部署 |
+| `feat-mobile-adapt` | 仅 Mobile（375–767，无前缀类名） | → `main` |
+| `feat-pad-adapt` | **仅 Pad（768–1023，`md:`）** | → `main`（验收后） |
+
+**Pad 开发铁律：** 不改 Mobile 基线、不破坏 Web（`lg:` 须与 `main` 一致）。
+
+#### Pad 断点写法
+
+1. **Mobile 基线不动**：不修改无前缀 class。
+2. **Pad 用 `md:`**：768–1023px 差异只写 `md:`。
+3. **Web 用 `lg:` 锁回**：`md:` 会延续到 ≥1024px 时，必须补 `lg:` 恢复 `main` 样式。
+
+```tsx
+// ✅ Pad 单列，Web 双列
+<div className="grid grid-cols-1 gap-4 md:flex md:flex-col md:gap-6 lg:grid lg:grid-cols-2 lg:gap-6" />
+```
+
+自定义 CSS 的 Pad 规则使用 `@media (min-width: 768px) and (max-width: 1023px)`，避免污染 Web。
 
 > 对照 Figma Pad（834px 画板）与 Mobile（375px 画板），按视口 768–1023 / 375–767 验收。
 
