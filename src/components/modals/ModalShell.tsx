@@ -21,6 +21,8 @@ type ModalShellProps = {
   contentClassName?: string;
   /** 覆盖弹窗外壳宽度/布局（如 Pad 登录弹窗固定 520px） */
   dialogClassName?: string;
+  /** 覆盖遮罩层内边距（如 Mobile 试用弹窗左右 48px） */
+  overlayClassName?: string;
   /** 左侧插画从该断点起显示，默认 md */
   panelVisibleFrom?: "md" | "lg";
 };
@@ -41,11 +43,15 @@ export function ModalShell({
   zIndex = 200,
   contentClassName,
   dialogClassName,
+  overlayClassName,
   panelVisibleFrom = "md",
 }: ModalShellProps) {
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center overflow-hidden overscroll-none p-4"
+      className={cn(
+        "fixed inset-0 flex items-center justify-center overflow-hidden overscroll-none p-4",
+        overlayClassName,
+      )}
       style={{ zIndex }}
     >
       <button

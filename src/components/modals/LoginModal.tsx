@@ -787,6 +787,7 @@ export function LoginModal() {
       zIndex={201}
       panelVisibleFrom="lg"
       dialogClassName="md:w-[520px] md:max-w-[520px] lg:w-full lg:max-w-[900px]"
+      contentClassName="min-h-0 h-[600px] max-h-[600px] shrink-0 gap-6 pt-20 pb-10 sm:pt-20 sm:pb-10"
     >
       <div className="flex w-full max-w-[380px] flex-1 flex-col items-center justify-start gap-6">
         <div className="flex w-full flex-col items-center gap-6">

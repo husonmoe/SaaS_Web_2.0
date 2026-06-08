@@ -13,38 +13,9 @@ import {
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { handoffModal } from "@/lib/modalHandoff";
+import { MODAL_TRIAL_PANEL_BG_SRC } from "@/lib/modalPanelAssets";
 import { PATHS } from "@/lib/paths";
 import { validatePhone } from "@/lib/validatePhone";
-
-const LOGO_SRC = "/assets/LOGO.png";
-const TRIAL_PANEL_BG_SRC = "/assets/trial-modal/trial-panel-bg.svg";
-const TRIAL_PANEL_TAGS = ["0 打字", "AI辅助问诊", "医保对接", "一键入库"];
-const TRIAL_PANEL_FEATURES = [
-  {
-    title: "在线客服",
-    desc: "7 x 12 小时专属客服品质服务",
-    iconSrc: "/assets/icon_在线客服.svg",
-    iconBg: "bg-[rgba(115,130,244,0.08)]",
-  },
-  {
-    title: "系统培训",
-    desc: "免费专人培训，助您轻松上手系统",
-    iconSrc: "/assets/icon_系统培训.svg",
-    iconBg: "bg-[rgba(49,184,146,0.08)]",
-  },
-  {
-    title: "数据搬家",
-    desc: "协助数据整理、导出以及导入",
-    iconSrc: "/assets/icon_数据搬家.svg",
-    iconBg: "bg-[#ebf6ff]",
-  },
-  {
-    title: "持续升级",
-    desc: "系统持续升级、迭代数据自动备份",
-    iconSrc: "/assets/icon_持续升级.svg",
-    iconBg: "bg-[rgba(255,136,38,0.08)]",
-  },
-] as const;
 
 const TRIAL_QRCODE_SRC = "/assets/modal/login_qrcode.png";
 const ICON_WECHAT_SRC = "/assets/modal/icon_wechat.svg";
@@ -58,90 +29,12 @@ const TRIAL_QR_DEV_PRESET_KEY = "trialQr";
 /** 本地 dev：?clinicCreate=1 自动打开「未加入诊所」创建提示 */
 const CLINIC_CREATE_DEV_PRESET_KEY = "clinicCreate";
 
-function TrialModalLeftPanel() {
-  return (
-    <div className="relative size-full overflow-hidden bg-gradient-to-b from-[#c8dbf2] to-[#f6f9fc]">
-      <Image
-        src={TRIAL_PANEL_BG_SRC}
-        alt=""
-        fill
-        className="object-cover"
-        aria-hidden
-        unoptimized
-      />
-
-      <div className="relative flex flex-col gap-10 px-10 pt-[50px]">
-        <Image
-          src={LOGO_SRC}
-          alt="光谱云诊"
-          width={116}
-          height={32}
-          className="h-8 w-auto"
-          unoptimized
-        />
-
-        <div className="flex flex-col gap-2">
-          <p className="text-[28px] font-medium leading-10 text-[var(--text-base)]">
-            百万基层医护的共同选择
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            {TRIAL_PANEL_TAGS.map((tag, index) => (
-              <span key={tag} className="flex items-center gap-3">
-                {index > 0 ? (
-                  <span
-                    className="h-3 w-px shrink-0 bg-white"
-                    aria-hidden
-                  />
-                ) : null}
-                <span className="text-sm leading-[22px] text-[var(--text-secondary)]">
-                  {tag}
-                </span>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-8">
-          {TRIAL_PANEL_FEATURES.map((feature) => (
-            <div key={feature.title} className="flex items-center gap-4">
-              <div
-                className={cn(
-                  "flex size-11 shrink-0 items-center justify-center rounded-full",
-                  feature.iconBg,
-                )}
-              >
-                <Image
-                  src={feature.iconSrc}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="size-6"
-                  aria-hidden
-                  unoptimized
-                />
-              </div>
-              <div className="flex min-w-0 flex-col">
-                <p className="text-base leading-6 text-[var(--text-base)]">
-                  {feature.title}
-                </p>
-                <p className="text-xs leading-5 text-[var(--text-secondary)]">
-                  {feature.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function TrialModalLoginFooter() {
   const { open: openLoginModal } = useLoginModal();
   const { close: closeTrialModal } = useTrialModal();
 
   return (
-    <p className="text-sm leading-[22px]">
+    <p className="w-full text-center text-sm leading-[22px]">
       <span className="text-[var(--text-secondary)]">已有诊所账号？</span>
       <button
         type="button"
@@ -176,8 +69,8 @@ function TrialModalFormView({
   onSubmit: (event: React.FormEvent) => void;
 }) {
   return (
-    <>
-      <div className="flex w-full max-w-[280px] flex-col items-center gap-2 text-center">
+    <div className="flex min-h-0 w-full flex-1 flex-col gap-6 md:max-w-[280px]">
+      <div className="flex w-full shrink-0 flex-col items-center gap-2 text-center md:h-[116px]">
         <h2
           id={titleId}
           className="text-[32px] font-medium leading-[44px] text-[var(--text-base)]"
@@ -191,11 +84,11 @@ function TrialModalFormView({
 
       <form
         onSubmit={onSubmit}
-        className="flex w-full max-w-[280px] flex-col gap-10"
+        className="flex min-h-0 w-full flex-1 flex-col items-start justify-start gap-6 md:gap-10"
         noValidate
       >
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-2">
+        <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col gap-2">
             <label
               htmlFor="trial-phone"
               className="flex items-start gap-1 text-sm leading-[22px] text-[var(--text-base)]"
@@ -203,7 +96,7 @@ function TrialModalFormView({
               手机号
               <span className="text-[var(--text-error)]">*</span>
             </label>
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 ref={phoneInputRef}
                 id="trial-phone"
@@ -242,10 +135,13 @@ function TrialModalFormView({
                 </button>
               ) : null}
             </div>
+          </div>
+
+          <div className="relative h-8 shrink-0">
             <p
               id="trial-phone-error"
               className={cn(
-                "min-h-[22px] text-sm leading-[22px] text-[var(--text-error)]",
+                "absolute inset-x-0 top-0 text-sm leading-[22px] text-[var(--text-error)]",
                 !phoneError && "invisible",
               )}
               role={phoneError ? "alert" : undefined}
@@ -255,7 +151,7 @@ function TrialModalFormView({
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex w-full flex-col gap-2">
             <label
               htmlFor="trial-org"
               className="text-sm leading-[22px] text-[var(--text-base)]"
@@ -280,8 +176,10 @@ function TrialModalFormView({
         </Button>
       </form>
 
-      <TrialModalLoginFooter />
-    </>
+      <div className="shrink-0">
+        <TrialModalLoginFooter />
+      </div>
+    </div>
   );
 }
 
@@ -537,11 +435,12 @@ export function TrialModal() {
     <ModalShell
       titleId={titleId}
       dialogRef={dialogRef}
-      panel={<TrialModalLeftPanel />}
+      panelBgSrc={MODAL_TRIAL_PANEL_BG_SRC}
       onClose={handleClose}
-      contentClassName="h-fit min-h-0 gap-6 sm:gap-6 sm:pt-20 sm:pb-10"
       panelVisibleFrom="lg"
-      dialogClassName="md:w-[520px] md:max-w-[520px] lg:w-full lg:max-w-[900px]"
+      overlayClassName="px-[12.5px] py-4 md:p-4"
+      dialogClassName="h-[450px] w-[350px] max-w-[350px] md:h-auto md:w-[520px] md:max-w-[520px] lg:w-full lg:max-w-[900px]"
+      contentClassName="min-h-0 h-[450px] max-h-[450px] shrink-0 gap-6 overflow-hidden px-6 pt-6 pb-6 sm:min-h-0 sm:overflow-hidden sm:px-6 sm:pt-6 sm:pb-6 md:h-[600px] md:max-h-[600px] md:overflow-y-auto md:px-[60px] md:pt-20 md:pb-10"
     >
       {view === "form" ? (
         <TrialModalFormView
