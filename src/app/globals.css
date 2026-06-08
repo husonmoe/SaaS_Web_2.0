@@ -22,6 +22,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* 裁剪横向溢出（工具栏滑出、bleed 负 margin 等），不创建横向滚动容器 */
+    overflow-x: clip;
     /* 弹窗锁滚动时保留滚动条占位，避免内容宽度跳动 */
     overflow-y: scroll;
     scrollbar-gutter: stable;
