@@ -15,16 +15,16 @@ const HERO_MOCKUP_HEIGHT = 1320;
 
 export function HeroSection() {
   return (
-    <section className="relative isolate h-fit overflow-visible pt-8 pb-8 md:pt-[72px] md:pb-[72px] lg:pt-[calc(72px+2rem)] lg:pb-16">
+    <section className="relative isolate h-fit overflow-visible pt-8 pb-8 md:pt-[calc(72px+3rem)] md:pb-20 lg:pt-[calc(72px+2rem)] lg:pb-16">
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10">
         <PageGrid className="hero-page-grid">
           <FadeInOnScroll
             as="div"
-            className="hero-page-grid-text col-span-full flex w-full flex-col items-center gap-6 text-center md:gap-10 lg:items-start lg:gap-10 lg:text-left"
+            className="hero-page-grid-text col-span-full flex flex-col items-center gap-6 text-center md:gap-10 lg:items-start lg:gap-10 lg:text-left"
           >
-            <div className="flex flex-col gap-2 md:gap-6 lg:gap-6">
+            <div className="flex flex-col gap-2 md:gap-5 lg:gap-6">
               <div className="flex items-center justify-center gap-1 lg:justify-start">
                 <Image
                   src={LAUREL_LEFT}
@@ -47,14 +47,14 @@ export function HeroSection() {
                 />
               </div>
 
-              <h1 className="text-[36px] font-medium leading-[52px] text-[var(--text-base)] md:text-[52px] md:leading-[68px] md:whitespace-nowrap">
+              <h1 className="text-[36px] font-medium leading-[52px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
                 开诊所就用
                 <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-end)] bg-clip-text text-transparent">
                   光谱云诊
                 </span>
               </h1>
 
-              <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-[22px] text-[var(--text-base)] md:flex-nowrap md:text-xl md:leading-7 lg:flex-wrap lg:justify-start">
+              <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm leading-[22px] text-[var(--text-base)] md:text-xl md:leading-normal lg:justify-start">
                 {FEATURES.map((item, i) => (
                   <li key={item} className="flex items-center gap-3">
                     {i > 0 && (
@@ -69,16 +69,16 @@ export function HeroSection() {
               </ul>
             </div>
 
-            <TrialModalButton className="h-12 min-h-12 w-32 rounded-xl px-6 text-base md:h-14 md:min-h-14 md:w-[152px] md:rounded-xl md:px-10 md:text-lg">
+            <TrialModalButton className="h-12 min-h-12 w-32 rounded-xl px-6 text-base md:h-14 md:min-h-14 md:w-[152px] md:px-10 md:text-lg">
               免费试用
             </TrialModalButton>
           </FadeInOnScroll>
 
           <FadeInOnScroll
             as="div"
-            className="hero-page-grid-media col-span-full mt-16 w-full max-w-[640px] shrink-0 md:mt-20 lg:mt-0 lg:max-w-[640px]"
+            className="hero-page-grid-media col-span-full mt-16 w-full max-w-[640px] shrink-0 md:mt-20 lg:mt-0"
           >
-            <div className="relative mx-auto w-full lg:max-w-none">
+            <div className="relative mx-auto w-full max-w-[660px] lg:max-w-none">
               <Image
                 src={HERO_MOCKUP_SRC}
                 alt="光谱云诊产品界面预览"

@@ -1,11 +1,11 @@
 /**
  * Hero 顶部渐变背景 bg_header.png (5760×1956)
- * - 与顶栏同高：Mobile/Pad 64px，Web 72px
+ * - 与顶栏同高（72px）：层盒下移 72px，背景图上移 72px，视觉仍贴页面顶
  * - 视口 < 1024px：background-size 1920px，水平居中，不随页面变窄缩小
  * - 视口 ≥ 1024px：background-size 100% auto，等比铺满宽度
  */
 :root {
-  --hero-header-offset: 64px;
+  --hero-header-offset: 72px;
 }
 
 .hero-header-bg-layer {
@@ -13,7 +13,7 @@
   left: 0;
   right: 0;
   top: var(--hero-header-offset);
-  margin-top: calc(-2 * var(--hero-header-offset));
+  margin-top: -144px;
   margin-bottom: 0;
   z-index: 0;
   width: 100%;
@@ -27,10 +27,6 @@
 }
 
 @media (min-width: 1024px) {
-  :root {
-    --hero-header-offset: 72px;
-  }
-
   .hero-header-bg-layer {
     aspect-ratio: 5760 / 1956;
     min-height: 0;

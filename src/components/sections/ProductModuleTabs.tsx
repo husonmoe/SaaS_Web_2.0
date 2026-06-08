@@ -40,7 +40,7 @@ export function ProductModuleTabs() {
         className="w-full overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <div
-          className="mx-auto flex w-full min-w-0 items-start justify-start gap-0 rounded-lg bg-[var(--bg-shell)] p-0.5 md:justify-between md:gap-2 md:rounded-2xl md:p-2 lg:w-max lg:justify-start"
+          className="mx-auto flex w-full min-w-0 items-start justify-start gap-0 rounded-lg bg-[var(--bg-shell)] p-0.5 md:w-max md:gap-2 md:rounded-2xl md:p-2"
           role="tablist"
           aria-label="产品模块"
         >
@@ -55,7 +55,7 @@ export function ProductModuleTabs() {
                 aria-selected={isActive}
                 onClick={() => setActiveId(tab.id)}
                 className={cn(
-                  "flex h-9 w-full min-w-0 flex-1 items-center justify-center rounded-md px-0 text-sm leading-[22px] transition-colors md:h-[52px] md:min-w-0 md:flex-1 md:shrink md:rounded-xl md:px-4 md:text-base md:leading-6 lg:w-auto lg:flex-none lg:shrink-0 lg:px-6",
+                  "flex h-9 w-full min-w-0 flex-1 items-center justify-center rounded-md px-0 text-sm leading-[22px] transition-colors md:h-[52px] md:w-auto md:flex-none md:shrink-0 md:rounded-xl md:px-6 md:text-xl md:leading-7",
                   isActive
                     ? "bg-[image:var(--gradient-primary)] font-medium text-white"
                     : "font-normal text-[var(--text-base)] hover:bg-white/80",

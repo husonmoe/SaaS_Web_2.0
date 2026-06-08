@@ -23,22 +23,3 @@
     background-size: 100% auto;
   }
 }
-
-/* Pad+：左内容 autofil + 24px 间距 + 右侧素材图贴边 */
-@media (min-width: 768px) {
-  .action-cta-grid.page-grid {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--grid-gutter);
-    align-items: center;
-  }
-
-  .action-cta-grid.page-grid > :first-child {
-    grid-column: 1;
-    min-width: 0;
-  }
-
-  .action-cta-grid.page-grid > :last-child {
-    grid-column: 2;
-    justify-self: end;
-  }
-}

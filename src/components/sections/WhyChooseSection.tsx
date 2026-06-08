@@ -75,7 +75,7 @@ function WhyChooseCard({ item }: { item: WhyChooseItem }) {
 
 export function WhyChooseSection() {
   return (
-    <section className="bg-[var(--bg-shell)] py-[60px] md:py-[80px]">
+    <section className="bg-[var(--bg-shell)] py-[60px] md:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         <FadeInOnScroll
           as="h2"
@@ -84,7 +84,7 @@ export function WhyChooseSection() {
           为什么选择光谱云诊
         </FadeInOnScroll>
 
-        <div className="grid w-full max-w-[1200px] grid-cols-2 gap-3 overflow-visible md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-6">
+        <div className="grid w-full max-w-[1200px] grid-cols-2 gap-3 overflow-visible md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {WHY_CHOOSE_ITEMS.map((item) => (
             <WhyChooseCard key={item.title} item={item} />
           ))}

@@ -4,7 +4,7 @@ import { FadeInOnScroll } from "@/components/ui/FadeInOnScroll";
 
 export function ProductSection() {
   return (
-    <section className="bg-[image:var(--gradient-section-product)] py-[60px] md:py-[80px]">
+    <section className="bg-[image:var(--gradient-section-product)] py-[60px] md:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-8 md:gap-10">
         <FadeInOnScroll
           as="h2"

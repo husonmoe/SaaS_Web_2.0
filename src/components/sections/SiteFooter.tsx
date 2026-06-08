@@ -84,10 +84,16 @@ const PRODUCT_LINKS: ProductFooterLink[] = [
 
 const FRIEND_LINKS = ["药师帮官网", "光谱健康官网", "掌店易Pro"];
 
-const CONTACT_INFO = [
+const CONTACT_MOBILE = [
   "400-666-5061",
   "zhengsuo@ysbang.cn",
   "09:30 - 18:30",
+];
+
+const CONTACT_DESKTOP = [
+  "客服 400-666-5061",
+  "邮箱 zhengsuo@ysbang.cn",
+  "服务时间 09:30 - 18:30",
 ];
 
 export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
@@ -116,13 +122,10 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
           ))}
         </div>
 
-        {/* 桌面端 · 服务特性：图标 + 标题 */}
-        <div className="hidden h-fit justify-start gap-0 py-6 md:flex">
+        {/* 桌面端 · 服务特性：图标 + 标题 + 描述 */}
+        <div className="hidden grid-cols-2 gap-6 py-12 md:grid lg:grid-cols-4">
           {SERVICES.map((item) => (
-            <div
-              key={item.title}
-              className="flex h-fit w-full flex-row items-center justify-start gap-1"
-            >
+            <div key={item.title} className="flex flex-col gap-2">
               <Image
                 src={item.iconSrc}
                 alt=""
@@ -132,8 +135,11 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
                 unoptimized
               />
               <div className="min-w-0">
-                <p className="text-base font-normal leading-6 text-[var(--text-secondary)]">
+                <p className="text-base font-medium leading-6 text-[var(--text-base)]">
                   {item.title}
+                </p>
+                <p className="text-sm leading-[22px] text-[var(--text-tertiary)]">
+                  {item.desc}
                 </p>
               </div>
             </div>
@@ -164,7 +170,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
               联系我们
             </p>
             <ul className="flex w-full flex-col items-start gap-1">
-              {CONTACT_INFO.map((line) => (
+              {CONTACT_MOBILE.map((line) => (
                 <li
                   key={line}
                   className="text-sm leading-[22px] text-[var(--text-secondary)]"
@@ -177,8 +183,8 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
         </div>
 
         {/* 桌面端 · 品牌 / 产品入口 / 友情链接 / 联系我们 */}
-        <div className="hidden gap-6 py-8 md:flex">
-          <div className="flex w-full flex-1 flex-col items-start justify-between gap-6 md:min-w-0">
+        <div className="hidden gap-6 py-12 md:grid md:grid-cols-2 lg:grid-cols-4">
+          <div className="flex w-full flex-col items-start gap-8">
             <Image
               src={ICONS.logo}
               alt="光谱云诊"
@@ -202,7 +208,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
           <FooterColumn title="友情链接" links={FRIEND_LINKS} />
           <FooterColumn
             title="联系我们"
-            links={CONTACT_INFO}
+            links={CONTACT_DESKTOP}
             interactive={false}
           />
         </div>
@@ -230,13 +236,13 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
         </div>
 
         {/* 桌面端 · 社交 + 版权 */}
-        <div className="hidden flex-col items-center gap-4 py-6 text-left md:flex lg:justify-between">
+        <div className="hidden flex-col items-start gap-6 py-12 text-left md:flex lg:flex-row lg:items-center lg:justify-between">
           <div className="flex gap-4">
             {FOOTER_SOCIAL_LINKS.map((item) => (
               <FooterSocialIcon key={item.id} {...item} />
             ))}
           </div>
-          <div className="flex flex-nowrap items-center justify-end gap-5 text-sm leading-[22px] text-[var(--text-tertiary)]">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-tertiary)]">
             <span>© 2023 广州光谱健康科技有限公司版权所有</span>
             <span>粤ICP备2021101844号-2</span>
             <span className="inline-flex items-center gap-1">
@@ -263,7 +269,7 @@ function FooterProductColumn() {
   const { open: openTrial } = useTrialModal();
 
   return (
-    <div className="w-full flex-1 md:min-w-0">
+    <div className="w-full md:pl-[52px]">
       <p className="mb-8 font-medium text-[var(--text-base)]">产品入口</p>
       <ul className="flex flex-col gap-4">
         {PRODUCT_LINKS.map((link) => (
@@ -439,7 +445,7 @@ function FooterColumn({
   interactive?: boolean;
 }) {
   return (
-    <div className="w-full flex-1 md:min-w-0">
+    <div className="w-full md:pl-[52px]">
       <p className="mb-8 font-medium text-[var(--text-base)]">{title}</p>
       <ul className="flex flex-col gap-4">
         {links.map((link) => (

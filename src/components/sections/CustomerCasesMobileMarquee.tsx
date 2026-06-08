@@ -22,17 +22,17 @@ function MarqueeRow({
   const loop = [...items, ...items];
 
   return (
-    <div className="customer-cases-marquee flex">
+    <div className="customer-cases-marquee">
       <div
         className={cn(
-          "customer-cases-marquee-track flex w-max items-end gap-2",
+          "customer-cases-marquee-track flex w-max",
           offset && "customer-cases-marquee-track--offset",
         )}
       >
         {loop.map((item, index) => (
           <div
             key={`${item.id}-${index}`}
-            className="mr-3 flex w-[300px] shrink-0 items-end"
+            className="mr-3 w-[280px] shrink-0"
           >
             <CustomerCaseCard {...item} />
           </div>
@@ -44,7 +44,7 @@ function MarqueeRow({
 
 export function CustomerCasesMobileMarquee() {
   return (
-    <div className="customer-cases-marquee-bleed flex flex-col gap-6 lg:hidden">
+    <div className="customer-cases-marquee-bleed flex flex-col gap-4 lg:hidden">
       <MarqueeRow items={ROW_ONE} />
       <MarqueeRow items={ROW_TWO} offset />
     </div>
