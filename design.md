@@ -98,16 +98,6 @@
 
 ## 5. Pad / Mobile 适配
 
-### 5.0 分支策略
-
-| 分支 | 职责 |
-| --- | --- |
-| `main` | Web（≥1024px）+ 已合并 Mobile |
-| `feat-pad-adapt` | **仅 Pad（768–1023，`md:`）** — 本分支样式 |
-| `feat-mobile-adapt` | 仅 Mobile（375–767） |
-
-合并 `main` 前须在 1024px / 1920px 回归 Web，避免 `md:` 污染大屏（必要时补 `lg:` 锁回）。
-
 > 对照 Figma Pad（834px 画板）与 Mobile（375px 画板），按视口 768–1023 / 375–767 验收。
 
 ### 5.1 全局与布局
