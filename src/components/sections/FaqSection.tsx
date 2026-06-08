@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: FaqItem }) {
   return (
-    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-6 md:py-7">
+    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-6 md:py-7 lg:px-8">
       <div className="flex gap-3 md:gap-4">
         <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
@@ -33,7 +33,7 @@ function FaqCard({ item }: { item: FaqItem }) {
 
 export function FaqSection() {
   return (
-    <section className="bg-white py-[60px] md:py-[100px]">
+    <section className="bg-white py-[60px] md:py-[80px] lg:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         <FadeInOnScroll
           as="h2"

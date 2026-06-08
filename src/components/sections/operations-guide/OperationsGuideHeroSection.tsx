@@ -4,7 +4,7 @@ import { OPERATIONS_GUIDE_HERO } from "@/components/sections/operations-guide/op
 
 export function OperationsGuideHeroSection() {
   return (
-    <section className="page-hero-section operations-guide-hero-section relative isolate overflow-visible pt-[60px] pb-[60px] md:pb-[100px]">
+    <section className="page-hero-section operations-guide-hero-section relative isolate overflow-visible pt-[60px] pb-[60px] md:pb-[100px] lg:pt-[100px] lg:pb-16">
       <PageHeroBgLayer />
 
       <PageContainer className="relative z-10 flex flex-col items-center">
@@ -12,7 +12,7 @@ export function OperationsGuideHeroSection() {
           <h1 className="text-3xl font-semibold leading-[38px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
             {OPERATIONS_GUIDE_HERO.title}
           </h1>
-          <p className="text-lg text-[var(--text-secondary)] md:text-xl">
+          <p className="text-lg text-[var(--text-secondary)] md:text-xl lg:max-w-[840px] lg:text-2xl lg:leading-8">
             {OPERATIONS_GUIDE_HERO.subtitle}
           </p>
         </header>

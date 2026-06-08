@@ -24,7 +24,7 @@ export function HeroSection() {
             as="div"
             className="hero-page-grid-text col-span-full flex w-full flex-col items-center gap-6 text-center md:gap-10 lg:items-start lg:gap-10 lg:text-left"
           >
-            <div className="flex flex-col gap-2 md:gap-6 lg:gap-6">
+            <div className="flex flex-col gap-2 md:gap-5 lg:gap-6">
               <div className="flex items-center justify-center gap-1 lg:justify-start">
                 <Image
                   src={LAUREL_LEFT}
@@ -47,7 +47,7 @@ export function HeroSection() {
                 />
               </div>
 
-              <h1 className="text-[36px] font-medium leading-[52px] text-[var(--text-base)] md:text-[52px] md:leading-[68px] md:whitespace-nowrap">
+              <h1 className="text-[36px] font-medium leading-[52px] text-[var(--text-base)] md:text-[52px] md:leading-[68px] md:whitespace-nowrap lg:whitespace-normal">
                 开诊所就用
                 <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-end)] bg-clip-text text-transparent">
                   光谱云诊
@@ -78,7 +78,7 @@ export function HeroSection() {
             as="div"
             className="hero-page-grid-media col-span-full mt-16 w-full max-w-[640px] shrink-0 md:mt-20 lg:mt-0 lg:max-w-[640px]"
           >
-            <div className="relative mx-auto w-full lg:max-w-none">
+            <div className="relative mx-auto w-full max-w-[660px] lg:max-w-none">
               <Image
                 src={HERO_MOCKUP_SRC}
                 alt="光谱云诊产品界面预览"

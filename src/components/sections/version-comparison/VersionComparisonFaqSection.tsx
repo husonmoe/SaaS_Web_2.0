@@ -9,24 +9,24 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: VersionComparisonFaqItem }) {
   return (
-    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
-      <div className="flex gap-3 md:gap-4">
-        <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
+    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7 lg:rounded-2xl lg:px-8 lg:py-7">
+      <div className="flex gap-3 md:gap-4 lg:gap-4">
+        <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit lg:block lg:h-fit">
           <Image
             src={VERSION_COMPARISON_FAQ_ICON}
             alt=""
             width={24}
             height={24}
-            className="size-5 md:size-6"
+            className="size-5 md:size-6 lg:size-6"
             aria-hidden
             unoptimized
           />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7">
+          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7 lg:text-lg lg:font-semibold lg:leading-7">
             {item.title}
           </h3>
-          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
+          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6 lg:mt-2 lg:text-base lg:leading-6">
             {item.answer}
           </p>
         </div>

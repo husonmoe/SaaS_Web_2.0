@@ -31,14 +31,14 @@ function StepItem({ step, label, iconSrc }: VersionComparisonStep) {
   );
 }
 
-function StepArrow() {
+function StepArrow({ className }: { className?: string }) {
   return (
     <Image
       src={VERSION_COMPARISON_STEP_ARROW}
       alt=""
       width={24}
       height={24}
-      className="size-6 shrink-0"
+      className={className ?? "size-6 shrink-0"}
       aria-hidden
     />
   );
@@ -59,7 +59,8 @@ export function VersionComparisonStepsSection() {
             简单四步，开启诊所新体验
           </h2>
 
-          <div className="flex w-full max-w-[1200px] flex-col items-center gap-8">
+          {/* Mobile / Pad：2×2 网格 */}
+          <div className="flex w-full max-w-[1200px] flex-col items-center gap-8 lg:hidden">
             {STEP_ROW_PAIRS.map((row) => (
               <div
                 key={row[0].step}
@@ -72,6 +73,18 @@ export function VersionComparisonStepsSection() {
                   </Fragment>
                 ))}
               </div>
+            ))}
+          </div>
+
+          {/* Web：单行横排 */}
+          <div className="hidden w-full max-w-[1200px] flex-col items-center gap-0 lg:flex lg:flex-row lg:justify-between">
+            {VERSION_COMPARISON_STEPS.map((item, index) => (
+              <Fragment key={item.step}>
+                {index > 0 ? (
+                  <StepArrow className="size-6 shrink-0 rotate-0" />
+                ) : null}
+                <StepItem {...item} />
+              </Fragment>
             ))}
           </div>
         </div>

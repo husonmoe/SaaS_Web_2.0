@@ -17,10 +17,10 @@ export function OperationsGuideArticleCard({
       href={operationsGuideDetailPath(slug)}
       target="_blank"
       rel="noopener noreferrer"
-      className="operations-guide-article-card group flex h-fit w-full flex-col self-start overflow-hidden rounded-xl border border-[var(--border-light)] bg-[var(--bg-white)] transition-[box-shadow] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+      className="operations-guide-article-card group flex h-fit w-full flex-col self-start overflow-hidden rounded-xl border border-[var(--border-light)] bg-[var(--bg-white)] transition-[box-shadow] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] lg:rounded-2xl"
       aria-label={`阅读：${title}（新标签页打开）`}
     >
-      <div className="p-2 md:p-4">
+      <div className="p-2 md:p-4 lg:p-4">
         <div className="relative aspect-[282/120] w-full overflow-hidden rounded-md">
           <Image
             src={coverSrc}
@@ -33,11 +33,11 @@ export function OperationsGuideArticleCard({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 px-3 pb-3 md:gap-6 md:px-6 md:pb-4">
-        <h2 className="line-clamp-2 text-sm font-medium leading-5 text-[var(--text-base)] md:text-base md:leading-6">
+      <div className="flex flex-1 flex-col gap-3 px-3 pb-3 md:gap-6 md:px-6 md:pb-4 lg:gap-6 lg:px-6 lg:pb-4">
+        <h2 className="line-clamp-2 text-sm font-medium leading-5 text-[var(--text-base)] md:text-base md:leading-6 lg:text-base lg:leading-6">
           {title}
         </h2>
-        <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs leading-5 text-[var(--text-tertiary)] md:gap-4">
+        <div className="flex gap-4 text-xs leading-5 text-[var(--text-tertiary)] max-lg:flex-wrap max-lg:gap-x-2 max-lg:gap-y-1">
           <span>{publishedAt}</span>
           <span>{viewCount}人看过</span>
         </div>

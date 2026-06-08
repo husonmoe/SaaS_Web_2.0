@@ -6,7 +6,7 @@ import { CustomerCasesScroller } from "@/components/sections/CustomerCasesScroll
 
 export function CustomerCasesSection() {
   return (
-    <section className="relative overflow-hidden bg-[var(--bg-shell)] py-[60px] md:py-[80px]">
+    <section className="relative overflow-hidden bg-[var(--bg-shell)] py-[60px] md:py-[80px] lg:py-[100px]">
       <div className="customer-cases-bg-layer" aria-hidden />
 
       <PageContainer className="relative z-10 flex flex-col items-center gap-8 md:gap-16">

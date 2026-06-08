@@ -61,13 +61,24 @@ export function UserManualCategoryBar({
   const [chipsCollapsed, setChipsCollapsed] = useState(false);
   const [categoryRowHeight, setCategoryRowHeight] = useState(0);
   const [topicBarHeight, setTopicBarHeight] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const stickyBarHeight =
     chipsStuck && categoryRowHeight > 0
-      ? chipsCollapsed
-        ? topicBarHeight
-        : categoryRowHeight + topicBarHeight
+      ? isDesktop
+        ? categoryRowHeight
+        : chipsCollapsed
+          ? topicBarHeight
+          : categoryRowHeight + topicBarHeight
       : 0;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const syncDesktop = () => setIsDesktop(mq.matches);
+    syncDesktop();
+    mq.addEventListener("change", syncDesktop);
+    return () => mq.removeEventListener("change", syncDesktop);
+  }, []);
 
   useEffect(() => {
     const sentinel = stickySentinelRef.current;
@@ -160,7 +171,7 @@ export function UserManualCategoryBar({
     resetScrollMonitor();
 
     const updateCollapseByDirection = () => {
-      if (animatingRef.current) return;
+      if (isDesktop || animatingRef.current) return;
 
       const currentY = window.scrollY;
       const delta = currentY - lastScrollYRef.current;
@@ -205,7 +216,7 @@ export function UserManualCategoryBar({
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [chipsStuck]);
+  }, [chipsStuck, isDesktop]);
 
   useEffect(() => {
     const scope = scopeRef.current;
@@ -316,7 +327,7 @@ export function UserManualCategoryBar({
               "transition-[height] duration-300 ease-in-out",
           )}
           style={
-            shouldAnimateCollapse && categoryRowHeight > 0
+            shouldAnimateCollapse && categoryRowHeight > 0 && !isDesktop
               ? { height: chipsCollapsed ? 0 : categoryRowHeight }
               : undefined
           }
@@ -325,10 +336,11 @@ export function UserManualCategoryBar({
           <div
             ref={categoryScrollRef}
             className={cn(
-              "w-full overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "w-full overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-visible",
               shouldAnimateCollapse &&
+                !isDesktop &&
                 "will-change-transform transition-transform duration-300 ease-in-out",
-              shouldAnimateCollapse && chipsCollapsed && "-translate-y-full",
+              shouldAnimateCollapse && chipsCollapsed && !isDesktop && "-translate-y-full",
             )}
           >
             <div
@@ -336,8 +348,8 @@ export function UserManualCategoryBar({
               className={cn(
                 "flex w-max min-w-full flex-nowrap items-center justify-start gap-3",
                 "px-[var(--page-margin-x)] pb-3 pt-3",
-                "lg:mx-auto lg:max-w-[1200px] lg:justify-start lg:px-6",
-                chipsStuck && chipsCollapsed && "pointer-events-none",
+                "lg:mx-auto lg:w-full lg:max-w-[1200px] lg:flex-wrap lg:justify-center lg:px-6 lg:py-6",
+                chipsStuck && chipsCollapsed && !isDesktop && "pointer-events-none",
               )}
               role="tablist"
               aria-label="手册分类"
@@ -356,7 +368,7 @@ export function UserManualCategoryBar({
                     tabIndex={chipsStuck && chipsCollapsed ? -1 : undefined}
                     onClick={() => handleCategorySelect(category.id)}
                     className={cn(
-                      "inline-flex h-fit w-fit shrink-0 whitespace-nowrap items-center justify-center rounded-lg px-4 py-2.5 text-sm leading-[22px] transition-colors",
+                      "inline-flex h-fit w-fit shrink-0 whitespace-nowrap items-center justify-center rounded-lg px-4 py-2.5 text-sm leading-[22px] transition-colors lg:h-10 lg:min-w-10",
                       active
                         ? "bg-gradient-to-r from-[var(--color-primary-end)] to-[var(--color-primary)] text-white"
                         : "bg-[var(--bg-shell)] text-[var(--text-base)] hover:bg-[var(--user-manual-chip-hover)]",
@@ -370,7 +382,7 @@ export function UserManualCategoryBar({
           </div>
         </div>
 
-        <div ref={topicBarWrapRef}>
+        <div ref={topicBarWrapRef} className="lg:hidden">
           <UserManualTopicBar
             activeCategoryId={activeCategoryId}
             activeTopicId={activeTopicId}

@@ -75,7 +75,7 @@ function WhyChooseCard({ item }: { item: WhyChooseItem }) {
 
 export function WhyChooseSection() {
   return (
-    <section className="bg-[var(--bg-shell)] py-[60px] md:py-[80px]">
+    <section className="bg-[var(--bg-shell)] py-[60px] md:py-[80px] lg:py-[100px]">
       <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
         <FadeInOnScroll
           as="h2"

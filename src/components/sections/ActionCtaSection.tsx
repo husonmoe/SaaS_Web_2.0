@@ -51,14 +51,14 @@ export function ActionCtaSection() {
   return (
     <section
       id={ACTION_CTA_SECTION_ID}
-      className="relative h-fit overflow-hidden py-0"
+      className="relative h-fit overflow-hidden py-0 lg:h-[264px]"
     >
       <div className="action-cta-bg-layer" aria-hidden />
 
-      <PageContainer className="relative z-10 h-fit w-full py-8 md:py-0">
-        <FadeInOnScroll as="div" className="h-fit">
-          <PageGrid className="action-cta-grid h-fit items-start gap-10">
-          <div className="flex flex-col items-start justify-center gap-6 self-stretch py-8 md:h-full">
+      <PageContainer className="relative z-10 h-fit w-full py-8 md:py-0 lg:h-full lg:py-0">
+        <FadeInOnScroll as="div" className="h-fit lg:h-full">
+          <PageGrid className="action-cta-grid h-fit items-start gap-10 lg:h-full lg:gap-12">
+          <div className="col-span-full flex flex-col items-start justify-center gap-6 self-stretch py-8 md:h-full lg:col-span-5 lg:h-full lg:gap-8 lg:py-0">
             <div className="flex flex-col gap-2 lg:gap-3">
               <h2 className="text-2xl font-semibold leading-8 text-[var(--text-base)] lg:text-[28px] lg:leading-[36px]">
                 体验光谱云诊
@@ -68,15 +68,15 @@ export function ActionCtaSection() {
               </p>
             </div>
 
-            <div className="flex h-12 w-full flex-row items-stretch gap-2 lg:h-auto lg:gap-3">
-              <label className="relative w-full min-w-0 flex-1">
+            <div className="flex h-12 w-full flex-row items-stretch gap-2 lg:h-auto lg:max-w-[480px] lg:gap-3">
+              <label className="relative min-w-0 flex-1">
                 <span className="sr-only">手机号</span>
                 <Image
                   src={PHONE_ICON_SRC}
                   alt=""
                   width={20}
                   height={20}
-                  className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 lg:left-4"
+                  className="pointer-events-none absolute left-2 top-1/2 size-5 -translate-y-1/2 lg:left-4"
                   aria-hidden
                   unoptimized
                 />
@@ -99,7 +99,7 @@ export function ActionCtaSection() {
                   }}
                   placeholder="请输入手机号"
                   autoComplete="tel"
-                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-9 pr-4 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:rounded-xl lg:pl-11 lg:pr-4"
+                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:rounded-xl lg:pl-11 lg:pr-4"
                 />
               </label>
               <Button
@@ -112,8 +112,8 @@ export function ActionCtaSection() {
             </div>
           </div>
 
-          <div className="hidden shrink-0 md:flex md:h-full md:w-[320px] md:items-end md:justify-center lg:w-[486px]">
-            <div className="relative w-full shrink-0">
+          <div className="col-span-full hidden shrink-0 md:flex md:h-full md:w-[320px] md:items-end md:justify-center lg:col-span-7 lg:w-auto lg:justify-end">
+            <div className="relative mx-auto w-full max-w-[486px] shrink-0 lg:mx-0 lg:w-[486px] lg:max-w-[486px]">
               <Image
                 src={ACTION_MOCKUP_SRC}
                 alt="光谱云诊多终端产品界面"

@@ -12,9 +12,9 @@ export function CustomerCaseCard({
   const tag = VERSION_TAG_STYLES[version];
 
   return (
-    <article className="flex h-[94px] w-full shrink-0 flex-col rounded-lg bg-white px-4 py-3 shadow-[0_4px_24px_rgba(23,28,33,0.04)] md:h-[136px] md:px-8 md:py-6 lg:rounded-2xl">
-      <div className="flex min-w-0 flex-nowrap items-center gap-3">
-        <h3 className="min-w-0 flex-1 truncate text-base font-medium leading-6 text-[var(--text-base)] md:text-xl md:leading-7">
+    <article className="flex h-[94px] w-full shrink-0 flex-col rounded-lg bg-white px-4 py-3 shadow-[0_4px_24px_rgba(23,28,33,0.04)] md:h-[136px] md:rounded-xl md:px-8 md:py-6 lg:h-auto lg:rounded-2xl">
+      <div className="flex min-w-0 flex-nowrap items-center gap-3 lg:flex-wrap">
+        <h3 className="min-w-0 flex-1 truncate text-base font-medium leading-6 text-[var(--text-base)] md:text-xl md:leading-7 lg:truncate-none">
           {location}
         </h3>
         <span
@@ -27,7 +27,7 @@ export function CustomerCaseCard({
           {versionLabel}
         </span>
       </div>
-      <p className="mt-0.5 line-clamp-2 text-sm leading-[22px] text-[var(--text-secondary)] md:mt-3 md:text-base md:leading-6">
+      <p className="mt-0.5 line-clamp-2 text-sm leading-[22px] text-[var(--text-secondary)] md:mt-3 md:text-base md:leading-6 lg:line-clamp-none lg:break-words">
         {quote}
       </p>
     </article>

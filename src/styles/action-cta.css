@@ -24,8 +24,8 @@
   }
 }
 
-/* Pad+：左内容 autofil + 24px 间距 + 右侧素材图贴边 */
-@media (min-width: 768px) {
+/* Pad（768–1023）：左内容 autofil + 24px 间距 + 右侧素材图贴边 */
+@media (min-width: 768px) and (max-width: 1023px) {
   .action-cta-grid.page-grid {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--grid-gutter);
