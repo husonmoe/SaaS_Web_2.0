@@ -123,11 +123,11 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
         </div>
 
         {/* 桌面端 · 服务特性：Pad 横排 / Web 四列含描述 */}
-        <div className="hidden h-fit justify-start gap-0 py-6 md:flex lg:grid lg:grid-cols-4 lg:gap-6 lg:py-12">
+        <div className="hidden h-fit justify-start gap-0 py-6 md:flex md:justify-between lg:grid lg:grid-cols-4 lg:justify-start lg:gap-6 lg:py-12">
           {SERVICES.map((item) => (
             <div
               key={item.title}
-              className="flex h-fit w-full flex-row items-center justify-start gap-1 md:flex-1 lg:flex-row lg:items-center lg:gap-2"
+              className="flex h-fit w-full flex-row items-center justify-start gap-1 md:w-fit md:flex-none lg:w-full lg:flex-row lg:items-center lg:gap-2"
             >
               <Image
                 src={item.iconSrc}

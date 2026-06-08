@@ -35,7 +35,7 @@ export function UserManualFeedback() {
   }
 
   return (
-    <div className={cn(FEEDBACK_SHELL_CLASS, "h-fit flex-col items-center justify-center gap-3 md:flex-row lg:justify-between lg:gap-6")}>
+    <div className={cn(FEEDBACK_SHELL_CLASS, "h-fit flex-col items-center justify-center gap-3 md:flex-row md:items-center md:overflow-hidden lg:justify-between lg:gap-6")}>
       <p className="shrink-0 text-center text-xl font-medium leading-7 text-[var(--text-base)] lg:text-left">
         内容是否有帮助？
       </p>

@@ -44,7 +44,7 @@ const NAV_LINK_CLASS =
   "shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
 
 const MOBILE_NAV_LINK_CLASS =
-  "flex h-12 shrink-0 items-center justify-start rounded-none px-[var(--page-margin-x)] text-base text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
+  "flex h-12 shrink-0 items-center justify-start rounded-none px-6 text-base text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
 
 function NavLink({
   item,

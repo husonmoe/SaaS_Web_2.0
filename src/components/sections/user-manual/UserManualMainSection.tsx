@@ -30,7 +30,7 @@ export function UserManualMainSection({
   const showTopicLayout = topics.length > 0;
 
   return (
-    <section className="pb-0">
+    <section className="pb-0 lg:pb-[100px]">
       <PageContainer className="flex flex-col items-center gap-[40px] py-[60px] lg:gap-[100px] lg:py-0">
         {showTopicLayout ? (
           <div className="flex w-full max-w-[1200px] flex-col gap-12 lg:mt-16 lg:flex-row lg:gap-6">
