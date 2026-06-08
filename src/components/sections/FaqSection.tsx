@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: FaqItem }) {
   return (
-    <article className="rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
+    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-8 md:py-7">
       <div className="flex gap-3 md:gap-4">
         <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
@@ -44,7 +44,7 @@ export function FaqSection() {
 
         <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           {FAQ_ITEMS.map((item) => (
-            <FadeInOnScroll key={item.id} as="div">
+            <FadeInOnScroll key={item.id} as="div" className="h-full">
               <FaqCard item={item} />
             </FadeInOnScroll>
           ))}

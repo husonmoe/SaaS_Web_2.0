@@ -76,7 +76,7 @@ export function ActionCtaSection() {
                   alt=""
                   width={20}
                   height={20}
-                  className="pointer-events-none absolute left-2 top-1/2 size-5 -translate-y-1/2 lg:left-4"
+                  className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 lg:left-4"
                   aria-hidden
                   unoptimized
                 />
@@ -99,7 +99,7 @@ export function ActionCtaSection() {
                   }}
                   placeholder="请输入手机号"
                   autoComplete="tel"
-                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-8 pr-2 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:rounded-xl lg:pl-11 lg:pr-4"
+                  className="h-12 w-full rounded-lg border border-[var(--border-light)] bg-white pl-9 pr-2 text-base leading-6 text-[var(--text-base)] outline-none transition-colors placeholder:text-[var(--text-tertiary)] focus:border-[var(--color-primary)] lg:rounded-xl lg:pl-11 lg:pr-4"
                 />
               </label>
               <Button

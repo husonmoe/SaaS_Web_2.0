@@ -52,7 +52,7 @@ export function UserManualTopicBar({
       <nav
         className={cn(
           "flex w-max min-w-full flex-nowrap items-center justify-start gap-6",
-          "px-[var(--page-margin-x)] pb-0 pt-0",
+          "px-6 pb-0 pt-0",
         )}
         aria-label="手册目录"
       >

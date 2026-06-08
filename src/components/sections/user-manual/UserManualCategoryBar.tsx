@@ -328,14 +328,16 @@ export function UserManualCategoryBar({
               "w-full overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               shouldAnimateCollapse &&
                 "will-change-transform transition-transform duration-300 ease-in-out",
-              shouldAnimateCollapse && chipsCollapsed && "-translate-y-full",
+              shouldAnimateCollapse &&
+                !isDesktop &&
+                (chipsCollapsed ? "-translate-y-full" : "translate-y-0"),
             )}
           >
             <div
               ref={categoryRowRef}
               className={cn(
-                "flex w-max min-w-full flex-nowrap items-center justify-start gap-3",
-                "px-[var(--page-margin-x)] pb-3 pt-3",
+                "flex w-full flex-nowrap items-center justify-start gap-3",
+                "px-6 pb-3 pt-3",
                 "lg:mx-auto lg:max-w-[1200px] lg:justify-start lg:px-6",
                 chipsStuck && chipsCollapsed && "pointer-events-none",
               )}

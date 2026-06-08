@@ -30,8 +30,8 @@ export function UserManualMainSection({
   const showTopicLayout = topics.length > 0;
 
   return (
-    <section>
-      <PageContainer className="flex flex-col items-center gap-[60px] py-[60px]">
+    <section className="pb-0">
+      <PageContainer className="flex flex-col items-center gap-[40px] py-[60px]">
         {showTopicLayout ? (
           <div className="flex w-full max-w-[1200px] flex-col gap-12 lg:mt-16 lg:flex-row lg:gap-6">
             <aside className="user-manual-sidebar hidden w-full shrink-0 lg:block lg:w-[282px] lg:sticky lg:z-30 lg:self-start">

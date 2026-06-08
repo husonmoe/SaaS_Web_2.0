@@ -51,7 +51,7 @@ const WHY_CHOOSE_ITEMS: WhyChooseItem[] = [
 function WhyChooseCard({ item }: { item: WhyChooseItem }) {
   return (
     <FadeInOnScroll as="div" className="h-full">
-      <TiltCard className="flex h-full flex-col items-center rounded-xl px-4 py-6 text-center md:rounded-2xl md:px-6 md:py-10">
+      <TiltCard className="flex h-full flex-col items-center justify-center rounded-xl px-6 py-8 text-center md:rounded-2xl md:px-6 md:py-10">
         <Image
           src={item.iconSrc}
           alt=""

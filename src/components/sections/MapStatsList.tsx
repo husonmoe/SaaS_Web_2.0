@@ -37,7 +37,7 @@ export function MapStatsList({
               className="size-1 shrink-0 rounded-full bg-[var(--text-tertiary)] lg:mt-2"
               aria-hidden
             />
-            <span className="text-xs leading-5 text-[var(--text-secondary)] lg:text-base lg:leading-6">
+            <span className="text-sm leading-[22px] text-[var(--text-secondary)] lg:text-base lg:leading-6">
               {item.before}
               <AnimatedMapStatNumber
                 target={item.target}
