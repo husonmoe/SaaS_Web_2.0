@@ -8,7 +8,7 @@ export function ProductSection() {
       <PageContainer className="flex flex-col items-center gap-8 md:gap-10">
         <FadeInOnScroll
           as="h2"
-          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[36px] md:font-semibold md:leading-[48px] lg:text-[44px] lg:leading-[56px]"
         >
           让诊所经营更简单
         </FadeInOnScroll>

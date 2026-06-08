@@ -16,7 +16,7 @@ export function OperationsGuideListSection() {
 
   return (
     <section className="operations-guide-list-section pb-12 md:pb-16">
-      <PageContainer className="flex flex-col items-center gap-12 md:gap-16">
+      <PageContainer className="flex flex-col items-center gap-12 md:gap-10">
         <div className="grid w-full max-w-[1200px] grid-cols-2 items-start gap-x-3 gap-y-6 md:gap-x-6 lg:grid-cols-4 lg:gap-6">
           {visibleArticles.map((article) => (
             <OperationsGuideArticleCard key={article.id} {...article} />
@@ -32,7 +32,7 @@ export function OperationsGuideListSection() {
               )
             }
             className={cn(
-              "inline-flex h-14 min-h-14 w-[200px] items-center justify-center rounded-full border border-[var(--border-light)] bg-white px-5 text-base text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)] md:h-[60px] md:min-h-[60px] md:w-auto md:px-10 md:text-lg md:leading-[26px] lg:min-w-[188px] lg:bg-[var(--bg-white)]",
+              "flex h-14 min-h-14 w-[200px] items-center justify-center rounded-full border border-[var(--border-light)] bg-white px-5 text-base text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)] lg:h-[60px] lg:min-h-[60px] lg:w-auto lg:px-10 lg:text-lg",
             )}
           >
             加载更多内容

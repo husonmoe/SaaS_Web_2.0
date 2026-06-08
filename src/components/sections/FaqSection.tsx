@@ -5,8 +5,8 @@ import Image from "next/image";
 
 function FaqCard({ item }: { item: FaqItem }) {
   return (
-    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-6 md:py-7 lg:px-8">
-      <div className="flex gap-3 md:gap-4">
+    <article className="h-full rounded-xl bg-[var(--bg-shell)] px-4 py-4 md:rounded-2xl md:px-4 md:py-6 lg:px-8 lg:py-7">
+      <div className="flex gap-3 lg:gap-4">
         <span className="flex h-6 shrink-0 flex-col items-center justify-center py-[2px] md:block md:h-fit">
           <Image
             src={item.iconSrc}
@@ -19,10 +19,10 @@ function FaqCard({ item }: { item: FaqItem }) {
           />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] md:text-lg md:font-semibold md:leading-7">
+          <h3 className="text-base font-medium leading-6 text-[var(--text-base)] lg:text-lg lg:font-semibold lg:leading-7">
             {item.title}
           </h3>
-          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6">
+          <p className="mt-0.5 text-sm leading-[22px] text-[var(--text-secondary)] lg:text-base lg:leading-6">
             {item.answer}
           </p>
         </div>
@@ -34,10 +34,10 @@ function FaqCard({ item }: { item: FaqItem }) {
 export function FaqSection() {
   return (
     <section className="bg-white py-[60px] md:py-[80px] lg:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-10 lg:gap-16">
         <FadeInOnScroll
           as="h2"
-          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[36px] md:font-semibold md:leading-[48px] lg:text-[44px] lg:leading-[56px]"
         >
           常见问题
         </FadeInOnScroll>

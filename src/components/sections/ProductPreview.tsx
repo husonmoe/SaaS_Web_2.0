@@ -214,7 +214,7 @@ function ProductPreviewDots({
 
 function ProductPreviewHeadline({ content }: { content: ProductTabContent }) {
   return (
-    <div className="text-center text-2xl font-medium leading-7 text-[var(--text-base)] md:text-[32px] md:leading-[44px]">
+    <div className="text-center text-2xl font-medium leading-7 text-[var(--text-base)] md:text-[28px] md:leading-[36px] lg:text-[32px] lg:leading-[44px]">
       <p className="mb-0">
         <HeadlineLine part={content.headline[0]} />{" "}
         <HeadlineLine part={content.headline[1]} />

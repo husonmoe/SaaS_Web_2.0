@@ -160,6 +160,123 @@ function MatrixHeaderMobile({ stuck = false }: { stuck?: boolean }) {
   );
 }
 
+/** Pad 完整表头（768–1023px） */
+function MatrixHeaderPad({
+  hideIdentical,
+  onHideIdenticalChange,
+  stuck = false,
+}: {
+  hideIdentical: boolean;
+  onHideIdenticalChange: (checked: boolean) => void;
+  stuck?: boolean;
+}) {
+  const { open: openTrialModal } = useTrialModal();
+
+  const borderTone = stuck
+    ? "border-transparent"
+    : "border-[var(--border-light)]";
+
+  return (
+    <div
+      className={cn(
+        "grid w-full min-w-0 grid-cols-4 overflow-hidden border bg-[var(--bg-white)]",
+        stuck ? "rounded-none" : "rounded-xl",
+        borderTone,
+      )}
+    >
+      <div
+        className={cn(
+          "flex min-h-[120px] flex-col justify-between gap-3 bg-white p-3 md:min-h-[158px] md:p-4",
+          stuck ? "border-r border-transparent" : "border-r",
+          borderTone,
+        )}
+      >
+        <div className="flex flex-col gap-1">
+          <p className="text-xl font-medium leading-7 text-[var(--text-base)]">
+            版本
+          </p>
+          <button
+            type="button"
+            className="inline-flex w-fit items-center gap-1 text-xs leading-[22px] text-[var(--color-primary)] md:text-sm"
+          >
+            <span
+              className="inline-block size-4 shrink-0 bg-[var(--color-primary)]"
+              style={{
+                mask: `url(${ASSET_BASE}/icon_list_square.svg) center / contain no-repeat`,
+                WebkitMask:
+                  `url(${ASSET_BASE}/icon_list_square.svg) center / contain no-repeat`,
+              }}
+              aria-hidden
+            />
+            获取报价单
+          </button>
+        </div>
+        <label className="group inline-flex h-10 cursor-pointer items-center gap-2 text-xs leading-[22px] text-[var(--text-secondary)] md:text-sm md:text-[var(--text-base)]">
+          <input
+            type="checkbox"
+            checked={hideIdentical}
+            onChange={(e) => onHideIdenticalChange(e.target.checked)}
+            className="size-4 shrink-0 cursor-pointer appearance-none rounded border border-[var(--border-light)] bg-white transition-[background-color,border-color,filter] duration-150 checked:border-[var(--color-primary)] checked:bg-[var(--color-primary)] checked:bg-[length:10px_10px] checked:bg-center checked:bg-no-repeat focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] group-hover:[&:not(:checked)]:border-[var(--color-primary)] group-hover:[&:not(:checked)]:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] group-active:[&:not(:checked)]:border-[var(--color-primary)] group-active:[&:not(:checked)]:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)] [&:not(:checked):hover]:border-[var(--color-primary)] [&:not(:checked):hover]:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] [&:not(:checked):active]:border-[var(--color-primary)] [&:not(:checked):active]:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)] checked:group-hover:brightness-[0.92] checked:group-active:brightness-[0.85] checked:hover:brightness-[0.92] checked:active:brightness-[0.85]"
+            style={{
+              backgroundImage: hideIdentical
+                ? MATRIX_CHECKBOX_CHECKMARK
+                : undefined,
+            }}
+          />
+          隐藏相同选项
+        </label>
+      </div>
+
+      {COLUMN_IDS.map((columnId) => {
+        const plan = planByColumn(columnId);
+        const theme = VERSION_THEMES[plan.theme];
+
+        return (
+          <div
+            key={columnId}
+            className={cn(
+              "flex min-h-[120px] min-w-0 flex-col items-center justify-between gap-2 bg-white p-3 md:min-h-[158px] md:gap-0 md:p-4",
+              stuck
+                ? "border-r border-transparent last:border-r-0"
+                : "border-r last:border-r-0",
+              borderTone,
+            )}
+          >
+            <div className="flex w-full min-w-0 flex-col items-center gap-1 text-center">
+              <div className="flex items-center justify-center gap-1 md:gap-2">
+                <Image
+                  src={theme.diamondIcon}
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="size-5 shrink-0 md:size-6"
+                  unoptimized
+                />
+                <p
+                  className="text-base font-semibold leading-6 md:text-xl md:leading-7"
+                  style={{ color: theme.color }}
+                >
+                  {plan.title}
+                </p>
+              </div>
+              <p className="text-xs leading-[22px] text-[var(--text-secondary)] md:text-sm">
+                {plan.subtitle}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="inline-flex h-8 min-h-8 items-center justify-center rounded-lg border border-[var(--border-light)] bg-white px-3 text-xs leading-[22px] text-[var(--text-base)] transition-colors hover:bg-[var(--btn-outline-hover)] active:bg-[var(--btn-outline-active)] md:h-10 md:min-h-10 md:px-4 md:text-sm"
+              onClick={() => openTrialModal()}
+            >
+              立即试用
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /** Web 完整表头（恢复 PR #3 前样式） */
 function MatrixHeaderWeb({
   hideIdentical,
@@ -275,7 +392,7 @@ function MatrixHeaderWeb({
 function MatrixRow({ row }: { row: ComparisonFeatureRow }) {
   return (
     <div className="grid w-full grid-cols-4 border-b border-[var(--border-light)] bg-white last:border-b-0">
-      <div className="flex h-full min-w-0 items-center gap-2 border-r border-[var(--border-light)] px-3 py-3 lg:px-6">
+      <div className="flex h-full min-w-0 items-center gap-2 border-r border-[var(--border-light)] px-4 py-3 lg:px-6">
         <span
           className={cn(
             "min-w-0 break-words text-sm leading-[22px] text-[var(--text-base)] lg:break-normal",
@@ -327,7 +444,7 @@ function MatrixGroup({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex h-12 w-full items-center justify-between gap-2 bg-[var(--bg-shell)] py-3 pl-3 pr-4 text-left lg:h-auto lg:px-6 lg:py-4",
+          "flex h-12 w-full items-center justify-between gap-2 bg-[var(--bg-shell)] py-3 pl-4 pr-4 text-left lg:h-auto lg:px-6 lg:py-4",
           expanded && "border-b border-[var(--border-light)]",
         )}
         aria-expanded={expanded}
@@ -406,9 +523,9 @@ export function VersionComparisonMatrix() {
         aria-hidden
       />
 
-      {/* Mobile / Pad 吸顶表头 */}
+      {/* Mobile 吸顶表头 */}
       <div
-        className="relative sticky top-16 z-40 h-fit w-full overflow-visible lg:hidden"
+        className="relative sticky top-16 z-40 h-fit w-full overflow-visible md:hidden"
         style={{
           boxShadow: headerStuck ? "var(--shadow-card)" : undefined,
         }}
@@ -425,6 +542,32 @@ export function VersionComparisonMatrix() {
         />
         <div className="relative z-10 h-fit w-full">
           <MatrixHeaderMobile stuck={headerStuck} />
+        </div>
+      </div>
+
+      {/* Pad 吸顶表头 */}
+      <div
+        className="relative sticky top-16 z-40 hidden h-fit w-full overflow-visible md:block lg:hidden"
+        style={{
+          boxShadow: headerStuck ? "var(--shadow-card)" : undefined,
+        }}
+      >
+        <div
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen -translate-x-1/2 bg-[var(--bg-white)] transition-opacity duration-150",
+            headerStuck ? "opacity-100" : "opacity-0",
+          )}
+          style={{
+            boxShadow: headerStuck ? "var(--shadow-card)" : undefined,
+          }}
+        />
+        <div className="relative z-10 h-fit w-full">
+          <MatrixHeaderPad
+            hideIdentical={hideIdentical}
+            onHideIdenticalChange={setHideIdentical}
+            stuck={headerStuck}
+          />
         </div>
       </div>
 

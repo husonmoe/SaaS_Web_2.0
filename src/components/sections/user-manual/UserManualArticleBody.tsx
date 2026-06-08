@@ -65,13 +65,13 @@ export function UserManualArticleBody({ article }: UserManualArticleBodyProps) {
 
       <hr className="border-[var(--border-light)]" />
 
-      <div className="flex flex-col gap-20">
+      <div className="flex flex-col gap-10">
         {article.sections.map((section) => (
-          <section key={section.id} className="flex flex-col gap-8">
+          <section key={section.id} className="flex flex-col gap-6">
             <h3 className="text-2xl font-semibold leading-9 text-[var(--text-base)]">
               {section.heading}
             </h3>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
               {section.blocks.map((block, index) => (
                 <ContentBlock key={`${section.id}-${index}`} block={block} />
               ))}

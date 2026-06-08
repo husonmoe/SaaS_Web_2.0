@@ -14,7 +14,7 @@ export function StatsSection() {
           )}
         >
           <div className="flex flex-col items-center text-center">
-            <h2 className="text-[28px] font-semibold leading-[36px] text-[var(--text-base)] md:text-[44px] md:leading-[56px]">
+            <h2 className="text-[28px] font-semibold leading-[36px] text-[var(--text-base)] md:text-[36px] md:leading-[48px] lg:text-[44px] lg:leading-[56px]">
               资源覆盖百万基层
             </h2>
             <p className="mt-3 text-sm leading-[22px] text-[var(--text-secondary)] md:text-base md:leading-6 lg:text-xl lg:leading-7">

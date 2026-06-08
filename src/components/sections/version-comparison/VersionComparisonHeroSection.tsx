@@ -6,12 +6,12 @@ import { VERSION_PLANS } from "@/components/sections/versionSchemeContent";
 
 export function VersionComparisonHeroSection() {
   return (
-    <section className="page-hero-section relative isolate overflow-visible pt-[60px] pb-[60px] md:pb-[100px] lg:pt-[100px] lg:pb-16">
+    <section className="page-hero-section relative isolate overflow-visible pt-[60px] pb-[60px] md:pb-[80px] lg:pt-[100px] lg:pb-16">
       <PageHeroBgLayer />
 
-      <PageContainer className="relative z-10 flex flex-col items-center gap-8 md:gap-16 lg:gap-10">
+      <PageContainer className="relative z-10 flex flex-col items-center gap-8 md:gap-10 lg:gap-10">
         {/* FadeInOnScroll 暂关 */}
-        <div className="flex w-full flex-col items-center gap-8 md:gap-16 lg:gap-10">
+        <div className="flex w-full flex-col items-center gap-8 md:gap-10 lg:gap-10">
           <header className="flex max-w-[1200px] flex-col items-center gap-4 text-center">
             <h1 className="text-3xl font-semibold leading-[38px] text-[var(--text-base)] md:text-[52px] md:leading-[68px]">
               数字化升级方案
@@ -21,7 +21,7 @@ export function VersionComparisonHeroSection() {
             </p>
           </header>
 
-          <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+          <div className="grid w-full max-w-[1200px] grid-cols-1 gap-4 md:flex md:flex-col md:gap-6 lg:grid lg:grid-cols-3 lg:gap-6">
             {VERSION_PLANS.map((plan) => (
               <VersionPlanCard key={plan.id} plan={plan} />
             ))}

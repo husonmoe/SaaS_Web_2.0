@@ -51,7 +51,7 @@ const WHY_CHOOSE_ITEMS: WhyChooseItem[] = [
 function WhyChooseCard({ item }: { item: WhyChooseItem }) {
   return (
     <FadeInOnScroll as="div" className="h-full">
-      <TiltCard className="flex h-full flex-col items-center rounded-xl px-4 py-6 text-center md:rounded-2xl md:px-6 md:py-10">
+      <TiltCard className="flex h-full flex-col items-center justify-center rounded-xl px-6 py-8 text-center md:rounded-2xl md:px-6 md:py-8 lg:px-6 lg:py-10">
         <Image
           src={item.iconSrc}
           alt=""
@@ -76,10 +76,10 @@ function WhyChooseCard({ item }: { item: WhyChooseItem }) {
 export function WhyChooseSection() {
   return (
     <section className="bg-[var(--bg-shell)] py-[60px] md:py-[80px] lg:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-10 lg:gap-16">
         <FadeInOnScroll
           as="h2"
-          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[36px] md:font-semibold md:leading-[48px] lg:text-[44px] lg:leading-[56px]"
         >
           为什么选择光谱云诊
         </FadeInOnScroll>

@@ -340,15 +340,17 @@ export function UserManualCategoryBar({
               shouldAnimateCollapse &&
                 !isDesktop &&
                 "will-change-transform transition-transform duration-300 ease-in-out",
-              shouldAnimateCollapse && chipsCollapsed && !isDesktop && "-translate-y-full",
+              shouldAnimateCollapse &&
+                !isDesktop &&
+                (chipsCollapsed ? "-translate-y-full" : "translate-y-0"),
             )}
           >
             <div
               ref={categoryRowRef}
               className={cn(
-                "flex w-max min-w-full flex-nowrap items-center justify-start gap-3",
-                "px-[var(--page-margin-x)] pb-3 pt-3",
-                "lg:mx-auto lg:w-full lg:max-w-[1200px] lg:flex-wrap lg:justify-center lg:px-6 lg:py-6",
+                "flex w-full flex-nowrap items-center justify-start gap-3",
+                "px-6 pb-3 pt-3",
+                "lg:mx-auto lg:max-w-[1200px] lg:flex-wrap lg:justify-center lg:py-6",
                 chipsStuck && chipsCollapsed && !isDesktop && "pointer-events-none",
               )}
               role="tablist"

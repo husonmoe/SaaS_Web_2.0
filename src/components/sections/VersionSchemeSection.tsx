@@ -10,10 +10,10 @@ import { PATHS } from "@/lib/paths";
 export function VersionSchemeSection() {
   return (
     <section className="bg-white py-[60px] md:py-[80px] lg:py-[100px]">
-      <PageContainer className="flex flex-col items-center gap-8 md:gap-16">
+      <PageContainer className="flex flex-col items-center gap-8 md:gap-10 lg:gap-16">
         <FadeInOnScroll
           as="h2"
-          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[44px] md:font-semibold md:leading-[56px]"
+          className="max-w-[1200px] text-center text-[28px] font-medium leading-9 text-[var(--text-base)] md:text-[36px] md:font-semibold md:leading-[48px] lg:text-[44px] lg:leading-[56px]"
         >
           数字化升级方案
         </FadeInOnScroll>

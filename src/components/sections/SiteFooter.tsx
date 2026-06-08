@@ -10,7 +10,7 @@ import { SITE_FOOTER_ID } from "@/lib/floating-toolbar-anchor";
 import { EXTERNAL_PATHS } from "@/lib/paths";
 
 const FOOTER_SOCIAL_BUTTON_CLASS =
-  "inline-flex size-7 items-center justify-center rounded-full bg-[#BBC4CB] text-[#BBC4CB] transition-colors hover:bg-[#6D777E] hover:text-[#6D777E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
+  "inline-flex size-7 items-center justify-center rounded-full bg-[#BBC4CB] text-[#BBC4CB] transition-colors hover:bg-[#6D777E] hover:text-[#6D777E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] md:size-6 lg:size-7";
 
 const ICONS = {
   logo: "/assets/LOGO.png",
@@ -65,7 +65,7 @@ const SERVICES = [
 ];
 
 const FOOTER_LINK_CLASS =
-  "text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)]";
+  "text-base text-[var(--text-secondary)] hover:text-[var(--text-base)] active:text-[var(--text-base)] md:text-sm md:leading-[22px] lg:text-base lg:leading-6";
 
 type ProductFooterLink =
   | { label: string; action: "login" }
@@ -134,11 +134,11 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
                 alt=""
                 width={44}
                 height={44}
-                className="size-11 shrink-0"
+                className="size-11 shrink-0 md:size-8 lg:size-11"
                 unoptimized
               />
               <div className="min-w-0">
-                <p className="text-base font-normal leading-6 text-[var(--text-secondary)] lg:font-medium lg:text-[var(--text-base)]">
+                <p className="text-sm font-normal leading-[22px] text-[var(--text-secondary)] lg:font-medium lg:text-[var(--text-base)]">
                   {item.title}
                 </p>
                 <p className="hidden text-sm leading-[22px] text-[var(--text-tertiary)] lg:block">
@@ -186,16 +186,16 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
         </div>
 
         {/* 桌面端 · 品牌 / 产品入口 / 友情链接 / 联系我们 */}
-        <div className="hidden gap-6 py-8 md:flex lg:grid lg:grid-cols-4 lg:py-12">
-          <div className="flex w-full flex-col items-start gap-8 md:min-w-0">
+        <div className="hidden py-6 md:grid md:grid-cols-4 md:items-stretch md:gap-0 lg:gap-6 lg:py-12">
+          <div className="flex w-full min-w-0 flex-col items-start justify-between gap-0 lg:gap-8">
             <Image
               src={ICONS.logo}
               alt="光谱云诊"
               width={116}
               height={32}
-              className="h-8 w-[116px]"
+              className="h-7 w-[102px] lg:h-8 lg:w-[116px]"
             />
-            <div className="size-[110px] overflow-hidden rounded-md">
+            <div className="size-[90px] overflow-hidden rounded-md lg:size-[110px]">
               <Image
                 src={ICONS.qr}
                 alt="二维码"
@@ -211,7 +211,8 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
           <FooterColumn title="友情链接" links={FRIEND_LINKS} />
           <FooterColumn
             title="联系我们"
-            links={CONTACT_DESKTOP}
+            links={CONTACT_INFO}
+            lgLinks={CONTACT_DESKTOP}
             interactive={false}
           />
         </div>
@@ -239,13 +240,13 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_, ref) {
         </div>
 
         {/* 桌面端 · 社交 + 版权 */}
-        <div className="hidden flex-col items-start gap-6 py-6 text-left md:flex lg:flex-row lg:items-center lg:justify-between lg:py-12">
-          <div className="flex gap-4">
+        <div className="hidden flex-col items-center gap-4 py-6 text-left md:flex md:flex-row md:items-center md:justify-between md:gap-0 lg:gap-6 lg:py-12">
+          <div className="flex gap-3 lg:gap-4">
             {FOOTER_SOCIAL_LINKS.map((item) => (
               <FooterSocialIcon key={item.id} {...item} />
             ))}
           </div>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-tertiary)]">
+          <div className="flex flex-nowrap items-end justify-center gap-3 text-xs leading-5 text-[var(--text-tertiary)] lg:flex-wrap lg:gap-4 lg:text-sm">
             <span>© 2023 广州光谱健康科技有限公司版权所有</span>
             <span>粤ICP备2021101844号-2</span>
             <span className="inline-flex items-center gap-1">
@@ -272,9 +273,11 @@ function FooterProductColumn() {
   const { open: openTrial } = useTrialModal();
 
   return (
-    <div className="w-full flex-1 md:min-w-0 lg:pl-[52px] lg:flex-none">
-      <p className="mb-8 font-medium text-[var(--text-base)]">产品入口</p>
-      <ul className="flex flex-col gap-4">
+    <div className="flex h-fit w-full min-w-0 flex-col gap-0 self-start lg:pl-[52px]">
+      <p className="mb-6 text-base font-medium leading-6 text-[var(--text-base)] md:text-sm md:leading-[22px] lg:mb-8 lg:text-base lg:leading-6">
+        产品入口
+      </p>
+      <ul className="flex h-fit flex-col gap-3 lg:gap-4">
         {PRODUCT_LINKS.map((link) => (
           <li key={link.label}>
             {link.action === "external" ? (
@@ -315,7 +318,7 @@ type FooterSocialIconProps = {
 
 function FooterSocialGlyph({
   id,
-  className = "size-7 shrink-0",
+  className = "size-7 shrink-0 md:size-6 lg:size-7",
 }: {
   id: FooterSocialIconProps["id"];
   className?: string;
@@ -441,30 +444,48 @@ function FooterSocialIcon({
 function FooterColumn({
   title,
   links,
+  lgLinks,
   interactive = true,
 }: {
   title: string;
   links: string[];
+  lgLinks?: string[];
   interactive?: boolean;
 }) {
+  const webLinks = lgLinks ?? links;
+
+  const renderLinks = (items: string[]) =>
+    items.map((link) => (
+      <li key={link}>
+        {interactive ? (
+          <a href="#" className={FOOTER_LINK_CLASS}>
+            {link}
+          </a>
+        ) : (
+          <span className="text-base leading-6 text-[var(--text-secondary)] md:text-sm md:leading-[22px] lg:text-base lg:leading-6">
+            {link}
+          </span>
+        )}
+      </li>
+    ));
+
   return (
-    <div className="w-full flex-1 md:min-w-0 lg:pl-[52px] lg:flex-none">
-      <p className="mb-8 font-medium text-[var(--text-base)]">{title}</p>
-      <ul className="flex flex-col gap-4">
-        {links.map((link) => (
-          <li key={link}>
-            {interactive ? (
-              <a href="#" className={FOOTER_LINK_CLASS}>
-                {link}
-              </a>
-            ) : (
-              <span className="text-base text-[var(--text-secondary)]">
-                {link}
-              </span>
-            )}
-          </li>
-        ))}
-      </ul>
+    <div className="flex h-fit w-full min-w-0 flex-col gap-0 self-start lg:pl-[52px]">
+      <p className="mb-6 text-base font-medium leading-6 text-[var(--text-base)] md:text-sm md:leading-[22px] lg:mb-8 lg:text-base lg:leading-6">
+        {title}
+      </p>
+      {lgLinks ? (
+        <>
+          <ul className="flex h-fit flex-col gap-3 lg:hidden">
+            {renderLinks(links)}
+          </ul>
+          <ul className="hidden h-fit flex-col gap-3 lg:flex lg:gap-4">
+            {renderLinks(webLinks)}
+          </ul>
+        </>
+      ) : (
+        <ul className="flex h-fit flex-col gap-3 lg:gap-4">{renderLinks(links)}</ul>
+      )}
     </div>
   );
 }
