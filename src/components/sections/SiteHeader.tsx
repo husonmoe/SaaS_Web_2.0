@@ -41,7 +41,7 @@ const LOGO_SRC = "/assets/LOGO.png";
 const PHONE_ICON_SRC = "/assets/figma-cache/phone-icon.svg";
 
 const NAV_LINK_CLASS =
-  "shrink-0 rounded-[10px] px-5 py-3 text-lg text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
+  "flex h-10 shrink-0 items-center justify-center rounded-[8px] px-3 py-2 text-[15px] leading-[22px] text-[var(--text-base)] hover:bg-[var(--bg-shell)] lg:h-auto lg:px-5 lg:py-3 lg:text-lg";
 
 const MOBILE_NAV_LINK_CLASS =
   "flex h-12 shrink-0 items-center justify-start rounded-none px-6 text-base text-[var(--text-base)] hover:bg-[var(--bg-shell)]";
@@ -206,17 +206,17 @@ export function SiteHeader() {
         className={cn(
           "pointer-events-none absolute inset-x-0 top-0 h-16 bg-white/95 backdrop-blur-sm lg:h-[72px]",
           "border-b border-[var(--border-light)]",
-          menuOpen && "max-lg:border-b-0",
+          menuOpen && "max-md:border-b-0",
           useHoverTransition && "transition-opacity duration-300 ease-out",
         )}
         style={{ opacity: fillOpacity }}
         aria-hidden
       />
 
-      <div className="relative z-10 flex h-16 w-full items-center justify-between gap-4 pl-4 pr-3 lg:h-[72px] lg:justify-center lg:px-6">
+      <div className="relative z-10 flex h-16 w-full items-center justify-between gap-4 pl-4 pr-3 md:justify-center md:px-4 lg:h-[72px] lg:justify-center lg:px-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center lg:w-[222px]"
+          className="flex shrink-0 items-center md:w-fit"
           aria-label="光谱云诊"
           onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
         >
@@ -225,14 +225,14 @@ export function SiteHeader() {
             alt="光谱云诊"
             width={116}
             height={32}
-            className="h-7 w-auto lg:h-8"
+            className="h-7 w-auto md:h-8 lg:h-8"
             priority
           />
         </Link>
 
-        <div className="hidden min-w-0 flex-1 lg:flex lg:justify-center">
+        <div className="hidden min-w-0 flex-1 md:flex md:justify-center lg:flex lg:justify-center">
           <nav
-            className="flex w-full max-w-[1200px] items-center gap-3"
+            className="flex w-full max-w-[1200px] items-center justify-center gap-2 lg:gap-3"
             aria-label="主导航"
           >
             {NAV_ITEMS.map((item) => (
@@ -245,7 +245,7 @@ export function SiteHeader() {
               />
             ))}
             <span
-              className="ml-auto flex shrink-0 items-center gap-2 text-lg text-[var(--text-muted)]"
+              className="ml-auto hidden shrink-0 items-center gap-2 text-sm text-[var(--text-muted)] lg:flex lg:text-lg"
               aria-label="客服电话 400-666-5061"
             >
               <Image
@@ -253,7 +253,7 @@ export function SiteHeader() {
                 alt=""
                 width={24}
                 height={24}
-                className="size-6"
+                className="size-5 lg:size-6"
                 unoptimized
               />
               400-666-5061
@@ -261,11 +261,11 @@ export function SiteHeader() {
           </nav>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3 lg:ml-0">
+        <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
           <LoginModalButton
             variant="outline"
             className={cn(
-              "hidden lg:inline-flex",
+              "hidden md:inline-flex md:h-10 md:min-h-10 md:rounded-lg md:px-4 md:text-sm md:leading-[22px] lg:h-12 lg:min-h-12 lg:rounded-[10px] lg:px-5 lg:text-base lg:leading-6",
               headerInverted &&
                 "border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[color-mix(in_srgb,var(--color-primary)_8%,white)] active:bg-[color-mix(in_srgb,var(--color-primary)_16%,white)]",
             )}
@@ -274,7 +274,7 @@ export function SiteHeader() {
             登录诊所
           </LoginModalButton>
           <TrialModalButton
-            className="hidden lg:inline-flex"
+            className="hidden lg:inline-flex lg:h-12 lg:min-h-12 lg:rounded-[10px] lg:px-5 lg:text-base lg:leading-6"
             onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
           >
             免费试用
@@ -282,7 +282,7 @@ export function SiteHeader() {
           <button
             type="button"
             className={cn(
-              "relative inline-flex h-8 w-8 shrink-0 items-center justify-center lg:hidden",
+              "relative inline-flex h-8 w-8 shrink-0 items-center justify-center md:hidden",
               menuOpen && "is-active",
             )}
             aria-label={menuOpen ? "关闭菜单" : "打开菜单"}
@@ -329,12 +329,12 @@ export function SiteHeader() {
         <>
           <button
             type="button"
-            className="fixed inset-0 top-16 z-40 bg-[#000000]/40 lg:hidden"
+            className="fixed inset-0 top-16 z-40 bg-[#000000]/40 md:hidden"
             aria-label="关闭菜单"
             onClick={closeMobileMenu}
           />
           <nav
-            className="fixed inset-x-0 top-16 z-50 flex flex-col gap-0 bg-white lg:hidden"
+            className="fixed inset-x-0 top-16 z-50 flex flex-col gap-0 bg-white md:hidden"
             aria-label="主导航"
           >
             {NAV_ITEMS.map((item) => (

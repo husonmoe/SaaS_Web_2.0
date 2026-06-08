@@ -785,6 +785,8 @@ export function LoginModal() {
       panelBgSrc={MODAL_LOGIN_PANEL_BG_SRC}
       onClose={handleClose}
       zIndex={201}
+      panelVisibleFrom="lg"
+      dialogClassName="md:w-[520px] md:max-w-[520px] lg:w-full lg:max-w-[900px]"
     >
       <div className="flex w-full max-w-[380px] flex-1 flex-col items-center justify-start gap-6">
         <div className="flex w-full flex-col items-center gap-6">

@@ -348,6 +348,7 @@ function FooterSocialIcon({
   hoverQr,
   hoverCaption,
 }: FooterSocialIconProps) {
+  const tooltipId = useId();
   const popupTitleId = useId();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -359,6 +360,12 @@ function FooterSocialIcon({
 
   const closePopup = useCallback(() => {
     setOpen(false);
+  }, []);
+
+  const openPopup = useCallback(() => {
+    if (window.matchMedia("(max-width: 1023px)").matches) {
+      setOpen(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -383,21 +390,51 @@ function FooterSocialIcon({
   }
 
   return (
-    <>
+    <div className="group relative shrink-0">
       <button
         type="button"
         className={FOOTER_SOCIAL_BUTTON_CLASS}
         aria-label={label}
+        aria-describedby={tooltipId}
         aria-haspopup="dialog"
         aria-expanded={open}
-        onClick={() => setOpen(true)}
+        onClick={openPopup}
       >
         {iconImage}
       </button>
 
+      {/* Web · hover 气泡 */}
+      <div
+        id={tooltipId}
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 hidden w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none lg:block"
+      >
+        <div className="relative flex flex-col items-center gap-2 rounded-xl border border-[var(--border-light)] bg-white px-4 pb-4 pt-3 shadow-[0_8px_12px_rgba(15,47,76,0.08)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={hoverQr}
+            alt={hoverCaption ?? label}
+            width={140}
+            height={140}
+            className="block size-[140px] shrink-0 rounded-none border-0 object-contain outline-none"
+            decoding="async"
+          />
+          {hoverCaption ? (
+            <p className="text-sm leading-[22px] text-[var(--text-secondary)]">
+              {hoverCaption}
+            </p>
+          ) : null}
+          <span
+            className="absolute left-1/2 top-full size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r border-[var(--border-light)] bg-white"
+            aria-hidden
+          />
+        </div>
+      </div>
+
+      {/* Mobile/Pad · 点击弹窗 */}
       {mounted && open
         ? createPortal(
-            <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden overscroll-none p-4">
+            <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden overscroll-none p-4 lg:hidden">
               <button
                 type="button"
                 className="absolute inset-0 bg-[#000000]/40"
@@ -437,7 +474,7 @@ function FooterSocialIcon({
             document.body,
           )
         : null}
-    </>
+    </div>
   );
 }
 
