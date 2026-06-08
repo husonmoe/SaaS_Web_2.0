@@ -58,7 +58,7 @@ export function ActionCtaSection() {
       <PageContainer className="relative z-10 h-fit w-full py-8 md:py-0 lg:h-full lg:py-0">
         <FadeInOnScroll as="div" className="h-fit lg:h-full">
           <PageGrid className="action-cta-grid h-fit items-start gap-10 lg:h-full lg:gap-12">
-          <div className="col-span-full flex flex-col items-start justify-center gap-6 self-stretch py-8 md:h-full lg:col-span-5 lg:h-full lg:gap-8 lg:py-0">
+          <div className="col-span-full flex flex-col items-start justify-center gap-6 self-stretch md:h-full lg:col-span-5 lg:h-full lg:gap-8 lg:py-0">
             <div className="flex flex-col gap-2 lg:gap-3">
               <h2 className="text-2xl font-semibold leading-8 text-[var(--text-base)] lg:text-[28px] lg:leading-[36px]">
                 体验光谱云诊
@@ -68,7 +68,7 @@ export function ActionCtaSection() {
               </p>
             </div>
 
-            <div className="flex h-12 w-full flex-row items-stretch gap-2 lg:h-auto lg:max-w-[480px] lg:gap-3">
+            <div className="flex h-12 w-full max-w-[480px] flex-row items-stretch gap-2 lg:h-auto lg:gap-3">
               <label className="relative min-w-0 flex-1">
                 <span className="sr-only">手机号</span>
                 <Image
@@ -104,7 +104,7 @@ export function ActionCtaSection() {
               </label>
               <Button
                 type="button"
-                className="h-12 min-h-12 w-[88px] shrink-0 rounded-lg px-4 text-sm leading-[22px] lg:h-12 lg:min-h-12 lg:w-[152px] lg:rounded-xl lg:px-8 lg:text-base lg:leading-6"
+                className="h-12 min-h-12 w-[100px] shrink-0 rounded-lg px-4 text-sm leading-[22px] md:w-[88px] lg:h-12 lg:min-h-12 lg:w-[152px] lg:rounded-xl lg:px-8 lg:text-base lg:leading-6"
                 onClick={handleTrialClick}
               >
                 免费试用
