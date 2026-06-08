@@ -216,7 +216,7 @@ export function SiteHeader() {
       <div className="relative z-10 flex h-16 w-full items-center justify-between gap-4 pl-4 pr-3 md:justify-center md:px-4 lg:h-[72px] lg:justify-center lg:px-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center md:w-fit"
+          className="flex shrink-0 items-center md:w-fit lg:w-[222px]"
           aria-label="光谱云诊"
           onMouseEnter={(event) => activateHeader(event.clientX, event.clientY)}
         >
@@ -245,7 +245,7 @@ export function SiteHeader() {
               />
             ))}
             <span
-              className="ml-auto hidden shrink-0 items-center gap-2 text-sm text-[var(--text-muted)] lg:flex lg:text-lg"
+              className="hidden shrink-0 items-center gap-2 text-sm text-[var(--text-muted)]"
               aria-label="客服电话 400-666-5061"
             >
               <Image
