@@ -15,8 +15,10 @@
 **涉及文件**
 
 - `src/components/modals/TrialModal.tsx`
-- `src/components/modals/ModalShell.tsx`（新增 `overlayClassName`）
-- `src/components/modals/LoginModal.tsx`（Pad/Web 固定 600px 高度，与试用弹窗对齐）
+- `src/components/modals/ModalShell.tsx`（`overlayClassName`）
+- `src/components/modals/LoginModal.tsx`（Pad/Web 固定 600px 高度）
+
+**文档位置：** `docs/modals/TrialModal.breakpoints.md`
 
 ---
 

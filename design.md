@@ -125,8 +125,10 @@
 
 ### 5.4 弹窗
 
-- [ ] `ModalShell`：Mobile 全屏或底部 sheet；左侧插画 Mobile 隐藏（已有 `md:block` 基础）
-- [ ] 登录 / 试用 / 选诊所 / 忘记密码 / 微信绑定：内容与 Tab Mobile 排版
+- [x] `TrialModal`：Mobile 350×450 / Pad 520×600 / Web 900×600（详见 `docs/modals/TrialModal.breakpoints.md`）
+- [x] `LoginModal`：Pad/Web 520×600，左面板 `lg+` 显示
+- [ ] `ModalShell`：其余弹窗 Mobile 全屏或底部 sheet 方案待统一
+- [ ] 选诊所 / 忘记密码 / 微信绑定：Mobile 排版
 - [ ] 创建诊所页 `ServiceContactPopover`：Mobile 定位与触控区域
 
 ### 5.5 Mobile 首页（待 `feat-mobile-adapt` 合并后核对）
@@ -148,6 +150,8 @@
 - `src/components/sections/*`
 - `src/components/modals/*`
 - `src/components/create-clinic/*`
+
+**交付文档：** `docs/HANDOFF.md` · `docs/CONVENTIONS.md` · `docs/modals/TrialModal.breakpoints.md`
 
 ## 7. 本地开发
 

@@ -1,0 +1,2 @@
+# 本地 Cloudflare / OpenNext 预览用（复制为 .dev.vars）
+NEXTJS_ENV=development
